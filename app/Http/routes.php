@@ -10,6 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+use App\User;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,8 +19,13 @@ Route::get('/', function () {
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
-Route::get('/home/admin', function(){
-    return view('admin');
+Route::get('/home/admin', 'HomeController@showAdminHome');
+Route::get('/home/admin/upgrade/{id}', 'UserController@upgradeAdmin');
+Route::get('/home/admin/downgrade/{id}', 'UserController@donwgradeAdmin');
+Route::post('/home/admin/addStaff', 'UserController@addStaff');
+Route::get('/home/admin/manage', function(){
+	$users = User::all();
+	return view('manageUsers')->with('users', $users);
 });
 
 Route::get('/home', function(){

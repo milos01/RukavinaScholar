@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -26,4 +27,8 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+     public function showAdminHome(){
+        return view('admin');
+     }
 }

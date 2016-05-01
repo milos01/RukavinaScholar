@@ -24,9 +24,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function is($roleName)
+    public function is($role)
     {
-            if (  $this->role == $roleName)
+            if (  $this->role == $role)
             {
                 return true;
             }
