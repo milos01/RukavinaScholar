@@ -32,4 +32,17 @@ class User extends Authenticatable
             }
         return false;
     }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function fromMessages()
+    {
+        return $this->belongsToMany('User');
+    }
+
+    public function toMessages()
+    {
+        return $this->belongsToMany('User');
+    }
 }

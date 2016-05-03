@@ -29,6 +29,11 @@ class HomeController extends Controller
     }
 
      public function showAdminHome(){
-        return view('admin');
+        return view('homeCenter');
+     }
+
+     public function showUserProfile($id){
+        $user = User::findOrFail($id);
+        return view('userProfile')->with('user',$user);
      }
 }

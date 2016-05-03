@@ -21,7 +21,7 @@
     <link href="../../css/animate.css" rel="stylesheet">
     <link href="../../css/style.css" rel="stylesheet">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-
+    <link href="../../css/plugins/cropper/cropper.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Lato';
@@ -51,7 +51,7 @@
                 <li class="nav-header">
                     <div class="dropdown profile-element">
 						<span> <img alt="image" class="img-circle"
-                                    src="../../img/profile_small.jpg" />
+                                    src="../../img/{{Auth::user()->picture}}" width="53px;" height="53px;" />
 						</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
                                     class="clear"> <span class="block m-t-xs"> <strong
                                             class="font-bold">
@@ -71,9 +71,12 @@
 
                     <li><a href="/home/admin/manage"><i class="fa fa-area-chart"></i>
                         <span class="nav-label">Statistics</span></a></li>
+
+                    <li><a href="/home/admin/edit"><i class="fa fa-cog"></i>
+                        <span class="nav-label">Edit profile</span></a></li>
                 @endif
-                <li><a href="grid_options.html"><i class="fa fa-user"></i>
-                        <span class="nav-label">View profile</span></a></li>
+                <!-- <li><a href="grid_options.html"><i class="fa fa-user"></i>
+                        <span class="nav-label">View profile</span></a></li> -->
             </ul>
 
         </div>
@@ -86,18 +89,6 @@
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
                        href="#"><i class="fa fa-bars"></i> </a>
-                    <c:choose>
-                        <c:when test="${logedUser.role.roleName == 'Admin'}">
-                            <form role="search" class="navbar-form-custom"
-                                  action="search_results.html">
-                                <div class="form-group">
-                                    <input type="text" placeholder="Search for something..."
-                                           class="form-control" name="top-search" id="top-search">
-                                </div>
-                            </form>
-                        </c:when>
-                    </c:choose>
-
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li><a href="logout"> <i class="fa fa-sign-out"></i> Log
@@ -107,6 +98,20 @@
 
             </nav>
         </div>
+        
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2><b>
+                @section('navName')
+                @show
+                </b></h2>
+                <ol class="breadcrumb">
+                @section('navMenu')
+                @show
+                </ol>
+            </div>
+        </div>
+        
         @yield('manageUsers')
     </div>
     <!-- Mainly scripts -->
@@ -159,15 +164,76 @@
             src="../../js/plugins/sparkline/jquery.sparkline.min.js"></script>
 
     <!-- Sparkline demo data  -->
-    <script src="../../public/js/demo/sparkline-demo.js"></script>
+    <script src="../../js/demo/sparkline-demo.js"></script>
     <script src="../../js/app.js"></script>
 
 
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <!-- Image cropper -->
+    <script src="../../js/plugins/cropper/cropper.min.js"></script>
     <script>
+
         $(document).ready(
                 function() {
+                    var $image = $(".image-crop > img")
+            $($image).cropper({
+                aspectRatio: 1.618,
+                preview: ".img-preview",
+                done: function(data) {
+                    // Output the result data for cropping image.
+                }
+            });
+
+            var $inputImage = $("#inputImage");
+            if (window.FileReader) {
+                $inputImage.change(function() {
+                    var fileReader = new FileReader(),
+                            files = this.files,
+                            file;
+
+                    if (!files.length) {
+                        return;
+                    }
+
+                    file = files[0];
+
+                    if (/^image\/\w+$/.test(file.type)) {
+                        fileReader.readAsDataURL(file);
+                        fileReader.onload = function () {
+                            // $inputImage.val("");
+                            $image.cropper("reset", true).cropper("replace", this.result);
+                        };
+                    } else {
+                        showMessage("Please choose an image file.");
+                    }
+                });
+            } else {
+                $inputImage.addClass("hide");
+            }
+
+            $("#download").click(function() {
+                window.open($image.cropper("getDataURL"));
+            });
+
+            $("#zoomIn").click(function() {
+                $image.cropper("zoom", 0.1);
+            });
+
+            $("#zoomOut").click(function() {
+                $image.cropper("zoom", -0.1);
+            });
+
+            $("#rotateLeft").click(function() {
+                $image.cropper("rotate", 45);
+            });
+
+            $("#rotateRight").click(function() {
+                $image.cropper("rotate", -45);
+            });
+
+            $("#setDrag").click(function() {
+                $image.cropper("setDragMode", "crop");
+            });
                     $('.chart').easyPieChart({
                         barColor : '#f8ac59',
                         //                scaleColor: false,

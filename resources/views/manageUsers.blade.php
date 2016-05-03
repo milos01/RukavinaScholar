@@ -1,4 +1,16 @@
 @extends('admin')
+@section('navName')
+	Manage users
+@stop
+@section('navMenu')
+	@parent
+	 <li>
+         <a href="{{url('/home/admin')}}">Home</a>
+     </li>
+    <li class="active">
+    	<strong>Manage users</strong>
+    </li>                
+@stop
 @section('manageUsers')
 	<!-- Modal -->
 	<div id="addMemnerModal" class="modal fade" role="dialog">
@@ -53,7 +65,7 @@
 	                                        @endif
 	                                        </td>
 	                                        <td class="project-title">
-	                                            <a href="project_detail.html">{{ $user->name }} {{$user->lastName}}
+	                                            <a href="{{url('/home', $user->id)}}">{{ $user->name }} {{$user->lastName}}
 	                                            	@if($user->is('moderator'))
 	                                            		(Moderator)
 	                                        		@elseif($user->is('admin'))

@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\MakeUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\NewImageRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\User;
-use Hash;
+use Hash, Auth;
+
 
 class UserController extends Controller
 {
@@ -46,6 +50,45 @@ class UserController extends Controller
         $user->role = 'moderator';
         if($user->save()){
             return redirect('/home/admin/manage');
+        }
+    }
+
+    public function editUser(){
+        return view('editUser');
+    }
+
+    public function updateUser(UpdateUserRequest $request){
+        $user = Auth::user();
+        $user->name = $request->fname;
+        $user->lastName = $request->lname;
+        if($user->save()){
+            return redirect('/home/admin/edit');
+        }
+    }
+
+    public function saveImage(NewImageRequest $request){
+        if ($request->file('picture')) {
+            $request->file('picture')->move(public_path('img'), $request->file('picture')->getClientOriginalName());
+            $user = Auth::user();
+            $user->picture = $request->file('picture')->getClientOriginalName();
+            if($user->save()){
+                return redirect('/home/admin/edit');
+            }
+        }else{
+            return "error";
+        }
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request){
+        $user = Auth::user();
+        $hashedPassword = Hash::make($request->newPassword);
+        if (Hash::check($user, $hashedPassword))
+        {
+            return "error";
+        }
+        $user->password = $hashedPassword;
+        if ($user->save()) {
+            return redirect('/home/admin/edit');
         }
     }
 }
