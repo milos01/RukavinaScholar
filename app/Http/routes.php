@@ -27,6 +27,7 @@ Route::post('/home/admin/updateUser', 'UserController@updateUser');
 Route::post('/home/admin/saveImage', 'UserController@saveImage');
 Route::post('/home/admin/updatePassword', 'UserController@updatePassword');
 Route::get('/home/{id}', 'HomeController@showUserProfile');
+Route::get('/home/admin/inbox', 'InboxController@showInbox');
 Route::get('/home/admin/manage', function(){
 	$users = User::all();
 	return view('manageUsers')->with('users', $users);

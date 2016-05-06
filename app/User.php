@@ -38,11 +38,11 @@ class User extends Authenticatable
      */
     public function fromMessages()
     {
-        return $this->belongsToMany('User');
+        return $this->belongsToMany('App\User', 'messages','user_from','user_to')->withPivot('created_at', 'message','read');
     }
 
     public function toMessages()
     {
-        return $this->belongsToMany('User');
+        return $this->belongsToMany('App\User', 'messages','user_from','user_to')->withPivot('created_at', 'message','read');
     }
 }

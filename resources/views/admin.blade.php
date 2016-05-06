@@ -75,8 +75,8 @@
                     <li><a href="/home/admin/edit"><i class="fa fa-cog"></i>
                         <span class="nav-label">Edit profile</span></a></li>
                 @endif
-                <!-- <li><a href="grid_options.html"><i class="fa fa-user"></i>
-                        <span class="nav-label">View profile</span></a></li> -->
+                <li><a href="/home/admin/inbox"><i class="fa fa-envelope"></i>
+                        <span class="nav-label">Inbox</span></a></li>
             </ul>
 
         </div>
