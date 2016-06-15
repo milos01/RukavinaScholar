@@ -116,9 +116,8 @@ trait AuthenticatesUsers
         }
         if(Auth::user()->is("admin")){
 
-            return redirect()->intended("/home/admin");
-        }else{
-            return redirect()->intended("/home");
+        $myMessages = "1";
+            return redirect()->intended("/home")->with('myMessagesCount',$myMessages);
         }
 //        return redirect()->intended($this->redirectPath());
     }

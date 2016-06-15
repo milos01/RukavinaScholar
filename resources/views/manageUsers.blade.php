@@ -5,7 +5,7 @@
 @section('navMenu')
 	@parent
 	 <li>
-         <a href="{{url('/home/admin')}}">Home</a>
+         <a href="{{url('/home')}}">Home</a>
      </li>
     <li class="active">
     	<strong>Manage users</strong>
@@ -17,7 +17,7 @@
 	  <div class="modal-dialog" style="width:400px">
 
 	    <!-- Modal content-->
-	     <form method="POST" action="{{ url('/home/admin/addStaff') }}">
+	     <form method="POST" action="{{ url('/home/addStaff') }}">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -59,9 +59,9 @@
 	                                    <tr>
 	                                        <td class="project-status">
 	                                        @if($user->is('moderator'))
-	                                            <a href="{{url('/home/admin/upgrade', $user->id)}}" class="btn btn-primary btn-s">Make admin</a>
+	                                            <a href="{{url('/home/upgrade', $user->id)}}" class="btn btn-primary btn-s">Make admin</a>
 	                                        @elseif($user->is('admin'))
-	                                        	<a href="{{url('/home/admin/downgrade', $user->id)}}" class="btn btn-default btn-s">Downgrade</a>
+	                                        	<a href="{{url('/home/downgrade', $user->id)}}" class="btn btn-default btn-s">Downgrade</a>
 	                                        @endif
 	                                        </td>
 	                                        <td class="project-title">

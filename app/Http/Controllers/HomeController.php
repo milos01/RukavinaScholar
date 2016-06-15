@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\User;
+use App\Problem;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -25,10 +27,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+        $allProblems = Problem::all();
+
+        return view('homeCenter')->with('myMessagess', $myMessagess->count())->with('allProblems',$allProblems);
     }
 
      public function showAdminHome(){
+       
         return view('homeCenter');
      }
 

@@ -66,17 +66,19 @@
                 </li>
                 <!-- Admin side menu -->
                 @if(Auth::user()->is('admin'))
-                    <li><a href="/home/admin/manage"><i class="fa fa-users"></i>
+                    <li><a href="/home/manage"><i class="fa fa-users"></i>
                         <span class="nav-label">Manage users</span></a></li>
 
-                    <li><a href="/home/admin/manage"><i class="fa fa-area-chart"></i>
+                    <li><a href="/home/manage"><i class="fa fa-area-chart"></i>
                         <span class="nav-label">Statistics</span></a></li>
 
-                    <li><a href="/home/admin/edit"><i class="fa fa-cog"></i>
+                    <li><a href="/home/edit"><i class="fa fa-cog"></i>
                         <span class="nav-label">Edit profile</span></a></li>
                 @endif
-                <li><a href="/home/admin/inbox"><i class="fa fa-envelope"></i>
-                        <span class="nav-label">Inbox</span></a></li>
+                
+                
+                    <li><a href="/home/inbox"><i class="fa fa-envelope"></i>
+                    <span class="nav-label"></span>Mailbox ({{$myMessagess}}) </a></li>
             </ul>
 
         </div>
@@ -91,7 +93,7 @@
                        href="#"><i class="fa fa-bars"></i> </a>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
-                    <li><a href="logout"> <i class="fa fa-sign-out"></i> Log
+                    <li><a href="/logout"> <i class="fa fa-sign-out"></i> Log
                             out
                         </a></li>
                 </ul>

@@ -11,31 +11,30 @@
 |
 */
 use App\User;
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/', ['middleware' => 'guest', function () {
+    	return view('welcome');
+	}]);
 
-Route::get('/', function () {
-    return view('welcome');
-});
+	Route::auth();
 
-Route::auth();
-
-Route::get('/home', 'HomeController@index');
-Route::get('/home/admin', 'HomeController@showAdminHome');
-Route::get('/home/admin/upgrade/{id}', 'UserController@upgradeAdmin');
-Route::get('/home/admin/downgrade/{id}', 'UserController@donwgradeAdmin');
-Route::post('/home/admin/addStaff', 'UserController@addStaff');
-Route::post('/home/admin/updateUser', 'UserController@updateUser');
-Route::post('/home/admin/saveImage', 'UserController@saveImage');
-Route::post('/home/admin/updatePassword', 'UserController@updatePassword');
-Route::get('/home/{id}', 'HomeController@showUserProfile');
-Route::get('/home/admin/inbox', 'InboxController@showInbox');
-Route::get('/home/admin/inbox/{id}', 'InboxController@showUsersMessages');
-Route::post('/home/admin/inbox/sendMessage', 'InboxController@sendMessage');
-Route::get('/home/admin/manage', function(){
-	$users = User::all();
-	return view('manageUsers')->with('users', $users);
-});
-Route::get('/home/admin/edit', 'UserController@editUser');
-
-Route::get('/home', function(){
-    return "home of regular user";
+	Route::group(['prefix'=>'home', 'middleware' => 'auth'], function () {
+		Route::get('/', 'HomeController@index');
+		Route::get('problem/{id}', 'ProblemController@showProblem');
+		Route::get('upgrade/{id}', 'UserController@upgradeAdmin');
+		Route::get('downgrade/{id}', 'UserController@donwgradeAdmin');
+		Route::post('addStaff', 'UserController@addStaff');
+		Route::post('updateUser', 'UserController@updateUser');
+		Route::post('saveImage', 'UserController@saveImage');
+		Route::post('updatePassword', 'UserController@updatePassword');
+		Route::get('user/{id}', 'HomeController@showUserProfile');
+		Route::get('inbox', 'InboxController@showInbox');
+		Route::get('inbox/{id}', 'InboxController@showUsersMessages');
+		Route::post('inbox/sendMessage', 'InboxController@sendMessage');
+		Route::get('manage', function(){
+			$users = User::all();
+			return view('/manageUsers')->with('users', $users);
+		});
+		Route::get('edit', 'UserController@editUser');
+	});
 });

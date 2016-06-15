@@ -1,11 +1,13 @@
+
 @extends('admin')
 @section('navName')
 	Inbox
 @stop
 @section('navMenu')
+
 	@parent
 	 <li>
-         <a href="{{url('/home/admin')}}">Home</a>
+         <a href="{{url('/home')}}">Home</a>
      </li>
     <li class="active">
     	<strong>Inbox</strong>
@@ -46,24 +48,45 @@
 		                @else
 		                <tr class="read">
 		                @endif
-		                    <td class="check-mail">
+		                    <td class="check-mail" style="padding-top: 19px">
 		                        <input type="checkbox" class="i-checks">
 		                    </td>
 		                    @if($message->pivot->user_to != Auth::user()->id)
-		                    	<td class="mail-ontact"><a href="mail_detail.html">{{$message->name}} {{$message->lastName}}</a></td>
-		                    @else
-		                    	<td class="mail-ontact"><a href="mail_detail.html">{{$message->pivot->user_from}}</a></td>
-		                    
-		                    @endif
-		                    <td class="mail-subject"><a href="{{url('/home/admin/inbox', $message->pivot->user_from)}}">
+                                <td style="width:50px;padding: 6px">
+                                    <div >
+                                         <img class="message-avatar" style="width:45px;margin-top:0px;height:45px;border-radius:50%;" src="../../../img/{{$message->picture}}" alt="" >
+                                    </div>
+                                </td>
+		                    	<td class="mail-ontact" style="padding-top: 19px"><a href="mail_detail.html">{{$message->name}} {{$message->lastName}}</a></td>
+                                <td class="mail-subject" style="padding-top: 19px"><a href="{{url('/home/inbox', $message->pivot->user_to)}}">
 
-		                    @if(strlen($message->pivot->message) > 120)
-		                    	{{substr($message->pivot->message, 0, 120)}}...
+                                @if(strlen($message->pivot->message) > 120)
+                                    <i class="fa fa-weixin" aria-hidden="true"></i>  &nbsp; {{substr($message->pivot->message, 0, 120)}}...
+                                @else
+                                    <i class="fa fa-weixin" aria-hidden="true"></i>  &nbsp; {{$message->pivot->message}}
+                                @endif
+                                </a></td>
 		                    @else
-		                    	{{$message->pivot->message}}
+                                <?php
+                                    $notMeUser = App::make("App\User")->find($message->pivot->user_from);
+                                ?>
+		                          <td style="width:50px;padding: 6px">
+                                    <div >
+                                         <img class="message-avatar" style="width:45px;margin-top:0px;height:45px;border-radius:50%;" src="../../../img/{{$notMeUser->picture}}" alt="" >
+                                    </div>
+                                  </td>
+                                  <td class="mail-ontact" style="padding-top: 19px"> <a href="mail_detail.html">{{$notMeUser->name}} {{$notMeUser->lastName}}</a></td>
+                                  <td class="mail-subject" style="padding-top: 19px"><a href="{{url('/home/inbox', $message->pivot->user_from)}}">
+
+                                    @if(strlen($message->pivot->message) > 120)
+                                        <i class="fa fa-weixin" aria-hidden="true"></i>  &nbsp; {{substr($message->pivot->message, 0, 120)}}...
+                                    @else
+                                        <i class="fa fa-weixin" aria-hidden="true"></i>  &nbsp; {{$message->pivot->message}}
+                                    @endif
+                                </a></td>
 		                    @endif
-		                    </a></td>
-		                    <td class="text-right mail-date"><small>{{$message->created_at->format('m/d/Y')}}</small></td>
+		                    
+		                    <td class="text-right mail-date" style="padding-top: 19px"><small>{{$message->created_at->format('m/d/Y')}}</small></td>
 		                </tr>
                 @endforeach
                 </tbody>

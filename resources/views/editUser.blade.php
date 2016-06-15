@@ -24,7 +24,7 @@
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
                                     <div class="panel-body">
-                                    	<form action="{{url('/home/admin/updateUser')}}" method="POST">
+                                    	<form action="{{url('/home/admin/updateUserurl')}}" method="POST">
 	                                        <fieldset class="form-horizontal">
 	                                            <div class="form-group"><label class="col-sm-2 control-label">First name:</label>
 	                                                <div class="col-sm-8"><input type="text" class="form-control" value="{{Auth::user()->name}}" name="fname"></div>

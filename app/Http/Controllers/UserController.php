@@ -30,9 +30,9 @@ class UserController extends Controller
         $user->role = 'moderator';
 
         if ($user->save()) {
-            return redirect('/home/admin/manage');
+            return redirect('/home/manage');
         }else{
-            return redirect('/home/admin/manage')->with('alert', 'Something went wrong :(');
+            return redirect('/home/manage')->with('alert', 'Something went wrong :(');
         }
     }
 
@@ -40,7 +40,7 @@ class UserController extends Controller
         $user = User::find($id);
         $user->role = 'admin';
         if($user->save()){
-            return redirect('/home/admin/manage');
+            return redirect('/home/manage');
         }
 
     }
@@ -49,7 +49,7 @@ class UserController extends Controller
         $user = User::find($id);
         $user->role = 'moderator';
         if($user->save()){
-            return redirect('/home/admin/manage');
+            return redirect('/home/manage');
         }
     }
 
@@ -62,7 +62,7 @@ class UserController extends Controller
         $user->name = $request->fname;
         $user->lastName = $request->lname;
         if($user->save()){
-            return redirect('/home/admin/edit');
+            return redirect('/home/edit');
         }
     }
 
@@ -72,7 +72,7 @@ class UserController extends Controller
             $user = Auth::user();
             $user->picture = $request->file('picture')->getClientOriginalName();
             if($user->save()){
-                return redirect('/home/admin/edit');
+                return redirect('/home/edit');
             }
         }else{
             return "error";
@@ -88,7 +88,7 @@ class UserController extends Controller
         }
         $user->password = $hashedPassword;
         if ($user->save()) {
-            return redirect('/home/admin/edit');
+            return redirect('/home/edit');
         }
     }
 }
