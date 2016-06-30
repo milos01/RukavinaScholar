@@ -18,19 +18,21 @@ class InboxController extends Controller
     }
 
     public function showUsersMessages($id){
-    	$user = User::find($id);
+    	$user = Auth::user();
     	if ($id < $user->id) {
     		$min = $id;
     		$max = $user->id;
-    	}
-    	$min = $user->id;
-    	$max = $id;
-
-    	$myMessages = Auth::user()->fromMessages()->where('user_to', Auth::id())->orWhere('group_start',$min)->orWhere('group_end', $max)->orderBy('pivot_id','ASC')->get();
+    	}else{
+    	   $min = $user->id;
+    	   $max = $id;
+        }
+        
+        $toUser = User::find($id);
+    	$myMessages = Auth::user()->fromMessages()->where('user_to', Auth::id())->orWhere('group_start',$min)->where('group_end', $max)->orderBy('pivot_id','ASC')->get();
     	$myMessages->last()->pivot->read = 1;
     	$myMessages->last()->pivot->save();
     	
-    	return view('messages')->with('user', $user)->with('myMessages', $myMessages);
+    	return view('messages')->with('user', $toUser)->with('myMessages', $myMessages);
     }
 
     public function sendMessage(Request $request){

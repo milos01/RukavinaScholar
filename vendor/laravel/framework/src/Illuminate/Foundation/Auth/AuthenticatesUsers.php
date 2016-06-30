@@ -114,11 +114,11 @@ trait AuthenticatesUsers
         if (method_exists($this, 'authenticated')) {
             return $this->authenticated($request, Auth::guard($this->getGuard())->user());
         }
-        if(Auth::user()->is("admin")){
+        
 
         $myMessages = "1";
             return redirect()->intended("/home")->with('myMessagesCount',$myMessages);
-        }
+        
 //        return redirect()->intended($this->redirectPath());
     }
 

@@ -72,13 +72,15 @@
                     <li><a href="/home/manage"><i class="fa fa-area-chart"></i>
                         <span class="nav-label">Statistics</span></a></li>
 
+                @endif
                     <li><a href="/home/edit"><i class="fa fa-cog"></i>
                         <span class="nav-label">Edit profile</span></a></li>
-                @endif
-                
-                
+
+                    <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
+                    <span class="nav-label"></span>Assigned to me </a></li>
+                    
                     <li><a href="/home/inbox"><i class="fa fa-envelope"></i>
-                    <span class="nav-label"></span>Mailbox ({{$myMessagess}}) </a></li>
+                    <span class="nav-label"></span>Mailbox () </a></li>
             </ul>
 
         </div>

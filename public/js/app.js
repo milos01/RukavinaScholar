@@ -15,12 +15,15 @@ app.controller('sendMessageController', function($scope, $http ) {
     console.log(id);
 	 	$http({
   			method: 'POST',
-  			url: '/home/admin/inbox/sendMessage',
+  			url: '/home/inbox/sendMessage',
   			data: {message: message, id: id}
 		}).then(function successCallback(response) {
-        $( ".chDiscussion" ).load( " .chDiscussion" );
+        $(".messInput").val("");
+        // $( ".chDiscussion" ).load( " .chDiscussion" );
+        $("#leftUserMessage").find("#messageBox").text(response.data.variable1);
+        var messageDiv = $("#leftUserMessage");
         $(".chDiscussion").css('padding','0px');
-        $cont[0].scrollTop = $cont[0].scrollHeight;
+        $(".chDiscussion").append(messageDiv);
 	    	// var res = JSON.stringify(response.data);
 	    	// alert(res);
   		}, function errorCallback(response) {

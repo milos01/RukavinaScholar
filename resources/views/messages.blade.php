@@ -22,14 +22,14 @@
                             <div class="col-md-12 animated fadeInRight" >
                                 <div class="chat-discussion chDiscussion"  style="background: #fff;">
                                     @foreach($myMessages as $message)
-
+                                        {{$message->id}}<br>
                                         @if($message->id != Auth::id())
-                                            <div class="chat-message left" style="width:60%">
+                                            <div class="chat-message left" style="width:60%" id="leftUserMessage">
                                                 <img class="message-avatar" src="../../../img/{{Auth::user()->picture}}" alt="" style="border-radius: 50%">
                                                 <div class="message">
                                                      <a class="message-author" href="#"> {{Auth::user()->name}} {{Auth::user()->lastName}} </a>
                                                         <span class="message-date">{{$message->pivot->created_at->format('m/d/Y')}}</span>
-                                                        <span class="message-content" >
+                                                        <span class="message-content" id="messageBox">
                                                             {!!nl2br(($message->pivot->message))!!}
                                                         </span>
                                                 </div>

@@ -5,7 +5,7 @@
 @section('navMenu')
 	@parent
 	 <li>
-         <a href="{{url('/home/admin')}}">Home</a>
+         <a href="{{url('/home')}}">Home</a>
      </li>
     <li class="active">
     	<strong>Product edit</strong>
@@ -24,7 +24,7 @@
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
                                     <div class="panel-body">
-                                    	<form action="{{url('/home/admin/updateUserurl')}}" method="POST">
+                                    	<form action="{{url('/home/updateUser')}}" method="POST">
 	                                        <fieldset class="form-horizontal">
 	                                            <div class="form-group"><label class="col-sm-2 control-label">First name:</label>
 	                                                <div class="col-sm-8"><input type="text" class="form-control" value="{{Auth::user()->name}}" name="fname"></div>
@@ -51,7 +51,7 @@
                                 </div>
                                 <div id="tab-2" class="tab-pane">
                                     <div class="panel-body">
-                                    <form action="{{url('/home/admin/updatePassword')}}" method="POST">
+                                    <form action="{{url('/home/updatePassword')}}" method="POST">
                                         <fieldset class="form-horizontal">
                                             <div class="form-group"><label class="col-sm-2 control-label">Old password:</label>
                                                 <div class="col-sm-8"><input type="password" class="form-control" name="oldPassword"></div>
@@ -327,7 +327,7 @@
                             <div class="col-md-6">
                                 <h4>Preview image</h4>
                                 <div class="img-preview img-preview-sm"></div>
-                                <form action="{{url('/home/admin/saveImage')}}" method="POST" enctype="multipart/form-data">
+                                <form action="{{url('/home/saveImage')}}" method="POST" enctype="multipart/form-data">
 	                                <div class="btn-group">
 	                                    <label title="Upload image file" for="inputImage" class="btn btn-primary" style="margin-top:15px;">
 	                                        <input type="file" accept="image/*" name="picture" id="inputImage" 	 class="hidden">

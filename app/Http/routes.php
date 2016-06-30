@@ -28,6 +28,8 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('saveImage', 'UserController@saveImage');
 		Route::post('updatePassword', 'UserController@updatePassword');
 		Route::get('user/{id}', 'HomeController@showUserProfile');
+		Route::get('takeProblem/{id}', 'ProblemController@takeProblem');
+		Route::get('assigned', 'ProblemController@assigned');
 		Route::get('inbox', 'InboxController@showInbox');
 		Route::get('inbox/{id}', 'InboxController@showUsersMessages');
 		Route::post('inbox/sendMessage', 'InboxController@sendMessage');

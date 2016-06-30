@@ -132,6 +132,7 @@
 
                                             <tbody>
                                             @foreach($allProblems as $problem)
+                                                @if($problem->took != 1)
                                             
                                                 <tr>
                                                     <td style="padding: 0px;color:black">
@@ -151,7 +152,7 @@
                                                     <td style="padding: 0px">
                                                          <a href="{{url('/home/problem',$problem->id)}}">
                                                             <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                {{$problem->user->name}} {{$problem->user->lastName}}
+                                                                {{$problem->user_from->name}} {{$problem->user_from->lastName}}
                                                             </div>
                                                         </a>
                                                     </td>
@@ -179,7 +180,54 @@
                                                     </td>
 
                                                 </tr>
-                                            
+                                                @else
+                                                <tr>
+                                                    <td style="padding: 0px;color:black">
+                                                        
+                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                {{$problem->id}}
+                                                            </div>
+                                                      
+                                                    </td>
+                                                    <td style="padding: 0px;">
+                                                      
+                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                {{$problem->subject}}
+                                                            </div>
+                                                    
+                                                    </td>
+                                                    <td style="padding: 0px">
+                                                         
+                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                {{$problem->user_from->name}} {{$problem->user_from->lastName}}
+                                                            </div>
+                                                    
+                                                    </td>
+                                                    <td style="padding: 0px">
+                                                       
+                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                Type of problem
+                                                            </div>
+                                                      
+                                                    </td>
+                                                    
+                                                    <td style="padding: 0px">
+                                                        
+                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                {{$problem->created_at->format('m/d/Y')}}
+                                                            </div>
+                                                       
+                                                    </td>
+                                                    <td style="padding: 0px;text-align: center">
+                                                       
+                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                Assigned
+                                                            </div>
+                                                       
+                                                    </td>
+
+                                                </tr>
+                                                @endif
                                             @endforeach
                                             </tbody>
                                         </table>

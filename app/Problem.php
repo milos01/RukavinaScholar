@@ -19,4 +19,8 @@ class Problem extends Model
     public function user(){
     	return $this->belongsTo('App\User','person_name');
     }
+
+    public function user_from(){
+    	return $this->belongsTo('App\User','person_from');
+    }
 }
