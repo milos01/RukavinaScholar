@@ -28,7 +28,7 @@ class HomeController extends Controller
     public function index()
     {
         $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-        $allProblems = Problem::all();
+        $allProblems = Problem::all()->where('took',0);
 
         return view('homeCenter')->with('myMessagess', $myMessagess->count())->with('allProblems',$allProblems);
     }

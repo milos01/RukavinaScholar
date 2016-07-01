@@ -1,13 +1,10 @@
-if ($("#alarm").is(":visible")) { 
-	$("#alarm").delay(1800).fadeOut(500);
-}
-var $cont = $(".chDiscussion");
-$cont[0].scrollTop = $cont[0].scrollHeight;
+
 var app = angular.module('kbkApp', [], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
  });
-
+var $cont = $(".chDiscussion");
+$cont[0].scrollTop = $cont[0].scrollHeight;
 app.controller('sendMessageController', function($scope, $http ) {
 	 $scope.submitMessageForm = function() {
 	 	var message = $scope.message;
@@ -30,4 +27,47 @@ app.controller('sendMessageController', function($scope, $http ) {
     		alert('ne valja');
   		});
     };
+});
+
+$(document).mouseup(function (e)
+{
+    var container = $("#responseDiv");
+
+    if (!container.is(e.target) // if the target of the click isn't the container...
+        && container.has(e.target).length === 0) // ... nor a descendant of the container
+    {
+        $("#responseDiv").hide();
+    }
+});
+
+app.controller('userSearchController',function($scope, searchService){ 
+   
+    $scope.search = function(){
+
+        searchService.search($scope.keywords).then(function(response){
+            $("#responseDiv").text("");
+
+            $("#responseDiv").fadeIn(150);
+            if(response.data.length === 0){
+                $("#responseDiv").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
+            }else{
+              for (var i = response.data.length - 1; i >= 0; i--) {
+                  $("#responseDiv").append("<div style='padding-top:6px;padding-bottom:6px'>"+response.data[i].name+" "+response.data[i].lastName+"</div>");
+              }
+            };
+        });
+    };
+
+  
+
+});
+
+app.service('searchService', function($http){
+    return {
+        search: function(keywords){
+            console.log(keywords);
+            
+            return $http.post('/home/api/application/getusers', { "username" : keywords });
+        }
+    }
 });

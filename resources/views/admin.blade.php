@@ -62,7 +62,7 @@
 						    </span>
                         </a>
                     </div>
-                    <div class="logo-element">QFC</div>
+                    <div class="logo-element">KBK</div>
                 </li>
                 <!-- Admin side menu -->
                 @if(Auth::user()->is('admin'))
@@ -77,10 +77,10 @@
                         <span class="nav-label">Edit profile</span></a></li>
 
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
-                    <span class="nav-label"></span>Assigned to me </a></li>
+                    <span class="nav-label">Assigned to me </span></a></li>
                     
                     <li><a href="/home/inbox"><i class="fa fa-envelope"></i>
-                    <span class="nav-label"></span>Mailbox () </a></li>
+                    <span class="nav-label">Mailbox</span</a></li>
             </ul>
 
         </div>
@@ -95,8 +95,7 @@
                        href="#"><i class="fa fa-bars"></i> </a>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
-                    <li><a href="/logout"> <i class="fa fa-sign-out"></i> Log
-                            out
+                    <li><a href="/logout"> <i class="fa fa-power-off" aria-hidden="true"></i> Logout
                         </a></li>
                 </ul>
 

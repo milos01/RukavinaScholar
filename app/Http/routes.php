@@ -33,6 +33,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('inbox', 'InboxController@showInbox');
 		Route::get('inbox/{id}', 'InboxController@showUsersMessages');
 		Route::post('inbox/sendMessage', 'InboxController@sendMessage');
+		Route::post('api/application/getusers','UserController@getApiUsers');
 		Route::get('manage', function(){
 			$users = User::all();
 			return view('/manageUsers')->with('users', $users);

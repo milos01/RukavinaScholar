@@ -15,12 +15,13 @@ class Problem extends Model
     protected $hidden = [
         'password', 'remember_token',
     ];
-   
-    public function user(){
-    	return $this->belongsTo('App\User','person_name');
-    }
 
     public function user_from(){
     	return $this->belongsTo('App\User','person_from');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
     }
 }

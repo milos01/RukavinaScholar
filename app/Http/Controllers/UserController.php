@@ -9,7 +9,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\NewImageRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\User;
-use Hash, Auth;
+use Hash, Auth,DB;
 
 
 class UserController extends Controller
@@ -90,5 +90,11 @@ class UserController extends Controller
         if ($user->save()) {
             return redirect('/home/edit');
         }
+    }
+
+    public function getApiUsers(Request $request){
+        $keyword = $request->input('username');
+        $allUsers = User::where(DB::raw("CONCAT(`name`, ' ', `lastName`)"), 'LIKE', '%'.$keyword.'%')->get();
+        return json_encode($allUsers);
     }
 }

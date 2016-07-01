@@ -63,11 +63,23 @@
                                        
                                     </dl>
                                     <hr>
-
+                                    <div style="width: 400px;">
+                                        <div class="small text-muted" ng-controller="userSearchController">
+                                            <dt>Search for moderators</dt>
+                                            <input type="text" id="searchInput" class="form-control" style="margin-bottom:20px;width:250px" ng-model="keywords" ng-change="search()"></input>
+                                             
+                                        </div>
+                                       <!--  <span class="pull-left" style="border: 1px solid red;width:150px;height: 40px;margin-left: 260px;">
+                                                Milos Obradovic
+                                        </span> -->
+                                    </div>
+                                    <div class="container" id="responseDiv" style="width:250px;max-height:200px;border:1px solid red;position: absolute;margin-top:-17px;z-index: 999;background-color: white;display: none;">
+                                        
+                                    </div>
                                     <div>
                                         <div class="btn-group">
-                                            <button class="btn btn-primary btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true"></i><a href="{{url('home/takeProblem',$problem->id)}}" style="color:white"> Take it!</a></button>
-                                            <button class="btn btn-white btn-sm"><i class="fa fa-star"></i> Add to wishlist </button>
+                                            <button class="btn btn-white btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true"></i><a href="{{url('home/takeProblem',$problem->id)}}" style="color:#676A6C"> Take it</a></button>
+                                            <button class="btn btn-danger btn-sm"><i class="fa fa-angle-left" aria-hidden="true"></i><a href="{{url('/home')}}"  style="color: white"> Back to home </a></button>
                                         </div>
                                     </div>
 

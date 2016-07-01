@@ -131,104 +131,65 @@
                                         <table class="table table-striped">
 
                                             <tbody>
-                                            @foreach($allProblems as $problem)
-                                                @if($problem->took != 1)
-                                            
-                                                <tr>
-                                                    <td style="padding: 0px;color:black">
-                                                        <a href="{{url('/home/problem',$problem->id)}}">
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                {{$problem->id}}
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                    <td style="padding: 0px;">
-                                                        <a href="{{url('/home/problem',$problem->id)}}">
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                {{$problem->subject}}
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                    <td style="padding: 0px">
-                                                         <a href="{{url('/home/problem',$problem->id)}}">
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                {{$problem->user_from->name}} {{$problem->user_from->lastName}}
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                    <td style="padding: 0px">
-                                                        <a href="{{url('/home/problem',$problem->id)}}">
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                Type of problem
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                    
-                                                    <td style="padding: 0px">
-                                                        <a href="{{url('/home/problem',$problem->id)}}">
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                {{$problem->created_at->format('m/d/Y')}}
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                    <td style="padding: 0px;text-align: center">
-                                                        <a href="#">
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                <i class="fa fa-eye" style="color: #1AB394"></i>
-                                                            </div>
-                                                        </a>
-                                                    </td>
-
-                                                </tr>
-                                                @else
-                                                <tr>
-                                                    <td style="padding: 0px;color:black">
+                                            @if($allProblems->isEmpty())
+                                                <td style="padding: 0px;color:black;text-align: center;">
+                                                    <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                        No problems to selsect
+                                                    </div>
+                                                </td>
+                                            @else
+                                                @foreach($allProblems as $problem)
+                                                    @if($problem->took != 1)
+                                                
+                                                    <tr>
+                                                        <td style="padding: 0px;color:black">
+                                                            <a href="{{url('/home/problem',$problem->id)}}">
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                    {{$problem->id}}
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td style="padding: 0px;">
+                                                            <a href="{{url('/home/problem',$problem->id)}}">
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                    {{$problem->subject}}
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td style="padding: 0px">
+                                                             <a href="{{url('/home/problem',$problem->id)}}">
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                    {{$problem->user_from->name}} {{$problem->user_from->lastName}}
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td style="padding: 0px">
+                                                            <a href="{{url('/home/problem',$problem->id)}}">
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                    Type of problem
+                                                                </div>
+                                                            </a>
+                                                        </td>
                                                         
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                {{$problem->id}}
-                                                            </div>
-                                                      
-                                                    </td>
-                                                    <td style="padding: 0px;">
-                                                      
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                {{$problem->subject}}
-                                                            </div>
-                                                    
-                                                    </td>
-                                                    <td style="padding: 0px">
-                                                         
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                {{$problem->user_from->name}} {{$problem->user_from->lastName}}
-                                                            </div>
-                                                    
-                                                    </td>
-                                                    <td style="padding: 0px">
-                                                       
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                Type of problem
-                                                            </div>
-                                                      
-                                                    </td>
-                                                    
-                                                    <td style="padding: 0px">
-                                                        
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                {{$problem->created_at->format('m/d/Y')}}
-                                                            </div>
-                                                       
-                                                    </td>
-                                                    <td style="padding: 0px;text-align: center">
-                                                       
-                                                            <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                Assigned
-                                                            </div>
-                                                       
-                                                    </td>
+                                                        <td style="padding: 0px">
+                                                            <a href="{{url('/home/problem',$problem->id)}}">
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                    {{$problem->created_at->format('m/d/Y')}}
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td style="padding: 0px;text-align: center">
+                                                            <a href="#">
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                    <i class="fa fa-eye" style="color: #1AB394"></i>
+                                                                </div>
+                                                            </a>
+                                                        </td>
 
-                                                </tr>
-                                                @endif
-                                            @endforeach
+                                                    </tr>
+                                                    @endif
+                                                @endforeach
+                                             @endif
                                             </tbody>
                                         </table>
                                     </div>

@@ -25,15 +25,15 @@ class ProblemController extends Controller
     	$problem = Problem::findorFail($id);
     	$luser = Auth::user();
     	$problem->took = 1;
-    	$problem->person_name = $luser->id; 
     	$problem->save();
+        $luser->problems()->attach($problem->id /*array('message' => $message, 'read' => 0, 'group_start' => $min, 'group_end' => $max, 'last' => 1)*/);
 
     	return redirect('/home');
     }
 
     public function assigned(){
     	$authId = Auth::id();
-    	$myProblems = Problem::all()->where('person_name', $authId);
+    	$myProblems = Auth::user()->problems;
     	return view('myProblems')->with('myProblems', $myProblems);
     }
 }

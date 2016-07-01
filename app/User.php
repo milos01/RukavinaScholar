@@ -46,7 +46,8 @@ class User extends Authenticatable
         return $this->belongsToMany('App\User', 'messages','user_from','user_to')->withPivot('created_at', 'message','read', 'id', 'last');
     }
 
-    public function problems(){
-         return $this->hasMany('App\Problem');
+    public function problems()
+    {
+        return $this->belongsToMany('App\Problem', 'user_problem', 'user_id', 'problem_id');
     }
 }
