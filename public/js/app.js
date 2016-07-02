@@ -3,8 +3,8 @@ var app = angular.module('kbkApp', [], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
  });
-var $cont = $(".chDiscussion");
-$cont[0].scrollTop = $cont[0].scrollHeight;
+// var $cont = $(".chDiscussion");
+// $cont[0].scrollTop = $cont[0].scrollHeight;
 app.controller('sendMessageController', function($scope, $http ) {
 	 $scope.submitMessageForm = function() {
 	 	var message = $scope.message;
@@ -40,8 +40,8 @@ $(document).mouseup(function (e)
     }
 });
 
-app.controller('userSearchController',function($scope, searchService){ 
-   
+app.controller('userSearchController',function($scope, $compile, $http, searchService){ 
+    var problemId = $("#problemId").val();
     $scope.search = function(){
 
         searchService.search($scope.keywords).then(function(response){
@@ -52,7 +52,22 @@ app.controller('userSearchController',function($scope, searchService){
                 $("#responseDiv").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
             }else{
               for (var i = response.data.length - 1; i >= 0; i--) {
-                  $("#responseDiv").append("<div style='padding-top:6px;padding-bottom:6px'>"+response.data[i].name+" "+response.data[i].lastName+"</div>");
+                  
+                  var divDiv = "<div style='padding-top:6px;padding-bottom:6px' ng-click='addMateFunction("+response.data[i].id+","+problemId+")'>"+response.data[i].name+" "+response.data[i].lastName+"</div>";
+    
+                  angular.element(document.getElementById('responseDiv')).append($compile(divDiv)($scope));
+                  $scope.addMateFunction = function(userId, problemId){
+                      $http({
+                          method: 'POST',
+                          url: '/home/api/application/addModerator',
+                          data: {userId: userId, problemId: problemId}
+                      }).then(function successCallback(response) {
+                          alert("sve ok");
+                      }, function errorCallback(response) {
+                          alert('ne valja');
+                      });
+                  };
+                  
               }
             };
         });

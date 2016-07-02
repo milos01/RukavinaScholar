@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\User;
 use App\Problem;
 use Auth;
@@ -35,5 +34,13 @@ class ProblemController extends Controller
     	$authId = Auth::id();
     	$myProblems = Auth::user()->problems;
     	return view('myProblems')->with('myProblems', $myProblems);
+    }
+
+    public function addMate(Request $request){
+        $userId = $request->input('userId');
+        $problemId = $request->input('problemId');
+        $user = User::findorFail($userId);
+
+        $user->problems()->attach($problemId);
     }
 }
