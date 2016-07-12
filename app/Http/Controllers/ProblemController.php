@@ -40,7 +40,8 @@ class ProblemController extends Controller
         $userId = $request->input('userId');
         $problemId = $request->input('problemId');
         $user = User::findorFail($userId);
-
+        return $user->problems()->get();
         $user->problems()->attach($problemId);
+        return $user;
     }
 }

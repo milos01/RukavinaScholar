@@ -22,6 +22,8 @@
     <link href="../../../css/style.css" rel="stylesheet">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
     <link href="../../../css/plugins/cropper/cropper.min.css" rel="stylesheet">
+        <!-- Sweet Alert -->
+    <link href="../../../css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Lato';
@@ -174,6 +176,7 @@
     <script src="../../../js/plugins/cropper/cropper.min.js"></script>
 
     <script src="../../../js/app.js"></script>
+    <script src="../../../js/plugins/sweetalert/sweetalert.min.js"></script>
     <script>
 
         $(document).ready(

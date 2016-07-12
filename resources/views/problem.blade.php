@@ -68,14 +68,18 @@
                                             <dt>Search for moderators</dt>
                                             <input type="text" id="searchInput" class="form-control" style="margin-bottom:20px;width:250px" ng-model="keywords" ng-change="search()">
                                             <input type="hidden" value="{{$problem->id}}" id="problemId">
-                                             
+                                            <div id="itemsHolder" style="position: absolute;width: 500px;height: 120px;margin-top:-54px;margin-left:250px;">
+                                            @foreach($problem->users as $user)
+                                                <div class="" id="menuSearchItem" style="border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px ">
+                                                    {{$user->name}} {{$user->lastName}}
+                                                </div>
+                                            @endforeach
+                                            </div>
                                         </div>
                                     
-                                    <!-- @foreach($problem->users as $user)
-                                        {{$user->name}} {{$user->lastName}}
-                                    @endforeach -->
+                                    
                                   
-                                        <div class="container" id="responseDiv" style="width:250px;max-height:200px;border:1px solid red;position: absolute;margin-top:-17px;z-index: 999;background-color: white;display: none">
+                                        <div class="" id="responseDiv" style="width:250px;max-height:200px;border:1px solid red;position: absolute;margin-top:-17px;z-index: 999;background-color: white;display: none">
                                             
                                         </div>
                                     
