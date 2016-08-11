@@ -12,6 +12,7 @@
     </li>                
 @stop
 @section('manageUsers')
+
 <div class="wrapper wrapper-content animated fadeInRight ecommerce">
 	<div class="row">
                 <div class="col-lg-12">
@@ -315,19 +316,12 @@
 
                                         <div class="row">
             <div class="col-lg-12">
-                
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="image-crop">
-                                    <img src="../../img/{{Auth::user()->picture}}">
-                                    <!-- <div class="cropper-container" style="width: 462px;height: 309px;left: 0px;top: 107px;">
-                                    </div> -->
+                            <div class="col-md-6" >
+                                <div class="dropzone" id="dropzoneFileUpload">
+                                    
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <h4>Preview image</h4>
-                                <div class="img-preview img-preview-sm"></div>
-                                <form action="{{url('/home/saveImage')}}" method="POST" enctype="multipart/form-data">
+                                <!-- <form action="{{url('/home/saveImage')}}" method="POST" enctype="multipart/form-data">
 	                                <div class="btn-group">
 	                                    <label title="Upload image file" for="inputImage" class="btn btn-primary" style="margin-top:15px;">
 	                                        <input type="file" accept="image/*" name="picture" id="inputImage" 	 class="hidden">
@@ -341,10 +335,10 @@
 	                                    <!-- <button class="btn btn-white" id="rotateLeft" type="button">Rotate Left</button>
 	                                    <button class="btn btn-white" id="rotateRight" type="button">Rotate Right</button>
 	                                    <button class="btn btn-warning" id="setDrag" type="button">New crop</button> -->
-	                                    <button class="btn btn-warning" id="setDrag" type="submit">Save</button>
+	                                   <!--  <button class="btn btn-warning" id="setDrag" type="submit">Save</button>
 	                                </div>
 	                                <input type="hidden" value="{{csrf_token()}}" name="_token"></input>
-                                </form>
+                                </form>  -->
                             </div>
                         </div>
                     

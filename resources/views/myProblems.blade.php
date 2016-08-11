@@ -65,28 +65,28 @@
                                                  @foreach($myProblems as $myProblem)
                                                     <tr>
                                                         <td style="padding: 0px;color:black">
-                                                            <a href="{{url('/home/problem',$myProblem->id)}}">
+                                                            <a href="{{url('/home/myproblem',$myProblem->id)}}">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    {{$myProblem->id}}
+                                                                    <!-- {{$myProblem->id}} -->
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px;">
-                                                            <a href="{{url('/home/problem',$myProblem->id)}}">
+                                                            <a href="{{url('/home/myproblem',$myProblem->id)}}">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
                                                                     {{$myProblem->subject}}
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px">
-                                                             <a href="{{url('/home/problem',$myProblem->id)}}">
+                                                             <a href="{{url('/home/myproblem',$myProblem->id)}}">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
                                                                     {{$myProblem->user_from->name}} {{$myProblem->user_from->lastName}}
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px">
-                                                            <a href="{{url('/home/problem',$myProblem->id)}}">
+                                                            <a href="{{url('/home/myproblem',$myProblem->id)}}">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
                                                                     Type of problem
                                                                 </div>
@@ -94,20 +94,27 @@
                                                         </td>
                                                         
                                                         <td style="padding: 0px">
-                                                            <a href="{{url('/home/problem',$myProblem->id)}}">
+                                                            <a href="{{url('/home/my
+                                                            problem',$myProblem->id)}}">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
                                                                     {{$myProblem->created_at->format('m/d/Y')}}
                                                                 </div>
                                                             </a>
                                                         </td>
+                                                        
                                                         <td style="padding: 0px;text-align: center">
                                                             <a href="#">
+                                                                @if($myProblem->main_slovler == Auth::id())
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    <i class="fa fa-eye" style="color: #1AB394"></i>
+                                                                    <i class="fa fa-star" style="color: #ed5565"></i>
                                                                 </div>
+                                                                @else
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                    <i class="fa fa-thumb-tack" aria-hidden="true" style="color:#31708f"></i>
+                                                                </div>
+                                                                @endif
                                                             </a>
                                                         </td>
-
                                                     </tr>
                                                 @endforeach
                                              @endif

@@ -28,9 +28,15 @@ class HomeController extends Controller
     public function index()
     {
         $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+        $count = 0;
+        foreach ($myMessagess as $key => $message) {
+            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
+               $count++; 
+            }
+        }
         $allProblems = Problem::all()->where('took',0);
 
-        return view('homeCenter')->with('myMessagess', $myMessagess->count())->with('allProblems',$allProblems);
+        return view('homeCenter')->with('myMessagesCount', $count)->with('allProblems',$allProblems);
     }
 
      public function showAdminHome(){
@@ -40,6 +46,13 @@ class HomeController extends Controller
 
      public function showUserProfile($id){
         $user = User::findOrFail($id);
-        return view('userProfile')->with('user',$user);
+        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+        $count = 0;
+        foreach ($myMessagess as $key => $message) {
+            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
+               $count++; 
+            }
+        }
+        return view('userProfile')->with('user',$user)->with('myMessagesCount', $count);
      }
 }

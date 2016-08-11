@@ -9,7 +9,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\NewImageRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\User;
-use Hash, Auth,DB;
+use Hash, Auth,DB, Input, Validator, Response;
 
 
 class UserController extends Controller
@@ -54,7 +54,14 @@ class UserController extends Controller
     }
 
     public function editUser(){
-        return view('editUser');
+        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+        $count = 0;
+        foreach ($myMessagess as $key => $message) {
+            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
+               $count++; 
+            }
+        }
+        return view('editUser')->with('myMessagesCount', $count);
     }
 
     public function updateUser(UpdateUserRequest $request){
@@ -66,17 +73,47 @@ class UserController extends Controller
         }
     }
 
-    public function saveImage(NewImageRequest $request){
-        if ($request->file('picture')) {
-            $request->file('picture')->move(public_path('img'), $request->file('picture')->getClientOriginalName());
-            $user = Auth::user();
-            $user->picture = $request->file('picture')->getClientOriginalName();
-            if($user->save()){
-                return redirect('/home/edit');
-            }
-        }else{
-            return "error";
+    public function saveImage(Request $request){
+        $input = $request->all();
+ 
+        $rules = array(
+            'file' => 'image|max:3000',
+        );
+ 
+        $validation = Validator::make($input, $rules);
+ 
+        if ($validation->fails()) {
+            return Response::make($validation->errors->first(), 400);
         }
+ 
+        $destinationPath = 'uploads'; // upload path
+        $extension = $request->file('file')->getClientOriginalExtension(); // getting file extension
+        $fileName = rand(11111, 99999) . '.' . $extension;
+
+        $upload_success = $request->file('file')->move(public_path('img'), $fileName); // uploading file to given path
+        $user = Auth::user();
+        $user->picture = $fileName;
+
+        $user->save();
+        if ($upload_success) {
+            return Response::json('success', 200);
+        } else {
+            return Response::json('error', 400);
+        }
+        // var_dump("aa");
+
+
+        // if ($request->file('picture')) {
+
+        //     $request->file('picture')->move(public_path('img'), $request->file('picture')->getClientOriginalName());
+        //     $user = Auth::user();
+        //     $user->picture = $request->file('picture')->getClientOriginalName();
+        //     if($user->save()){
+        //         return json_encode("jeay");
+        //     }
+        // }else{
+        //     return json_encode("jeayt");
+        // }
     }
 
     public function updatePassword(UpdatePasswordRequest $request){
@@ -97,7 +134,15 @@ class UserController extends Controller
         $allUsers = User::where(DB::raw("CONCAT(`name`, ' ', `lastName`)"), 'LIKE', '%'.$keyword.'%')->where(function($q) {
           $q->where('role', 'admin')
             ->orWhere('role', 'moderator');
-      })->get();
+      })->where('id','!=', Auth::id())->get();
+
+        return json_encode($allUsers);
+    }
+
+    public function getApiUsers2(Request $request){
+        $keyword = $request->input('username');
+        $allUsers = User::where(DB::raw("CONCAT(`name`, ' ', `lastName`)"), 'LIKE', '%'.$keyword.'%')->where('id','!=', Auth::id())->get();
+
         return json_encode($allUsers);
     }
 }

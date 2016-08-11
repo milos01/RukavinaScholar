@@ -21,6 +21,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::group(['prefix'=>'home', 'middleware' => 'auth'], function () {
 		Route::get('/', 'HomeController@index');
 		Route::get('problem/{id}', 'ProblemController@showProblem');
+		Route::get('myproblem/{id}', 'ProblemController@showMyProblem');
 		Route::get('upgrade/{id}', 'UserController@upgradeAdmin');
 		Route::get('downgrade/{id}', 'UserController@donwgradeAdmin');
 		Route::post('addStaff', 'UserController@addStaff');
@@ -34,6 +35,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('inbox/{id}', 'InboxController@showUsersMessages');
 		Route::post('inbox/sendMessage', 'InboxController@sendMessage');
 		Route::post('api/application/getusers','UserController@getApiUsers');
+		Route::post('api/application/getusers2','UserController@getApiUsers2');
 		Route::post('api/application/addModerator', 'ProblemController@addMate');
 		Route::get('manage', function(){
 			$users = User::all();

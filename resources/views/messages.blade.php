@@ -22,7 +22,7 @@
                             <div class="col-md-12 animated fadeInRight" >
                                 <div class="chat-discussion chDiscussion"  style="background: #fff;">
                                     @foreach($myMessages as $message)
-                                        {{$message->id}}<br>
+                                        <br>
                                         @if($message->id != Auth::id())
                                             <div class="chat-message left" style="width:60%" id="leftUserMessage">
                                                 <img class="message-avatar" src="../../../img/{{Auth::user()->picture}}" alt="" style="border-radius: 50%">

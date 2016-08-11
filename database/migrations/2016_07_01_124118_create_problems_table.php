@@ -17,6 +17,8 @@ class CreateProblemsTable extends Migration
             $table->string('subject');
             $table->integer('person_from')->unsigned();
             $table->foreign('person_from')->references('id')->on('users');
+            $table->integer('main_slovler')->unsigned();
+            $table->foreign('main_slovler')->references('id')->on('users');
             $table->string('problem_description');
             $table->integer('took')->unsigned();
             $table->timestamps();

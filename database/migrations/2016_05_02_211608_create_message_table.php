@@ -18,6 +18,10 @@ class CreateMessageTable extends Migration
             $table->foreign('user_from')->references('id')->on('users');
             $table->integer('user_to')->unsigned();
             $table->foreign('user_to')->references('id')->on('users');
+            $table->integer('read')->unsigned();
+            $table->integer('last')->unsigned();
+            $table->integer('group_start')->unsigned();
+            $table->integer('group_end')->unsigned();
             $table->string('message');
             $table->timestamps();
         });

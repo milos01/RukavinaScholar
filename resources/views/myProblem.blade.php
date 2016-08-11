@@ -64,15 +64,30 @@
                                     </dl>
                                     <hr>
                                     
-                                        
+                                        <div class="small text-muted" ng-controller="userSearchController">
+                                            <dt>Search for moderators</dt>
+                                            <input type="text" id="searchInput" class="form-control" style="margin-bottom:20px;width:250px" ng-model="keywords" ng-change="search()">
+                                            <input type="hidden" value="{{$problem->id}}" id="problemId">
+                                            <div id="itemsHolder" style="position: absolute;width: 500px;height: 120px;margin-top:-54px;margin-left:250px;">
+                                            @foreach($problem->users as $user)
+                                                @if($user->id != Auth::user()->id)
+                                                <div class="" id="menuSearchItem" style="border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px ">
+                                                    {{$user->name}} {{$user->lastName}}
+                                                </div>
+                                                @endif
+                                            @endforeach
+                                            </div>
+                                        </div>
                                     
                                     
                                   
-                                       
+                                        <div class="" id="responseDiv" style="width:250px;max-height:200px;border:1px solid red;position: absolute;margin-top:-17px;z-index: 999;background-color: white;display: none">
+                                            
+                                        </div>
                                     
                                     <div>
                                         <div class="btn-group">
-                                            <button class="btn btn-white btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true"></i><a href="{{url('home/takeProblem',$problem->id)}}" style="color:#676A6C"> Take it</a></button>
+                                            <!-- <button class="btn btn-white btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true"></i><a href="{{url('home/takeProblem',$problem->id)}}" style="color:#676A6C"> Take it</a></button> -->
                                             <button class="btn btn-danger btn-sm"><i class="fa fa-angle-left" aria-hidden="true"></i><a href="{{url('/home')}}"  style="color: white"> Back to home </a></button>
                                         </div>
                                     </div>

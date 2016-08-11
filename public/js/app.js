@@ -17,10 +17,12 @@ app.controller('sendMessageController', function($scope, $http ) {
 		}).then(function successCallback(response) {
         $(".messInput").val("");
         // $( ".chDiscussion" ).load( " .chDiscussion" );
+        alert(response.data.variable1);
         $("#leftUserMessage").find("#messageBox").text(response.data.variable1);
         var messageDiv = $("#leftUserMessage");
+
         $(".chDiscussion").css('padding','0px');
-        $(".chDiscussion").append(messageDiv);
+        $(".chDiscussion").append('<div class="chat-message left" style="width:60%" id="leftUserMessage"><img class="message-avatar" src="../../../img/{{Auth::user()->picture}}" alt="" style="border-radius: 50%"><div class="message"><a class="message-author" href="#"></span><span class="message-content" id="messageBox">'+response.data.variable1+'</span></div></div>');
 	    	// var res = JSON.stringify(response.data);
 	    	// alert(res);
   		}, function errorCallback(response) {
@@ -29,22 +31,32 @@ app.controller('sendMessageController', function($scope, $http ) {
     };
 });
 
+
+
+
 $(document).mouseup(function (e)
 {
     var container = $("#responseDiv");
+    var container2 = $("#responseDiv2");
 
     if (!container.is(e.target) // if the target of the click isn't the container...
-        && container.has(e.target).length === 0) // ... nor a descendant of the container
+        && container.has(e.target).length === 0 || !container2.is(e.target) // if the target of the click isn't the container...
+        && container2.has(e.target).length === 0) // ... nor a descendant of the container
     {
         $("#responseDiv").hide();
+        $("#responseDiv2").hide();
     }
 });
 
-app.controller('userSearchController',function($scope, $compile, $http, searchService){ 
+app.controller('userSearchController',function($scope, $compile, $http, searchService, searchService2){ 
     var problemId = $("#problemId").val();
     $scope.search = function(){
 
         searchService.search($scope.keywords).then(function(response){
+          console.log(response.data);
+          if( !$("#searchInput").val() ){
+              $("#responseDiv").hide();
+            }else{
             $("#responseDiv").text("");
 
             $("#responseDiv").fadeIn(150);
@@ -72,19 +84,88 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                   
               }
             };
+          }
         });
     };
 
+    $scope.search2 = function(){
+            
+        searchService2.search($scope.keywords).then(function(response){
+          console.log(response.data);
+            if( !$("#top-search").val() ){
+              $("#responseDiv2").hide();
+            }else{
+
+            $("#responseDiv2").text("");
+
+            $("#responseDiv2").fadeIn(150);
+            if(response.data.length === 0){
+                $("#responseDiv2").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
+            }else{
+              for (var i = response.data.length - 1; i >= 0; i--) {
+                  
+                  var divDiv = "<a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
+    
+                  angular.element(document.getElementById('responseDiv2')).append($compile(divDiv)($scope));
+                  $scope.addMateFunction = function(userId, problemId){
+                      $http({
+                          method: 'POST',
+                          url: '/home/api/application/addModerator',
+                          data: {userId: userId, problemId: problemId}
+                      }).then(function successCallback(response) {
+                          console.log(response.data);
+                          // var item = $("#menuSearchItem").text("aa");
+                          $("#itemsHolder").append(" <div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"</div>");
+                      }, function errorCallback(response) {
+                          alert('ne valja');
+                      });
+                  };
+                  
+              }
+            };
+          }
+        });
+
+    };
   
 
 });
 
+app.controller('sendDirectMessageController', function($scope, $http){
+  $scope.submitMessageForm = function(){
+    var message2 = $scope.message;
+    var id2 = $('#userID').val();
+    alert(message2 + ' ' + id2);
+    $http({
+        method: 'POST',
+        url: '/home/inbox/sendMessage',
+        data: {message: message2, id: id2}
+    }).then(function successCallback(response) {
+        alert('radi');
+      }, function errorCallback(response) {
+        alert('ne valja');
+    });
+  }
+});
+
 app.service('searchService', function($http){
     return {
-        search: function(keywords){
+        search: function(keywords, problemId){
             console.log(keywords);
+            console.log(problemId);
             
-            return $http.post('/home/api/application/getusers', { "username" : keywords });
+            return $http.post('/home/api/application/getusers', { "username" : keywords, "problemId" : problemId});
+        }
+    }
+});
+
+app.service('searchService2', function($http){
+    return {
+        search: function(keywords, problemId){
+            console.log(keywords);
+            console.log(problemId);
+            
+            return $http.post('/home/api/application/getusers2', { "username" : keywords, "problemId" : problemId});
         }
     }
 });

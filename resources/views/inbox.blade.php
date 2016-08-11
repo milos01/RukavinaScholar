@@ -23,10 +23,11 @@
             	<?php $num = 0 ?>
                 <h2>
                 @foreach($myMessages as $message)
-                	@if($message->pivot->read == 0)
+                	@if($message->pivot->read == 0 and $message->pivot->user_to == Auth::id())
                 		<?php $num++; ?>
                 	@endif
                 @endforeach
+
                 Inbox ({{$num}})
                 </h2>
                 <div class="mail-tools tooltip-demo m-t-md">
@@ -43,7 +44,7 @@
                 <table class="table table-hover table-mail">
                 <tbody>
                 @foreach($myMessages as $message)
-	                	@if($message->pivot->read == 0)
+	                	@if($message->pivot->read == 0 and $message->pivot->user_to == Auth::id())
 		                <tr class="unread">
 		                @else
 		                <tr class="read">

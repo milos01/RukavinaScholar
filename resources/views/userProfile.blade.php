@@ -3,6 +3,32 @@
 	Profile
 @stop
 @section('manageUsers')
+    <!-- Send message modal -->
+                <div id="sendMessageModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog" style="width:450px">
+
+                <!-- Modal content-->
+                     <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Modal Header</h4>
+                        </div>
+                        <form ng-submit="submitMessageForm()" ng-controller="sendDirectMessageController">
+                            <div class="modal-body" style="padding: 20px 30px 20px 30px">
+                                <textarea rows="5" cols="52" style="resize:none" ng-model="message" ></textarea>
+                                <p style="margin-top:6px">To: {{$user->name}} {{$user->lastName}}</p>
+                                <input type="hidden" id="userID" value="{{$user->id}}">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">Send message</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                        </form>
+                    </div>
+
+                    </div>
+                </div>
+                <!-- End send message modal -->
 	<div class="row animated fadeInRight" style="margin-top:20px">
                 <div class="col-md-4">
                     <div class="ibox float-e-margins">
@@ -23,17 +49,17 @@
                                 </p>
                                 <div class="row m-t-lg">
                                     <div class="col-md-4">
-                                        <span class="bar">5,3,9,6,5,9,7,3,5,2</span>
+                                        <span class="bar">8</span>
                                         <h5><strong>{{$user->effect}}</strong> problems solved</h5>
                                     </div>
                                 </div>
                                 <div class="user-button">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-envelope"></i> Send Message</button>
+                                            <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#sendMessageModal"><i class="fa fa-envelope" ></i> Send Message</button>
                                         </div>
                                         <div class="col-md-6">
-                                            <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-coffee"></i> Buy a coffee</button>
+                                            <!-- <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-coffee"></i> Buy a coffee</button> -->
                                         </div>
                                     </div>
                                 </div>
@@ -41,7 +67,8 @@
                     </div>
                 </div>
                     </div>
-                <div class="col-md-8">
+                
+                <!-- <div class="col-md-8">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>Activites</h5>
@@ -175,5 +202,5 @@
                     </div>
 
                 </div>
-            </div>
+            </div> -->
 @stop

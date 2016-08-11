@@ -24,6 +24,8 @@
     <link href="../../../css/plugins/cropper/cropper.min.css" rel="stylesheet">
         <!-- Sweet Alert -->
     <link href="../../../css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="../../../css/plugins/dropzone/dropzone.css" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Lato';
@@ -81,8 +83,15 @@
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
                     <span class="nav-label">Assigned to me </span></a></li>
                     
-                    <li><a href="/home/inbox"><i class="fa fa-envelope"></i>
-                    <span class="nav-label">Mailbox</span</a></li>
+                    <li>
+                        <a href="/home/inbox"><i class="fa fa-envelope"></i>
+                            <span class="nav-label">Mailbox 
+                            @if($myMessagesCount != 0)
+                                ({{$myMessagesCount}})
+                            @endif
+                            </span>
+                        </a>
+                    </li>
             </ul>
 
         </div>
@@ -92,9 +101,15 @@
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top white-bg" role="navigation"
                  style="margin-bottom: 0">
-                <div class="navbar-header">
+                <div class="navbar-header" ng-controller="userSearchController">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
                        href="#"><i class="fa fa-bars"></i> </a>
+                    <form role="search" class="navbar-form-custom" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for people..." class="form-control" name="top-search" id="top-search" ng-model="keywords" ng-change="search2()">
+                        </div>
+                    </form>
+                    
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li><a href="/logout"> <i class="fa fa-power-off" aria-hidden="true"></i> Logout
@@ -102,6 +117,9 @@
                 </ul>
 
             </nav>
+            <div class="" id="responseDiv2" style="width:250px;max-height:200px;border:1px solid gray;position: absolute;margin-top:-5px;display:none;margin-left:70px;z-index: 999;background-color: white;z-index:9999;border-radius:2px;box-shadow: 0px 0px 5px #888888;">
+                            
+            </div>
         </div>
         
         <div class="row wrapper border-bottom white-bg page-heading">
@@ -177,6 +195,7 @@
 
     <script src="../../../js/app.js"></script>
     <script src="../../../js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="../../../js/plugins/dropzone/dropzone.js"></script>
     <script>
 
         $(document).ready(
@@ -426,6 +445,26 @@
                         },
                     });
                 });
+    </script>
+    <script type="text/javascript">
+        var baseUrl = "{{url('/home/saveImage')}}";
+        var token = "{{ Session::getToken() }}";
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone("div#dropzoneFileUpload", {
+            url: baseUrl,
+            params: {
+                _token: token
+            }
+        });
+        Dropzone.options.myAwesomeDropzone = {
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 2, // MB
+            addRemoveLinks: false,
+            maxFiles: 1,
+            accept: function(file, done) {
+ 
+            },
+        };
     </script>
 </body>
 </body>
