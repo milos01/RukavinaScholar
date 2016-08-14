@@ -19,12 +19,12 @@
 
                         <div class="row">
 
-                            <div class="col-md-12 animated fadeInRight" >
+                            <div class="col-md-8 animated fadeInRight" >
                                 <div class="chat-discussion chDiscussion"  style="background: #fff;">
                                     @foreach($myMessages as $message)
                                         <br>
                                         @if($message->id != Auth::id())
-                                            <div class="chat-message left" style="width:60%" id="leftUserMessage">
+                                            <div class="chat-message left" style="width:100%" id="leftUserMessage">
                                                 <img class="message-avatar" src="../../../img/{{Auth::user()->picture}}" alt="" style="border-radius: 50%">
                                                 <div class="message">
                                                      <a class="message-author" href="#"> {{Auth::user()->name}} {{Auth::user()->lastName}} </a>
@@ -35,7 +35,7 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <div class="chat-message right" style="width:60%">
+                                            <div class="chat-message right" style="width:100%">
                                                 <img class="message-avatar" src="../../../img/{{$user->picture}}" alt="" style="border-radius: 50%">
                                                 <div class="message" style="background: #f7f7f7">
                                                     <a class="message-author" href="#"> {{$user->name}} {{$user->lastName}} </a>
@@ -52,6 +52,7 @@
                                     
                                 </div>
 
+
                             </div>
                             
 
@@ -60,26 +61,28 @@
 
 
                     </div>
-                    <div class="rcol-md-12 animated fadeInRight" >
+                    <!-- <div class="rcol-md-12 animated fadeInRight" > -->
                      
-                            <div class="col-lg-12" style="background-color: #fff; margin-top: 1px">
-                                <div class="" style="margin-left:22px;width:40%;margin-bottom: 15px;margin-top:20px">
+                            <div class="col-lg-8" style="background-color: #fff; margin-top: 1px;width:66%;">
+                                <div class="" style="margin-left:22px;width:60%;margin-bottom: 15px;margin-top:20px">
                                     <div class="chat-message-form">
 
-                                        <div class="form-group" ng-controller="sendMessageController">
+                                        <div class="form-group" ng-controller="sendMessageController" style="float:left;">
                                             <form ng-submit="submitMessageForm()">
-                                                <textarea class="form-control message-input messInput" name="message" placeholder="Enter message text" ng-model="message" ng-model-options="{ debounce: 1000 }"></textarea>
+                                                <textarea rows="2" cols="55" class="form-control messInput" name="message" placeholder="Write a message..." ng-model="message" ng-model-options="{ debounce: 1000 }" style="resize:none;border:none"></textarea>
                                                 <input type="hidden" name="userId" value="{{$user->id}}" id="userId">
                                                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                                                 <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
-                                             
+                                                
                                             </form>
                                         </div>
-
+                                        <div class="container">
+                                            <span style="float:left;padding:7px 0px">SEND</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                       
-                        </div>
+                        <!-- </div> -->
     </div>
 @stop
