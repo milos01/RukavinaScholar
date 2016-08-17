@@ -31,8 +31,75 @@ app.controller('sendMessageController', function($scope, $http ) {
     };
 });
 
+app.directive('capitalizeFirst', function($parse) {
+   return {
+     require: 'ngModel',
+     link: function(scope, element, attrs, modelCtrl) {
+        var capitalize = function(inputValue) {
+           if (inputValue === undefined) { inputValue = ''; }
+           var capitalized = inputValue.charAt(0).toUpperCase() +
+                             inputValue.substring(1);
+           if(capitalized !== inputValue) {
+              modelCtrl.$setViewValue(capitalized);
+              modelCtrl.$render();
+            }         
+            return capitalized;
+         }
+         modelCtrl.$parsers.push(capitalize);
+         capitalize($parse(attrs.ngModel)(scope)); // capitalize initial value
+     }
+   };
+});
 
+app.directive('passwordLength', function($timeout, $q, $http){
+  return {
+  require: 'ngModel',
+  link: function(scope, elm, attr, model) {
+            model.$asyncValidators.passwordLen = function() {
+                console.log(model.$viewValue.length);
+                if(model.$viewValue.length >= 4 && model.$viewValue.length <= 10){
+                  model.$setValidity('passlen', true);
+                  return $q.resolve();
+                }else{
+                  model.$setValidity('passlen', false);
+                  return $q.reject();
+                }
+            };
+        }
+  }
+});
 
+app.directive("passwordVerify", function() {
+    return {
+        require: "ngModel",
+        scope: {
+            passwordVerify: '='
+        },
+        link: function(scope, element, attrs, ctrl) {
+            scope.$watch(function() {
+                var combined;
+
+                if (scope.passwordVerify || ctrl.$viewValue) {
+                    combined = scope.passwordVerify + '_' + ctrl.$viewValue;
+                }
+                return combined;
+            }, function(value) {
+                if (value) {
+                    ctrl.$parsers.unshift(function(viewValue) {
+                        var origin = scope.passwordVerify;
+                        if (origin !== viewValue) {
+                            ctrl.$setValidity("passwordVerify", false);
+                            return undefined;
+                        } else {
+                            ctrl.$setValidity("passwordVerify", true);
+                            return viewValue;
+                        }
+                    });
+                }
+            });
+        }
+    };
+});
 
 $(document).mouseup(function (e)
 {

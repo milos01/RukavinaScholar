@@ -68,17 +68,22 @@
                                     <div class="chat-message-form">
 
                                         <div class="form-group" ng-controller="sendMessageController" style="float:left;">
-                                            <form ng-submit="submitMessageForm()">
-                                                <textarea rows="2" cols="55" class="form-control messInput" name="message" placeholder="Write a message..." ng-model="message" ng-model-options="{ debounce: 1000 }" style="resize:none;border:none"></textarea>
+                                            <form ng-submit="submitMessageForm()" name="sendMessageForm" novalidate>
+                                                <div class="form-group" ng-class="{ 'has-error' : sendMessageForm.message.$invalid && !sendMessageForm.message.$pristine }">
+                                                <div class="col-sm-7">
+                                                <textarea rows="2" cols="55" class="form-control messInput" name="message" placeholder="Write a message..." ng-model="message" style="resize:none;border:none" required></textarea>
+                                                </div>
+                                            </div>
+                                                
                                                 <input type="hidden" name="userId" value="{{$user->id}}" id="userId">
                                                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                                                 <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
-                                                
+                                                <div class="container">
+                                                    <button style="float:left;padding:7px 0px;border:none;background:white;margin-left:-1       0px" ng-disabled="sendMessageForm.$invalid">SEND</button>
+                                                </div>
                                             </form>
                                         </div>
-                                        <div class="container">
-                                            <span style="float:left;padding:7px 0px">SEND</span>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>

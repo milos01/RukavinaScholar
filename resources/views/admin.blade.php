@@ -88,7 +88,7 @@
                             <span class="nav-label">Mailbox 
                             @if($myMessagesCount != 0)
                                 ({{$myMessagesCount}})
-                            @endif
+                            @endif  
                             </span>
                         </a>
                     </li>
@@ -196,6 +196,10 @@
     <script src="../../../js/app.js"></script>
     <script src="../../../js/plugins/sweetalert/sweetalert.min.js"></script>
     <script src="../../../js/plugins/dropzone/dropzone.js"></script>
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="../../../js/socketClient.js"></script>
+
     <script>
 
         $(document).ready(

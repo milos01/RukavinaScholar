@@ -25,20 +25,26 @@
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
                                     <div class="panel-body">
-                                    	<form action="{{url('/home/updateUser')}}" method="POST">
+                                    	<form action="{{url('/home/updateUser')}}" method="POST" name="editBasicInfoForm" novalidate>
 	                                        <fieldset class="form-horizontal">
-	                                            <div class="form-group"><label class="col-sm-2 control-label">First name:</label>
-	                                                <div class="col-sm-8"><input type="text" class="form-control" value="{{Auth::user()->name}}" name="fname"></div>
+	                                            <div class="form-group" ng-class="{ 'has-error' : editBasicInfoForm.firstName.$invalid && !editBasicInfoForm.firstName.$pristine }"><label class="col-sm-2 control-label">First name</label>
+	                                                <div class="col-sm-8"><input type="text" class="form-control" placeholder="{{Auth::user()->name}}" name="firstName" ng-model="user.firstName" capitalize-first required>
+                                                         <p ng-show="editBasicInfoForm.firstName.$error.required && !editBasicInfoForm.firstName.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your first name is required</p>
+                                                    </div>
 	                                            </div>
-	                                            <div class="form-group"><label class="col-sm-2 control-label">Last name:</label>
-	                                                <div class="col-sm-8"><input type="text" class="form-control" value="{{Auth::user()->lastName}}" name="lname"></div>
+                                               
+                
+	                                            <div class="form-group" ng-class="{ 'has-error' : editBasicInfoForm.lastName.$invalid && !editBasicInfoForm.lastName.$pristine}"><label class="col-sm-2 control-label">Last name</label>
+	                                                <div class="col-sm-8"><input type="text" class="form-control" placeholder="{{Auth::user()->lastName}}" name="lastName" ng-model="user.lastName" capitalize-first required>
+                                                    <p ng-show="editBasicInfoForm.lastName.$error.required && !editBasicInfoForm.lastName.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your last name is required</p>
+                                                    </div>
 	                                            </div>
 	                                            
-	                                            <div class="form-group"><label class="col-sm-2 control-label">Email:</label>
+	                                            <div class="form-group"><label class="col-sm-2 control-label">Email</label>
 	                                                <div class="col-sm-8"><input type="text" class="form-control" value="{{Auth::user()->email}}" name="email" disabled></div>
 	                                            </div>
 
-	                                            <div class="form-group"><label class="col-sm-2 control-label">Role:</label>
+	                                            <div class="form-group"><label class="col-sm-2 control-label">Role</label>
 	                                                <div class="col-sm-8"><input type="text" class="form-control" value="{{ucfirst(Auth::user()->role)}}" name="role" disabled></div>
 	                                            </div>
 	                                            
@@ -52,16 +58,25 @@
                                 </div>
                                 <div id="tab-2" class="tab-pane">
                                     <div class="panel-body">
-                                    <form action="{{url('/home/updatePassword')}}" method="POST">
+                                    <form action="{{url('/home/updatePassword')}}" method="POST" name="editPasswordForm" novalidate>
                                         <fieldset class="form-horizontal">
-                                            <div class="form-group"><label class="col-sm-2 control-label">Old password:</label>
-                                                <div class="col-sm-8"><input type="password" class="form-control" name="oldPassword"></div>
+                                            <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.oldPassword.$invalid && !editPasswordForm.oldPassword.$pristine }"><label class="col-sm-2 control-label">Old password:</label>
+                                                <div class="col-sm-8"><input type="password" class="form-control" name="oldPassword" ng-model="user.oldPassword" autocomplete="off" required>
+                                                <p ng-show="editPasswordForm.oldPassword.$error.required && !editPasswordForm.oldPassword.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your current password is required</p>
+                                                </div>
                                             </div>
-                                            <div class="form-group"><label class="col-sm-2 control-label">New password:</label>
-                                                <div class="col-sm-8"><input type="password" class="form-control" name="newPassword"></div>
+                                            <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.newPassword.$invalid && !editPasswordForm.newPassword.$pristine }"><label class="col-sm-2 control-label">New password:</label>
+                                                <div class="col-sm-8"><input type="password" class="form-control" name="newPassword" ng-model="user.newPassword" password-length required>
+                                                     <p ng-show="editPasswordForm.newPassword.$error.required && !editPasswordForm.newPassword.$pristine &&  editPasswordForm.newPassword.$error.passlen" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your new password is required</p>
+                                                     <p ng-show="editPasswordForm.newPassword.$error.passlen && !editPasswordForm.newPassword.$error.required" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Password must be in between 4 and 10 chars</p>
+                                                     <!-- <p ng-show="editPasswordForm.newPassword.$error.passlen && " style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Password must be in between 4 and 10 chars</p> -->
+                                                </div>
                                             </div>
-                                            <div class="form-group"><label class="col-sm-2 control-label">Repeat password:</label>
-                                                <div class="col-sm-8"><input type="password" class="form-control" name="repPassword"></div>
+                                            <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.repPassword.$invalid && !editPasswordForm.repPassword.$pristine }"><label class="col-sm-2 control-label">Repeat password:</label>
+                                                <div class="col-sm-8"><input type="password" class="form-control" name="repPassword" ng-model="user.repPassword" required password-verify="user.newPassword">
+                                                     <p ng-show="editPasswordForm.repPassword.$error.required && !editPasswordForm.repPassword.$pristine && editPasswordForm.repPassword.$error.passwordVerify" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Repeat password is required</p>
+                                                     <p ng-show="editPasswordForm.repPassword.$error.passwordVerify && !editPasswordForm.repPassword.$error.required" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Passwords not same</p>
+                                                </div>
                                             </div>
                                             <div class="col-sm-10" style="margin-left:10px;">
                                             	<button type="submit" class="btn btn-primary pull-right">Change password</button>
@@ -81,9 +96,6 @@
                                                 <tr>
                                                     <th>
                                                         Group
-                                                    </th>
-                                                    <th>
-                                                        Quantity
                                                     </th>
                                                     <th>
                                                         Discount

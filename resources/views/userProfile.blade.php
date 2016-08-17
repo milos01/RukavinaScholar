@@ -13,14 +13,14 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Modal Header</h4>
                         </div>
-                        <form ng-submit="submitMessageForm()" ng-controller="sendDirectMessageController">
+                        <form ng-submit="submitMessageForm()" ng-controller="sendDirectMessageController" name="sendMessageUserForm" novalidate>
                             <div class="modal-body" style="padding: 20px 30px 20px 30px">
-                                <textarea rows="5" cols="52" style="resize:none" ng-model="message" ></textarea>
+                                <textarea rows="5" cols="52" style="resize:none" ng-model="message" required></textarea>
                                 <p style="margin-top:6px">To: {{$user->name}} {{$user->lastName}}</p>
                                 <input type="hidden" id="userID" value="{{$user->id}}">
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-primary" type="submit">Send message</button>
+                            <button class="btn btn-primary" type="submit" ng-disabled="sendMessageUserForm.$invalid">Send message</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                         </form>

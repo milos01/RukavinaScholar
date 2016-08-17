@@ -39,7 +39,14 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('api/application/addModerator', 'ProblemController@addMate');
 		Route::get('manage', function(){
 			$users = User::all();
-			return view('/manageUsers')->with('users', $users);
+			$myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+	        $count = 0;
+	        foreach ($myMessagess as $key => $message) {
+	            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
+	               $count++; 
+	            }
+	        }
+			return view('/manageUsers')->with('users', $users)->with('myMessagesCount', $count);
 		});
 		Route::get('edit', 'UserController@editUser');
 	});

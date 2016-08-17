@@ -17,17 +17,34 @@
 	  <div class="modal-dialog" style="width:400px">
 
 	    <!-- Modal content-->
-	     <form method="POST" action="{{ url('/home/addStaff') }}">
+	     <form method="POST" action="{{ url('/home/addStaff') }}" name="addStaffForm" novalidate>
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
 	        <h4 class="modal-title">Add staff</h4>
 	      </div>
 	      <div class="modal-body">
-	        <input type="text" class="form-control" placeholder="First name" name = "fname" style="margin-top:10px"></input>
-	        <input type="text" class="form-control" placeholder="Last name" name = "lname" style="margin-top:10px"></input>
-	        <input type="text" class="form-control" placeholder="Email" name = "email" style="margin-top:10px"></input>
-	        <input type="password" class="form-control" placeholder="Password" name = "password" style="margin-top:10px"></input>
+	      	<fieldset class="form-horizontal">
+	        <div class="form-group" ng-class="{ 'has-error' : addStaffForm.fname.$invalid && !addStaffForm.fname.$pristine }">
+                <div class="col-sm-12"><input type="text" class="form-control" name="fname" ng-model="staff.fname" placeholder="First name" required>
+                	<p ng-show="addStaffForm.fname.$error.required && !addStaffForm.fname.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Name required</p>
+                </div>
+             </div>
+             <div class="form-group" ng-class="{ 'has-error' : addStaffForm.lname.$invalid && !addStaffForm.lname.$pristine }">
+             	<div class="col-sm-12">
+	        		<input type="text" class="form-control" placeholder="Last name" name = "lname" ng-model="staff.lname" required>
+	        		<p ng-show="addStaffForm.lname.$error.required && !addStaffForm.lname.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Last name required</p>
+                </div>
+             </div>
+             <div class="form-group" ng-class="{ 'has-error' : addStaffForm.email.$invalid && !addStaffForm.email.$pristine }">
+             	<div class="col-sm-12">
+	        		<input type="email" class="form-control" placeholder="Email" name = "email" ng-model="staff.email" required>
+	        		<p ng-show="addStaffForm.email.$error.required && !addStaffForm.email.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Email required</p>
+	        		<p ng-show="addStaffForm.email.$error.email && !addStaffForm.email.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Email not valid</p>
+                </div>
+             </div>
+	        <input type="text" class="form-control" placeholder="Password" name = "password" value="defpass" style="margin-top:10px" disabled>
+	        </fieldset>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="submit" class="btn btn-primary">Add</button>
