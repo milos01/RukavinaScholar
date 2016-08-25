@@ -20,7 +20,7 @@
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#tab-1"> Basic info</a></li>
                                 <li class=""><a data-toggle="tab" href="#tab-2"> Security</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-4"> Images</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-4"> Image</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
@@ -49,7 +49,7 @@
 	                                            </div>
 	                                            
 	                   							<div class="col-sm-10" style="margin-left:10px;">
-	                                            	<button class="btn btn-primary pull-right" type="submit">Edit info</button>
+	                                            	<button class="btn btn-primary pull-right" type="submit" ng-disabled="editBasicInfoForm.$invalid">Edit info</button>
 	                                            </div>
 	                                            <input type="hidden" name="_token" value="{{csrf_token()}}"> </input>
 	                                        </fieldset>
@@ -60,26 +60,26 @@
                                     <div class="panel-body">
                                     <form action="{{url('/home/updatePassword')}}" method="POST" name="editPasswordForm" novalidate>
                                         <fieldset class="form-horizontal">
-                                            <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.oldPassword.$invalid && !editPasswordForm.oldPassword.$pristine }"><label class="col-sm-2 control-label">Old password:</label>
+                                            <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.oldPassword.$invalid && !editPasswordForm.oldPassword.$pristine }"><label class="col-sm-2 control-label">Old password</label>
                                                 <div class="col-sm-8"><input type="password" class="form-control" name="oldPassword" ng-model="user.oldPassword" autocomplete="off" required>
                                                 <p ng-show="editPasswordForm.oldPassword.$error.required && !editPasswordForm.oldPassword.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your current password is required</p>
                                                 </div>
                                             </div>
-                                            <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.newPassword.$invalid && !editPasswordForm.newPassword.$pristine }"><label class="col-sm-2 control-label">New password:</label>
+                                            <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.newPassword.$invalid && !editPasswordForm.newPassword.$pristine }"><label class="col-sm-2 control-label">New password</label>
                                                 <div class="col-sm-8"><input type="password" class="form-control" name="newPassword" ng-model="user.newPassword" password-length required>
                                                      <p ng-show="editPasswordForm.newPassword.$error.required && !editPasswordForm.newPassword.$pristine &&  editPasswordForm.newPassword.$error.passlen" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your new password is required</p>
                                                      <p ng-show="editPasswordForm.newPassword.$error.passlen && !editPasswordForm.newPassword.$error.required" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Password must be in between 4 and 10 chars</p>
                                                      <!-- <p ng-show="editPasswordForm.newPassword.$error.passlen && " style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Password must be in between 4 and 10 chars</p> -->
                                                 </div>
                                             </div>
-                                            <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.repPassword.$invalid && !editPasswordForm.repPassword.$pristine }"><label class="col-sm-2 control-label">Repeat password:</label>
+                                            <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.repPassword.$invalid && !editPasswordForm.repPassword.$pristine }"><label class="col-sm-2 control-label">Repeat password</label>
                                                 <div class="col-sm-8"><input type="password" class="form-control" name="repPassword" ng-model="user.repPassword" required password-verify="user.newPassword">
                                                      <p ng-show="editPasswordForm.repPassword.$error.required && !editPasswordForm.repPassword.$pristine && editPasswordForm.repPassword.$error.passwordVerify" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Repeat password is required</p>
                                                      <p ng-show="editPasswordForm.repPassword.$error.passwordVerify && !editPasswordForm.repPassword.$error.required" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Passwords not same</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-10" style="margin-left:10px;">
-                                            	<button type="submit" class="btn btn-primary pull-right">Change password</button>
+                                            	<button type="submit" class="btn btn-primary pull-right" ng-disabled="editPasswordForm.$invalid">Change password</button>
                                             </div>
                                         </fieldset>
                                         <input type="hidden" value="{{csrf_token()}}" name="_token"></input>

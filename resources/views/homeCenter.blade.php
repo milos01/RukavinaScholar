@@ -13,7 +13,7 @@
                                 26,900
                             </h1>
                             <small>
-                                Sales in current month
+                                Ex.
                             </small>
                             <div id="sparkline1" class="m-b-sm">
 
@@ -39,12 +39,12 @@
 
                             <div class="row m-t-xs">
                                 <div class="col-xs-6">
-                                    <h5 class="m-b-xs">Income last month</h5>
+                                    <h5 class="m-b-xs">Ex.</h5>
                                     <h1 class="no-margins">160,000</h1>
                                     <div class="font-bold text-navy">98% <i class="fa fa-bolt"></i></div>
                                 </div>
                                 <div class="col-xs-6">
-                                    <h5 class="m-b-xs">Sals current year</h5>
+                                    <h5 class="m-b-xs">Ex.</h5>
                                     <h1 class="no-margins">42,120</h1>
                                     <div class="font-bold text-navy">98% <i class="fa fa-bolt"></i></div>
                                 </div>
@@ -53,7 +53,7 @@
 
                             <table class="table small m-t-sm">
                                 <tbody>
-                                <tr>
+                               <!--  <tr>
                                     <td>
                                         <strong>142</strong> Projects
 
@@ -78,7 +78,7 @@
                                     <td>
                                         <strong>32</strong> Clients
                                     </td>
-                                </tr>
+                                </tr> -->
                                 </tbody>
                             </table>
 
@@ -101,22 +101,22 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="control-label" for="product_name">Project Name</label>
-                                                <input type="text" id="product_name" name="product_name" value="" placeholder="Project Name" class="form-control">
+                                                <input type="text" id="product_name" name="product_name" placeholder="Project Name" class="form-control" ng-model="search.subject">
                                             </div>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <!-- <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label class="control-label" for="price">Name</label>
                                                 <input type="text" id="price" name="price" value="" placeholder="Name" class="form-control">
                                             </div>
-                                        </div>
-                                        <div class="col-sm-2">
+                                        </div> -->
+                                       <!--  <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label class="control-label" for="quantity">Company</label>
                                                 <input type="text" id="quantity" name="quantity" value="" placeholder="Company" class="form-control">
                                             </div>
-                                        </div>
-                                        <div class="col-sm-4">
+                                        </div> -->
+                                        <!-- <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="control-label" for="status">Status</label>
                                                 <select name="status" id="status" class="form-control">
@@ -124,72 +124,65 @@
                                                     <option value="0">Pending</option>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <div class="table-responsive">
                                         <table class="table table-striped">
-
+                                        
                                             <tbody>
-                                            @if($allProblems->isEmpty())
-                                                <td style="padding: 0px;color:black;text-align: center;">
-                                                    <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                        No problems to selsect
-                                                    </div>
-                                                </td>
-                                            @else
-                                                @foreach($allProblems as $problem)
-                                                    @if($problem->took != 1)
-                                                
-                                                    <tr>
+
+                                                <tr ng-repeat="problem in {{$allProblems}}" >
+                                                    
                                                         <td style="padding: 0px;color:black">
-                                                            <a href="{{url('/home/problem',$problem->id)}}">
+                                                            <a href="/home/problem/<%problem.id%>">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    {{$problem->id}}
+                                                                    <%$index + 1%>
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px;">
-                                                            <a href="{{url('/home/problem',$problem->id)}}">
+                                                            <a href="/home/problem/<%problem.id%>">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    {{$problem->subject}}
+                                                                    <%problem.subject%>
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px">
-                                                             <a href="{{url('/home/problem',$problem->id)}}">
+                                                             <a href="/home/problem/<%problem.id%>">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    {{$problem->user_from->name}} {{$problem->user_from->lastName}}
+                                                                    <%problem.problem_description | limitTo:50%>...
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px">
-                                                            <a href="{{url('/home/problem',$problem->id)}}">
+                                                            <a href="/home/problem/<%problem.id%>">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    Type of problem
+                                                                    <span style="color:red">Type of problem</span>
                                                                 </div>
                                                             </a>
                                                         </td>
-                                                        
                                                         <td style="padding: 0px">
-                                                            <a href="{{url('/home/problem',$problem->id)}}">
+                                                           
+                                                        </td>
+                                                        <td style="padding: 0px">
+                                                            <a href="/home/problem/<%problem.id%>">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    {{$problem->created_at->format('m/d/Y')}}
+                                                                     <span><% problem.created_at | date:'medium' %></span>
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px;text-align: center">
                                                             <a href="#">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
+                                                                <div  style="width:100%;height:100%;padding:8px;color:#737678">
                                                                     <i class="fa fa-eye" style="color: #1AB394"></i>
                                                                 </div>
                                                             </a>
                                                         </td>
 
-                                                    </tr>
-                                                    @endif
-                                                @endforeach
-                                             @endif
+                                                </tr>
+                                             
+                                           
                                             </tbody>
                                         </table>
                                     </div>

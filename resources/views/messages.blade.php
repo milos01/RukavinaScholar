@@ -16,11 +16,10 @@
 @stop
 @section('manageUsers')
 	<div class="wrapper wrapper-content">
+                        <div class="row" style="margin-top:-11px" >
 
-                        <div class="row">
-
-                            <div class="col-md-8 animated fadeInRight" >
-                                <div class="chat-discussion chDiscussion"  style="background: #fff;">
+                            <div class="col-md-8 animated fadeInRight" style="overflow:hidden;padding:0px">
+                                <div class="chat-discussion chDiscussion"  style="background: #fff;height:63vh;overflow: auto;position:relative;padding-right:20px;margin-right:-20px">
                                     @foreach($myMessages as $message)
                                         <br>
                                         @if($message->id != Auth::id())
@@ -51,43 +50,32 @@
                                     
                                     
                                 </div>
-
-
-                            </div>
-                            
-
-                        
-                        
-
-
-                    </div>
-                    <!-- <div class="rcol-md-12 animated fadeInRight" > -->
-                     
-                            <div class="col-lg-8" style="background-color: #fff; margin-top: 1px;width:66%;">
-                                <div class="" style="margin-left:22px;width:60%;margin-bottom: 15px;margin-top:20px">
+                                <div class="chat-discussion"  style="background: #fff;height:10vh;border-top:1px solid #e7eaec">
                                     <div class="chat-message-form">
-
                                         <div class="form-group" ng-controller="sendMessageController" style="float:left;">
                                             <form ng-submit="submitMessageForm()" name="sendMessageForm" novalidate>
                                                 <div class="form-group" ng-class="{ 'has-error' : sendMessageForm.message.$invalid && !sendMessageForm.message.$pristine }">
-                                                <div class="col-sm-7">
-                                                <textarea rows="2" cols="55" class="form-control messInput" name="message" placeholder="Write a message..." ng-model="message" style="resize:none;border:none" required></textarea>
+                                                    <div class="col-sm-7">
+                                                        <textarea rows="2" cols="140" class="form-control messInput" name="message" placeholder="Write a message..." ng-model="message" style="resize:none;border:none" required></textarea>
+                                                    </div>
                                                 </div>
-                                            </div>
                                                 
                                                 <input type="hidden" name="userId" value="{{$user->id}}" id="userId">
+                                                <input type="hidden" name="userPicture" value="{{Auth::user()->picture}}" id="userPicture">
+                                                <input type="hidden" name="userName" value="{{Auth::user()->name}}" id="userName">
+                                                <input type="hidden" name="lastName" value="{{Auth::user()->lastName}}" id="lastName">
+                                                <input type="hidden" name="userEmail" value="{{$user->email}}" id="userEmail">
                                                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                                                 <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
-                                                <div class="container">
-                                                    <button style="float:left;padding:7px 0px;border:none;background:white;margin-left:-1       0px" ng-disabled="sendMessageForm.$invalid">SEND</button>
-                                                </div>
+                                                <button type="submit" style="float:left;padding:7px 0px;border:none;background:white;margin-left:-10px;" ng-disabled="sendMessageForm.$invalid">SEND</button>
                                             </form>
-                                        </div>
+                                        </div>       
                                         
                                     </div>
                                 </div>
                             </div>
-                      
-                        <!-- </div> -->
+                        </div>
     </div>
+    
+
 @stop

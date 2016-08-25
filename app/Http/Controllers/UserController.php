@@ -64,10 +64,10 @@ class UserController extends Controller
         return view('editUser')->with('myMessagesCount', $count);
     }
 
-    public function updateUser(UpdateUserRequest $request){
+    public function updateUser(Request $request){
         $user = Auth::user();
-        $user->name = $request->fname;
-        $user->lastName = $request->lname;
+        $user->name = $request->firstName;
+        $user->lastName = $request->lastName;
         if($user->save()){
             return redirect('/home/edit');
         }

@@ -9,7 +9,7 @@
          <a href="{{url('/home')}}">Home</a>
      </li>
     <li class="active">
-        <strong>My work</strong>
+        <strong>Assigned</strong>
     </li>                
 @stop
 @section('manageUsers')
@@ -28,7 +28,7 @@
                                                 <input type="text" id="product_name" name="product_name" value="" placeholder="Project Name" class="form-control">
                                             </div>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <!-- <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label class="control-label" for="price">Name</label>
                                                 <input type="text" id="price" name="price" value="" placeholder="Name" class="form-control">
@@ -48,7 +48,7 @@
                                                     <option value="0">Pending</option>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <div class="table-responsive">
@@ -94,8 +94,7 @@
                                                         </td>
                                                         
                                                         <td style="padding: 0px">
-                                                            <a href="{{url('/home/my
-                                                            problem',$myProblem->id)}}">
+                                                            <a href="{{url('/home/myproblem',$myProblem->id)}}">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
                                                                     {{$myProblem->created_at->format('m/d/Y')}}
                                                                 </div>
@@ -106,11 +105,11 @@
                                                             <a href="#">
                                                                 @if($myProblem->main_slovler == Auth::id())
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    <i class="fa fa-star" style="color: #ed5565"></i>
+                                                                    <i class="fa fa-star" style="color: #ed5565" data-toggle="tooltip" data-placement="bottom" title="You are the head solver on this problem"></i>
                                                                 </div>
                                                                 @else
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    <i class="fa fa-thumb-tack" aria-hidden="true" style="color:#31708f"></i>
+                                                                    <i class="fa fa-thumb-tack" aria-hidden="true" style="color:#31708f" data-toggle="tooltip" data-placement="bottom" title="You are coworker on this problem"></i>
                                                                 </div>
                                                                 @endif
                                                             </a>

@@ -2,13 +2,26 @@
 var app = angular.module('kbkApp', [], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
+        
  });
-// var $cont = $(".chDiscussion");
-// $cont[0].scrollTop = $cont[0].scrollHeight;
+socket = io('http://localhost:3000');
+if($(".chDiscussion").is(":visible")){
+  $cont = $(".chDiscussion");
+  $cont[0].scrollTop = $cont[0].scrollHeight;
+}
+
 app.controller('sendMessageController', function($scope, $http ) {
 	 $scope.submitMessageForm = function() {
 	 	var message = $scope.message;
 	 	var id = $('#userId').val();
+    var email = $('#userEmail').val();
+    var picture = $('#userPicture').val();
+    var fname = $('#userName').val();
+    var lname = $('#lastName').val();
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
     console.log(id);
 	 	$http({
   			method: 'POST',
@@ -22,14 +35,67 @@ app.controller('sendMessageController', function($scope, $http ) {
         var messageDiv = $("#leftUserMessage");
 
         $(".chDiscussion").css('padding','0px');
-        $(".chDiscussion").append('<div class="chat-message left" style="width:60%" id="leftUserMessage"><img class="message-avatar" src="../../../img/{{Auth::user()->picture}}" alt="" style="border-radius: 50%"><div class="message"><a class="message-author" href="#"></span><span class="message-content" id="messageBox">'+response.data.variable1+'</span></div></div>');
-	    	// var res = JSON.stringify(response.data);
-	    	// alert(res);
+        $(".chDiscussion").append('<div class="chat-message left" style="width:100%" id="leftUserMessage"><img class="message-avatar" src="../../../img/'+picture+'" alt="" style="border-radius: 50%"><div class="message"> <a class="message-author" href="#">'+ fname +' '+ lname +'</a></span><span class="message-date">'+mm+'/'+dd+'/'+yyyy+'</span><span class="message-content" id="messageBox">'+response.data.variable1+'</span></div></div>');
+	    	// Sending notification
+        $cont = $(".chDiscussion");
+        $cont[0].scrollTop = $cont[0].scrollHeight;
+        socket.emit('messageNotify', {email: email});
+        
+
   		}, function errorCallback(response) {
     		alert('ne valja');
   		});
     };
 });
+
+socket.on('newMessageN', function (data) {
+          console.log("radiiiiiii");
+          $('#mailBox').append('<div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white"></div>');
+          toastr.options = {
+            "closeButton": true,
+            "debug": true,
+            "progressBar": true,
+            "preventDuplicates": true,
+            "positionClass": "toast-top-right",
+            "onclick": null,
+            "showDuration": "400",
+            "hideDuration": "1000",
+            "timeOut": "4000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+          }
+          toastr.success('You have new message')
+        });
+
+app.controller('loginController', function($scope, $http, $window){
+
+  $scope.loginFormSubmit = function(){
+      var email = $scope.email;
+      var password = $scope.password;
+      
+      var remember = $scope.remember;
+      console.log(email);
+      $http({
+        method: 'POST',
+        url: '/login',
+        data: { email: email, password: password, remember:remember}
+      }).then(function successCallback(response) {
+        if(response.data == 'otisao'){
+          $window.location.href = '/home';
+          socket.emit('my other event', { email: email });
+          
+
+        }
+        console.log(response);
+      }, function errorCallback(response) {
+        alert('ne valja');
+      });
+  };
+});
+
 
 app.directive('capitalizeFirst', function($parse) {
    return {
@@ -68,6 +134,10 @@ app.directive('passwordLength', function($timeout, $q, $http){
         }
   }
 });
+
+$("#mngu").click(function(){
+  socket.emit('kita',{l:"lolita"});
+})
 
 app.directive("passwordVerify", function() {
     return {
@@ -167,11 +237,11 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
 
             $("#responseDiv2").fadeIn(150);
             if(response.data.length === 0){
-                $("#responseDiv2").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
+                $("#responseDiv2").html(" <div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div><div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
             }else{
               for (var i = response.data.length - 1; i >= 0; i--) {
                   
-                  var divDiv = "<a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
+                  var divDiv = "<div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div><a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
     
                   angular.element(document.getElementById('responseDiv2')).append($compile(divDiv)($scope));
                   $scope.addMateFunction = function(userId, problemId){
@@ -182,7 +252,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                       }).then(function successCallback(response) {
                           console.log(response.data);
                           // var item = $("#menuSearchItem").text("aa");
-                          $("#itemsHolder").append(" <div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"</div>");
+                          $("#itemsHolder").append("<div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div><div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"</div>");
                       }, function errorCallback(response) {
                           alert('ne valja');
                       });

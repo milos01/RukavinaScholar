@@ -25,7 +25,9 @@
         <!-- Sweet Alert -->
     <link href="../../../css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
     <link href="../../../css/plugins/dropzone/dropzone.css" rel="stylesheet">
-
+    <!-- Toastr style -->
+    <link href="../../../css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../../../css/tooltip.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Lato';
@@ -54,8 +56,11 @@
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-						<span> <img alt="image" class="img-circle"
-                                    src="../../../img/{{Auth::user()->picture}}" width="53px;" height="53px;" />
+						<span> 
+                        
+                        <img alt="image" class="img-circle"
+                                    src="../../../img/{{Auth::user()->picture}}" width="53px" height="53px" />
+                                    
 						</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
                                     class="clear"> <span class="block m-t-xs"> <strong
                                             class="font-bold">
@@ -70,14 +75,18 @@
                 </li>
                 <!-- Admin side menu -->
                 @if(Auth::user()->is('admin'))
-                    <li><a href="/home/manage"><i class="fa fa-users"></i>
-                        <span class="nav-label">Manage users</span></a></li>
+                    <li style="margin-top:-4px"><a href="/home"><i class="fa fa-home"></i>
+                        <span class="nav-label" id="mngu">Home</span></a></li>
+                    <li style="margin-top:-4px"><a href="/home/manage"><i class="fa fa-users"></i>
+                        <span class="nav-label" id="mngu">Manage users</span></a></li>
 
                     <li><a href="/home/manage"><i class="fa fa-area-chart"></i>
                         <span class="nav-label">Statistics</span></a></li>
 
                 @endif
-                    <li><a href="/home/edit"><i class="fa fa-cog"></i>
+                    <li style="margin-top:-4px"><a href="/home"><i class="fa fa-home"></i>
+                        <span class="nav-label" id="mngu">Home</span></a></li>
+                    <li style="margin-top:-4px"><a href="/home/edit"><i class="fa fa-cog"></i>
                         <span class="nav-label">Edit profile</span></a></li>
 
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
@@ -85,11 +94,16 @@
                     
                     <li>
                         <a href="/home/inbox"><i class="fa fa-envelope"></i>
-                            <span class="nav-label">Mailbox 
+                            <span id="mailBox"class="nav-label">Mailbox 
+
                             @if($myMessagesCount != 0)
-                                ({{$myMessagesCount}})
+                               
+                                <div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white">
+                                    <!-- {{$myMessagesCount}} -->
+                                </div>
                             @endif  
                             </span>
+                            
                         </a>
                     </li>
             </ul>
@@ -117,7 +131,7 @@
                 </ul>
 
             </nav>
-            <div class="" id="responseDiv2" style="width:250px;max-height:200px;border:1px solid gray;position: absolute;margin-top:-5px;display:none;margin-left:70px;z-index: 999;background-color: white;z-index:9999;border-radius:2px;box-shadow: 0px 0px 5px #888888;">
+            <div class="" id="responseDiv2" style="width:250px;max-height:200px;border:1px solid gray;position: absolute;margin-top:-5px;display:none;margin-left:70px;z-index: 999;background-color: white;z-index:9999;border-radius:2px;box-shadow: 0px 1px 3px #888888;">
                             
             </div>
         </div>
@@ -193,16 +207,21 @@
     <!-- Image cropper -->
     <script src="../../../js/plugins/cropper/cropper.min.js"></script>
 
-    <script src="../../../js/app.js"></script>
+   
     <script src="../../../js/plugins/sweetalert/sweetalert.min.js"></script>
     <script src="../../../js/plugins/dropzone/dropzone.js"></script>
     <!-- Socket.IO -->
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="../../../js/socketClient.js"></script>
+    <!-- Toastr script -->
+    <script src="../../../js/plugins/toastr/toastr.min.js"></script>
+    <script src="../../../js/app.js"></script>
+     
 
     <script>
 
         $(document).ready(
+
                 function() {
                     var $image = $(".image-crop > img")
             $($image).cropper({
@@ -212,7 +231,7 @@
                     // Output the result data for cropping image.
                 }
             });
-
+            
             var $inputImage = $("#inputImage");
             if (window.FileReader) {
                 $inputImage.change(function() {

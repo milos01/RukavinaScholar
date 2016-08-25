@@ -36,7 +36,7 @@ class HomeController extends Controller
         }
         $allProblems = Problem::all()->where('took',0);
 
-        return view('homeCenter')->with('myMessagesCount', $count)->with('allProblems',$allProblems);
+        return view('homeCenter')->with('myMessagesCount', $count)->with('allProblems',$allProblems->toJson());
     }
 
      public function showAdminHome(){

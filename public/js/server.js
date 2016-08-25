@@ -19,8 +19,48 @@ function handler (req, res) {
 }
 
 io.on('connection', function (socket) {
-  console.log(socket.nickname);
-  // socket.on('my other event', function (data) {
-  //   console.log(data);
-  // });
+  // console.log(socket);
+  socket.on('my other event', function (data, callback) {
+
+    if (data.email in users) {
+      // callback(false);
+    }else{
+      socket.nick = data.email;
+      users[socket.nick] = socket;
+      // callback(true);
+    }
+    var size = 0;
+    for (key in users) {
+        size++;
+    }
+    console.log(size);
+  });
+
+  socket.on('messageNotify', function (data) {
+    console.log('liki');
+    // socket.emit('newMessageN',);
+    console.log(users[data.email].id);
+    if(data.email in users){
+
+      
+      // console.log(ff);
+      console.log(users[data.email].id);
+      console.log("<---------------------------------------------------->");
+      console.log(io.sockets.clients());
+      // users[data.email].emit('newMessageN', {d:'ff'});
+      io.sockets.emit('newMessageN', {d:'ff'});
+      // socket.broadcast.to(users[data.email]).emit('newMessageN', {d:'ff'});
+      // io.sockets.connected[ff].emit('newMessageN', {d:'ff'});
+    }
+    // socket.emit('newMessage');
+  });
+  socket.on('disconnect', function(){
+    if(!socket.nick){
+      return;
+    }else{
+      delete users[socket.nick];
+    }
+    
+
+  });
 });

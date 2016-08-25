@@ -39,6 +39,30 @@ h5 {
   font-weight: 600;
 }
 
+.content-example {
+  position: relative;
+  width: 300px;
+  height: 40px;
+  left: 50px;
+  padding: 40px;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+.arrow-example {
+  position: absolute;
+  left: 11px;
+  top: -10px;
+  border-bottom: 10px solid #fff;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+}
+.arrow-border-example {
+  top: -11px;
+  border-bottom-color: rgba(0, 0, 0, 0.9);
+}
+
 /*My style*/
 
 .searchResults:hover{

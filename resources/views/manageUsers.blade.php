@@ -47,7 +47,7 @@
 	        </fieldset>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary">Add</button>
+	        <button type="submit" class="btn btn-primary" ng-disabled="addStaffForm.$invalid">Add</button>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
@@ -99,7 +99,7 @@
 	                                                </div>
 	                                        </td>
 	                                        <td class="project-people">
-	                                            <a href=""><img alt="image" class="img-circle" src="../../img/a3.jpg"></a>
+	                                            <a href=""><img alt="image" class="img-circle" src="../../img/{{$user->picture}}"></a>
 	                                            
 	                                        </td>
 	                                        <td class="project-actions">
