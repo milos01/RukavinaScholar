@@ -213,7 +213,10 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                       }).then(function successCallback(response) {
                           console.log(response.data);
                           // var item = $("#menuSearchItem").text("aa");
-                          $("#itemsHolder").append(" <div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"</div>");
+                          $("#itemsHolder").append(" <div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<div id='iks'></div></div>");
+                        var html="<i class='fa fa-times' aria-hidden='true' style='cursor:pointer' ng-click='deleteWorker("+problemId+")'></i>" ;
+                        angular.element(document.getElementById('iks')).append($compile(html)($scope));
+
                       }, function errorCallback(response) {
                           alert('ne valja');
                       });
@@ -252,7 +255,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                       }).then(function successCallback(response) {
                           console.log(response.data);
                           // var item = $("#menuSearchItem").text("aa");
-                          $("#itemsHolder").append("<div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div><div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"</div>");
+                          $("#itemsHolder").append("<div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div><div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<i class='fa fa-times' aria-hidden='true' style='cursor:pointer' ng-click='deleteWorker("+problemId+")'></i></div>");
                       }, function errorCallback(response) {
                           alert('ne valja');
                       });
@@ -264,6 +267,10 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
         });
 
     };
+
+    $scope.deleteWorker = function(problemId){
+      alert(problemId);
+    }
   
 
 });
