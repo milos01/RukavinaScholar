@@ -95,7 +95,7 @@
 
 
 
-                                <div class="ibox-content">
+                                <div class="ibox-content" style="min-height: 100px">
 
                                     <div class="row">
                                         <div class="col-sm-4">
@@ -127,38 +127,41 @@
                                         </div> -->
                                     </div>
 
-                                    <div class="table-responsive">
+                                    <div class="table-responsive" ng-controller="showProblemController">
                                         <table class="table table-striped">
                                         
                                             <tbody>
-
-                                                <tr ng-repeat="problem in {{$allProblems}}" >
+                                                <div style="text-align: center;margin-top:30px;position: relative;" ng-show="loading">
+                                                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="color:#1ab394"></i>
+                                                    <!-- <span class="sr-only">Loading...</span> -->
+                                                </div>
+                                                <tr ng-repeat="problem in problems | filter:{took:0} | filter: search" ng-cloak>
                                                     
                                                         <td style="padding: 0px;color:black">
                                                             <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    <%$index + 1%>
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" ng-bind="$index + 1">
+                                                                
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px;">
                                                             <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    <%problem.subject%>
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" ng-bind="problem.subject">
+                                                                
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px">
                                                              <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    <%problem.problem_description | limitTo:50%>...
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" ng-bind="problem.problem_description | limitTo:50">
+                                                                    
                                                                 </div>
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px">
                                                             <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    <span style="color:red">Type of problem</span>
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" >
+                                                                    <span style="color:red" ng-bind="Type of problem"></span>
                                                                 </div>
                                                             </a>
                                                         </td>
@@ -167,8 +170,8 @@
                                                         </td>
                                                         <td style="padding: 0px">
                                                             <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                     <span><% problem.created_at | date:'medium' %></span>
+                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" >
+                                                                     <span ng-bind="problem.created_at | date:'medium' "></span>
                                                                 </div>
                                                             </a>
                                                         </td>
@@ -181,7 +184,7 @@
                                                         </td>
 
                                                 </tr>
-                                             
+                                                <p ng-show="(problems | filter:{took:0} | filter: search).length == 0" style="text-align:center;margin-top:40px;position: relative;">No problems found!</p>
                                            
                                             </tbody>
                                         </table>

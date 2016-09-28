@@ -79,9 +79,9 @@
                                             <div id="itemsHolder" style="position: absolute;width: 500px;height: 120px;margin-top:-54px;margin-left:250px;">
                                             @foreach($problem->users as $user)
                                                 @if($user->id != Auth::user()->id)
-                                                <div class="" id="menuSearchItem" style="border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px ">
+                                                <div class="" id="menuSearchItem{{$user->id}}plus{{$problem->id}}" style="border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px ">
                                                     {{$user->name}} {{$user->lastName}} 
-                                                <i class="fa fa-times" aria-hidden="true" style="cursor:pointer" ng-click="deleteWorker({{$problem->id}})"></i></div>
+                                                <i class="fa fa-times" aria-hidden="true" style="cursor:pointer" ng-click="deleteWorker({{$problem->id}},{{$user->id}})"></i></div>
                                                 @endif
                                             @endforeach
                                             </div>

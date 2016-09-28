@@ -37,6 +37,9 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('api/application/getusers','UserController@getApiUsers');
 		Route::post('api/application/getusers2','UserController@getApiUsers2');
 		Route::post('api/application/addModerator', 'ProblemController@addMate');
+		Route::post('api/application/deleteWorker', 'ProblemController@deleteWorker');
+		Route::get('api/application/getuserproblems', 'ProblemController@getAllProblems');
+
 		Route::get('manage', function(){
 			$users = User::all();
 			$myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();

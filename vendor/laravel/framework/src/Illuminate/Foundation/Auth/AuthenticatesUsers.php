@@ -56,7 +56,7 @@ trait AuthenticatesUsers
      */
     public function login(Request $request)
     {
-        // $this->validateLogin($request);
+        $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
@@ -114,12 +114,8 @@ trait AuthenticatesUsers
         if (method_exists($this, 'authenticated')) {
             return $this->authenticated($request, Auth::guard($this->getGuard())->user());
         }
-        
 
-        $myMessages = "1";
-            return "otisao";
-        
-//        return redirect()->intended($this->redirectPath());
+        return redirect()->intended($this->redirectPath());
     }
 
     /**

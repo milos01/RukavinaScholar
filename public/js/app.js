@@ -1,5 +1,5 @@
 
-var app = angular.module('kbkApp', [], function($interpolateProvider) {
+var app = angular.module('kbkApp', ['ngAnimate'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
         
@@ -213,8 +213,8 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                       }).then(function successCallback(response) {
                           console.log(response.data);
                           // var item = $("#menuSearchItem").text("aa");
-                          $("#itemsHolder").append(" <div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<div id='iks'></div></div>");
-                        var html="<i class='fa fa-times' aria-hidden='true' style='cursor:pointer' ng-click='deleteWorker("+problemId+")'></i>" ;
+                          $("#itemsHolder").append("<div class='' id='menuSearchItem"+userId+"plus"+problemId+"' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<div id='iks' style='float:right;margin-left:2px'></div></div>");
+                        var html="<i class='fa fa-times' aria-hidden='true' style='cursor:pointer' ng-click='deleteWorker("+problemId+", "+userId+")'></i>" ;
                         angular.element(document.getElementById('iks')).append($compile(html)($scope));
 
                       }, function errorCallback(response) {
@@ -240,11 +240,11 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
 
             $("#responseDiv2").fadeIn(150);
             if(response.data.length === 0){
-                $("#responseDiv2").html(" <div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div><div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
+                $("#responseDiv2").html(" <div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
             }else{
               for (var i = response.data.length - 1; i >= 0; i--) {
                   
-                  var divDiv = "<div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div><a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
+                  var divDiv = "</div><a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
     
                   angular.element(document.getElementById('responseDiv2')).append($compile(divDiv)($scope));
                   $scope.addMateFunction = function(userId, problemId){
@@ -255,7 +255,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                       }).then(function successCallback(response) {
                           console.log(response.data);
                           // var item = $("#menuSearchItem").text("aa");
-                          $("#itemsHolder").append("<div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div><div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<i class='fa fa-times' aria-hidden='true' style='cursor:pointer' ng-click='deleteWorker("+problemId+")'></i></div>");
+                          $("#itemsHolder").append("<div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<i class='fa fa-times' aria-hidden='true' style='cursor:pointer;float:right' ng-click='deleteWorker("+problemId+","+userId+")'></i></div>");
                       }, function errorCallback(response) {
                           alert('ne valja');
                       });
@@ -268,8 +268,16 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
 
     };
 
-    $scope.deleteWorker = function(problemId){
-      alert(problemId);
+    $scope.deleteWorker = function(problemId, userId){
+        $http({
+          method: 'POST',
+          url: '/home/api/application/deleteWorker',
+          data: {problemId: problemId, userId: userId}
+        }).then(function successCallback(response) {
+          $("#menuSearchItem"+userId+"plus"+problemId).hide();
+        }, function errorCallback(response) {
+        alert('ne valja');
+        });
     }
   
 
@@ -313,3 +321,34 @@ app.service('searchService2', function($http){
         }
     }
 });
+
+app.controller('showProblemController', function($scope, $http){
+    $scope.loading = true;
+
+    return $http({
+        method: 'GET',
+        url: 'home/api/application/getuserproblems',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: {}
+    }).then(function(res){
+      
+      $scope.problems = res.data;
+      console.log($scope.problems);
+    }).finally(function() {
+      // called no matter success or failure
+      $scope.loading = false;
+    });
+});
+
+// app.directive('animateOnLoad', function($animateCss) {
+//     return {
+//       'link': function(scope, element) {
+//         $animateCss(element, {
+//             'event': 'enter',
+//              structural: true
+//         }).start();
+//       }
+//     };
+// });

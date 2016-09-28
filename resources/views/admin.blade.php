@@ -36,6 +36,27 @@
         .fa-btn {
             margin-right: 6px;
         }
+        .category {
+          display:block;
+          font-size:20px;
+          background:black;
+          color:#fff;
+          margin:10px;
+          padding:10px;
+          text-align:center;
+        }
+
+        .category.ng-enter {
+          /* standard transition code */
+          -webkit-transition: 2s linear all;
+          transition: 2s linear all;
+          opacity:0;
+        }
+
+        .category.ng-enter.ng-enter-active {
+          /* standard transition styles */
+          opacity:1;
+        }
     </style>
 </head>
 <body id="app-layout" ng-app="kbkApp">
@@ -74,18 +95,20 @@
                     <div class="logo-element">KBK</div>
                 </li>
                 <!-- Admin side menu -->
-                @if(Auth::user()->is('admin'))
-                    <li style="margin-top:-4px"><a href="/home"><i class="fa fa-home"></i>
+                <li style="margin-top:-4px"><a href="/home"><i class="fa fa-home"></i>
                         <span class="nav-label" id="mngu">Home</span></a></li>
+                @if(Auth::user()->is('admin'))
+                    
                     <li style="margin-top:-4px"><a href="/home/manage"><i class="fa fa-users"></i>
                         <span class="nav-label" id="mngu">Manage users</span></a></li>
 
                     <li><a href="/home/manage"><i class="fa fa-area-chart"></i>
                         <span class="nav-label">Statistics</span></a></li>
-
+                @elseif(Auth::user()->is('regular'))
+                    <li style="margin-top:-4px"><a href="/home/manage"><i class="fa fa-plus"></i>
+                        <span class="nav-label" id="mngu">Submit problem</span></a></li>
                 @endif
-                    <li style="margin-top:-4px"><a href="/home"><i class="fa fa-home"></i>
-                        <span class="nav-label" id="mngu">Home</span></a></li>
+                 
                     <li style="margin-top:-4px"><a href="/home/edit"><i class="fa fa-cog"></i>
                         <span class="nav-label">Edit profile</span></a></li>
 
@@ -131,9 +154,11 @@
                 </ul>
 
             </nav>
+
             <div class="" id="responseDiv2" style="width:250px;max-height:200px;border:1px solid gray;position: absolute;margin-top:-5px;display:none;margin-left:70px;z-index: 999;background-color: white;z-index:9999;border-radius:2px;box-shadow: 0px 1px 3px #888888;">
-                            
+                  
             </div>
+            <!-- <div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div> -->
         </div>
         
         <div class="row wrapper border-bottom white-bg page-heading">
@@ -152,6 +177,7 @@
         @yield('manageUsers')
     </div>
     <!-- Mainly scripts -->
+    
     <script src="../../../js/jquery-2.1.1.js"></script>
     <script src="../../../js/bootstrap.min.js"></script>
     <script
@@ -214,6 +240,7 @@
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="../../../js/socketClient.js"></script>
     <!-- Toastr script -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
     <script src="../../../js/plugins/toastr/toastr.min.js"></script>
     <script src="../../../js/app.js"></script>
      

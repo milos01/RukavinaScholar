@@ -1,0 +1,366 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"di",
+				"div	Tag"
+			],
+			[
+				"add",
+				"addVisit"
+			],
+			[
+				"s",
+				"style	Attr"
+			],
+			[
+				"text",
+				"textarea	Tag"
+			],
+			[
+				"in",
+				"input	Tag"
+			],
+			[
+				"all",
+				"allPatients"
+			],
+			[
+				"req",
+				"request"
+			],
+			[
+				"user",
+				"userId"
+			],
+			[
+				"problem",
+				"problemId"
+			],
+			[
+				"problm",
+				"problemId"
+			],
+			[
+				"pro",
+				"problemId"
+			],
+			[
+				"app",
+				"append"
+			],
+			[
+				"fon",
+				"font-size"
+			],
+			[
+				"emi",
+				"email"
+			],
+			[
+				"re",
+				"response"
+			],
+			[
+				"v",
+				"viewValue"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"ini",
+				"initialValue"
+			],
+			[
+				"uns",
+				"unsigned"
+			],
+			[
+				"co",
+				"count"
+			],
+			[
+				"for",
+				"foreach	foreach …"
+			],
+			[
+				"file",
+				"fileName"
+			],
+			[
+				"js",
+				"json_encode"
+			],
+			[
+				"res",
+				"response"
+			],
+			[
+				"var",
+				"variable1"
+			],
+			[
+				"mes",
+				"messageDiv"
+			],
+			[
+				"vi",
+				"view"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 187.0,
+		"last_filter": "prefere",
+		"selected_items":
+		[
+			[
+				"prefere",
+				"Preferences: Settings - User"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 575.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/config/app.php",
+		"/Users/macbookpro/Documents/LaravelDev/CardIndex/database/migrations/2016_09_01_171555_CreateVisitTable.php",
+		"/Users/macbookpro/Documents/LaravelDev/CardIndex/database/seeds/PatientTableSeeder.php",
+		"/Users/macbookpro/Documents/LaravelDev/CardIndex/public/js/app.js",
+		"/Users/macbookpro/Documents/LaravelDev/CardIndex/resources/views/layouts/app.blade.php",
+		"/Users/macbookpro/Documents/LaravelDev/CardIndex/app/Http/routes.php",
+		"/Users/macbookpro/Documents/LaravelDev/CardIndex/database/migrations/2016_09_01_100442_createPatientTable.php",
+		"/Users/macbookpro/Documents/LaravelDev/CardIndex/.env",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/resources/views/myProblem.blade.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/database/seeds/ProblemsTableSeeder.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/public/js/app.js",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/resources/views/admin.blade.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/database/seeds/UsersTableSeeder.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/app/Http/Controllers/ProblemController.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/app/Http/routes.php",
+		"/Users/macbookpro/Documents/admin panel/Static_Full_Version/toastr_notifications.html",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/public/js/server.js",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/resources/views/manageUsers.blade.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/resources/views/auth/login.blade.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/resources/views/myProblems.blade.php",
+		"/Users/macbookpro/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/database/migrations/2016_05_02_211608_create_message_table.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/database/migrations/2016_07_01_124118_create_problems_table.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/database/migrations/2014_10_12_000000_create_users_table.php",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/public/css/plugins/dropzone/dropzone.css",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/public/js/plugins/dropzone/dropzone.js",
+		"/Users/macbookpro/Documents/isamrs/isamrsMA/tim06/package.json",
+		"/Users/macbookpro/Documents/LaravelDev/RukavinaScholar/public/img/05c5b24.jpg",
+		"/Users/macbookpro/Documents/isamrs/tim06/src/main/java/com/packtpub/springmvc/dao/BidderDAOImpl.java",
+		"/Users/macbookpro/Documents/hciHelp/main.html",
+		"/Users/macbookpro/Documents/Laravel/Homestead/src/stubs/Homestead.yaml"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 158.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"append",
+			"');\n",
+			"lastName",
+			"api",
+			"menuSearchIten",
+			"times",
+			"max-height",
+			"max-height: 200px",
+			"max-height:200px",
+			"responseDiv",
+			"responsive",
+			"responsiv",
+			"responsiveDiv",
+			"responsiveDic",
+			"arrow",
+			"arrow-example",
+			"arrow-example arrow-border-example",
+			"responseDiv2",
+			"format",
+			"Olson",
+			"query",
+			"q",
+			"query",
+			"search2",
+			"ng-change",
+			"></",
+			"menuSearchItem",
+			"mngu",
+			".on",
+			"validate",
+			"                <",
+			"manage",
+			"menage",
+			"|| ",
+			"form-control",
+			"FORM-CONTORL",
+			"1ab394",
+			"form-control",
+			"angular",
+			"socket",
+			"chat-",
+			"searchService",
+			"getusers",
+			"getApiUsers",
+			"myMessages",
+			"center",
+			"\"><",
+			"Search for pe",
+			"Search for",
+			"Search for people",
+			"responseDiv",
+			"take it",
+			"contabo",
+			"Product name"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 61.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "app.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 444.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

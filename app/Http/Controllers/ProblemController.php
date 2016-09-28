@@ -42,10 +42,17 @@ class ProblemController extends Controller
     	$problem = Problem::findorFail($id);
     	$luser = Auth::user();
     	$problem->took = 1;
+        $problem->main_slovler = $luser->id;
     	$problem->save();
         $luser->problems()->attach($problem->id /*array('message' => $message, 'read' => 0, 'group_start' => $min, 'group_end' => $max, 'last' => 1)*/);
 
     	return redirect('/home');
+    }
+
+    public function getAllProblems(){
+        $allProblems = Problem::all();
+
+        return json_encode($allProblems);
     }
 
 
@@ -69,5 +76,15 @@ class ProblemController extends Controller
     
         $user->problems()->attach($problemId);
         return $user;
+    }
+
+    public function deleteWorker(Request $request){
+        $problemId = $request->input('problemId');
+        $userId = $request->input('userId');
+
+        $user = User::findorFail($userId);
+        
+        $user->problems()->detach($problemId);     
+        
     }
 }
