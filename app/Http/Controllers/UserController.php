@@ -145,4 +145,9 @@ class UserController extends Controller
 
         return json_encode($allUsers);
     }
+
+    public function getApiUser(){
+        $user = Auth::user();
+        return $user;
+    }
 }

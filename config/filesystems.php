@@ -56,10 +56,10 @@ return [
 
         's3' => [
             'driver' => 's3',
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'region' => 'your-region',
-            'bucket' => 'your-bucket',
+            'key' => 'AKIAIHHKKFUDDAUDVY5A',
+            'secret' => 'RIcgEqpzq/4nD4GFE4qYB1egA+uLoBuF44HYUmZO',
+            'region' => 'us-east-1',
+            'bucket' => 'kbk300test',
         ],
 
     ],

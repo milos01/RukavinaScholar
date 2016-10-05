@@ -11,6 +11,7 @@
 |
 */
 use App\User;
+
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', ['middleware' => 'guest', function () {
     	return view('welcome');
@@ -32,6 +33,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('takeProblem/{id}', 'ProblemController@takeProblem');
 		Route::get('assigned', 'ProblemController@assigned');
 		Route::get('inbox', 'InboxController@showInbox');
+		Route::get('newproblem', 'ProblemController@newProblem');
 		Route::get('inbox/{id}', 'InboxController@showUsersMessages');
 		Route::post('inbox/sendMessage', 'InboxController@sendMessage');
 		Route::post('api/application/getusers','UserController@getApiUsers');
@@ -39,18 +41,22 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('api/application/addModerator', 'ProblemController@addMate');
 		Route::post('api/application/deleteWorker', 'ProblemController@deleteWorker');
 		Route::get('api/application/getuserproblems', 'ProblemController@getAllProblems');
+		Route::get('api/application/getuser', 'UserController@getApiUser');
 
-		Route::get('manage', function(){
-			$users = User::all();
-			$myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-	        $count = 0;
-	        foreach ($myMessagess as $key => $message) {
-	            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-	               $count++; 
-	            }
-	        }
-			return view('/manageUsers')->with('users', $users)->with('myMessagesCount', $count);
+		Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function(){
+			Route::get('manage', function(){
+				$users = User::all();
+				$myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+		        $count = 0;
+		        foreach ($myMessagess as $key => $message) {
+		            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
+		               $count++; 
+		            }
+		        }
+				return view('/manageUsers')->with('users', $users)->with('myMessagesCount', $count);
+			});
 		});
 		Route::get('edit', 'UserController@editUser');
+		Route::post('uploadProblem', 'ProblemController@uploadProblem');
 	});
 });

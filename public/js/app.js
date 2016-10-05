@@ -4,12 +4,12 @@ var app = angular.module('kbkApp', ['ngAnimate'], function($interpolateProvider)
         $interpolateProvider.endSymbol('%>');
         
  });
-socket = io('http://localhost:3000');
+// socket = io('http://localhost:3000');
 if($(".chDiscussion").is(":visible")){
   $cont = $(".chDiscussion");
   $cont[0].scrollTop = $cont[0].scrollHeight;
 }
-
+var selectedFiles = [];
 app.controller('sendMessageController', function($scope, $http ) {
 	 $scope.submitMessageForm = function() {
 	 	var message = $scope.message;
@@ -39,7 +39,7 @@ app.controller('sendMessageController', function($scope, $http ) {
 	    	// Sending notification
         $cont = $(".chDiscussion");
         $cont[0].scrollTop = $cont[0].scrollHeight;
-        socket.emit('messageNotify', {email: email});
+        // socket.emit('messageNotify', {email: email});
         
 
   		}, function errorCallback(response) {
@@ -48,53 +48,29 @@ app.controller('sendMessageController', function($scope, $http ) {
     };
 });
 
-socket.on('newMessageN', function (data) {
-          console.log("radiiiiiii");
-          $('#mailBox').append('<div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white"></div>');
-          toastr.options = {
-            "closeButton": true,
-            "debug": true,
-            "progressBar": true,
-            "preventDuplicates": true,
-            "positionClass": "toast-top-right",
-            "onclick": null,
-            "showDuration": "400",
-            "hideDuration": "1000",
-            "timeOut": "4000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-          }
-          toastr.success('You have new message')
-        });
+// socket.on('newMessageN', function (data) {
+//           console.log("radiiiiiii");
+//           $('#mailBox').append('<div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white"></div>');
+//           toastr.options = {
+//             "closeButton": true,
+//             "debug": true,
+//             "progressBar": true,
+//             "preventDuplicates": true,
+//             "positionClass": "toast-top-right",
+//             "onclick": null,
+//             "showDuration": "400",
+//             "hideDuration": "1000",
+//             "timeOut": "4000",
+//             "extendedTimeOut": "1000",
+//             "showEasing": "swing",
+//             "hideEasing": "linear",
+//             "showMethod": "fadeIn",
+//             "hideMethod": "fadeOut"
+//           }
+//           toastr.success('You have new message')
+//         });
 
-app.controller('loginController', function($scope, $http, $window){
 
-  $scope.loginFormSubmit = function(){
-      var email = $scope.email;
-      var password = $scope.password;
-      
-      var remember = $scope.remember;
-      console.log(email);
-      $http({
-        method: 'POST',
-        url: '/login',
-        data: { email: email, password: password, remember:remember}
-      }).then(function successCallback(response) {
-        if(response.data == 'otisao'){
-          $window.location.href = '/home';
-          socket.emit('my other event', { email: email });
-          
-
-        }
-        console.log(response);
-      }, function errorCallback(response) {
-        alert('ne valja');
-      });
-  };
-});
 
 
 app.directive('capitalizeFirst', function($parse) {
@@ -135,9 +111,7 @@ app.directive('passwordLength', function($timeout, $q, $http){
   }
 });
 
-$("#mngu").click(function(){
-  socket.emit('kita',{l:"lolita"});
-})
+
 
 app.directive("passwordVerify", function() {
     return {
@@ -341,6 +315,34 @@ app.controller('showProblemController', function($scope, $http){
       $scope.loading = false;
     });
 });
+
+app.controller('newProblemController', function($scope){
+  $scope.addProblemSubmit = function(){
+      
+      // alert($scope.probName + " " + $scope.probDescription);
+      console.log(selectedFiles);
+  }
+});
+
+if($('#uploadHolderr').is(':visible')){
+                Dropzone.options.dropzoneForm = {
+                    addRemoveLinks: true,
+                    removedfile: function(file) {
+                        alert(file.name);
+                    },
+                    paramName: "file", // The name that will be used to transfer the file
+                    maxFilesize: 1024, // MB
+                    dictDefaultMessage: "<strong>Drop files here or click to upload. </strong>",
+                    accept: function(file, done) {
+                        console.log(file);
+                        selectedFiles.push(file.name);
+                        if (file.name == "a.jpg") {
+                          done("Naha, you don'tt.");
+                        }
+                        else { done(); }
+                  }
+                };
+            }
 
 // app.directive('animateOnLoad', function($animateCss) {
 //     return {

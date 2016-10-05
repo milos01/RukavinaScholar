@@ -64,3 +64,6 @@
     </div>
 </div>
 @endsection
+@section('jsSocket')
+    <script src="../../../js/LoginJS.js"></script>
+@stop

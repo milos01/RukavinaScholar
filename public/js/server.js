@@ -19,37 +19,32 @@ function handler (req, res) {
 }
 
 io.on('connection', function (socket) {
-  // console.log(socket);
+  console.log("pocetak "+socket.id);
+  socket.on('homeLoad', function(data){
+      
+      users[data.email] = socket.id;
+      console.log(users[data.email]);
+  });
   socket.on('my other event', function (data, callback) {
-
+    console.log(socket.id);
+  console.log('<------>');
     if (data.email in users) {
       // callback(false);
     }else{
       socket.nick = data.email;
-      users[socket.nick] = socket;
+      users[socket.nick] = socket.id;
       // callback(true);
     }
     var size = 0;
     for (key in users) {
         size++;
     }
-    console.log(size);
+    console.log(users[socket.nick]);
   });
 
   socket.on('messageNotify', function (data) {
-    console.log('liki');
-    // socket.emit('newMessageN',);
-    console.log(users[data.email].id);
     if(data.email in users){
-
-      
-      // console.log(ff);
-      console.log(users[data.email].id);
-      console.log("<---------------------------------------------------->");
-      console.log(io.sockets.clients());
-      // users[data.email].emit('newMessageN', {d:'ff'});
-      io.sockets.emit('newMessageN', {d:'ff'});
-      // socket.broadcast.to(users[data.email]).emit('newMessageN', {d:'ff'});
+      socket.broadcast.to(users[data.email]).emit('newMessageN', {d:'fuck.'});
       // io.sockets.connected[ff].emit('newMessageN', {d:'ff'});
     }
     // socket.emit('newMessage');
@@ -58,9 +53,13 @@ io.on('connection', function (socket) {
     if(!socket.nick){
       return;
     }else{
-      delete users[socket.nick];
+      // delete users[socket.nick];
     }
-    
+    var size = 0;
+    for (key in users) {
+        size++;
+    }
+    console.log(size);
 
   });
 });

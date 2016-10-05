@@ -178,7 +178,7 @@
                                                         <td style="padding: 0px;text-align: center">
                                                             <a href="#">
                                                                 <div  style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    <i class="fa fa-eye" style="color: #1AB394"></i>
+                                                                    <i class="fa fa-paperclip" style=""> Attached</i>
                                                                 </div>
                                                             </a>
                                                         </td>
@@ -199,4 +199,7 @@
 
 
             </div>
+@stop
+@section('jsSocket')
+    <script src="../../../js/HomeJS.js"></script>
 @stop

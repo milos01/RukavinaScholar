@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Problem;
 use Auth;
+use Illuminate\Support\Facades\Storage;
 class ProblemController extends Controller
 {
 	public function __construct()
@@ -85,6 +86,32 @@ class ProblemController extends Controller
         $user = User::findorFail($userId);
         
         $user->problems()->detach($problemId);     
+        
+    }
+
+    public function newProblem(){
+        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+        $count = 0;
+        foreach ($myMessagess as $key => $message) {
+            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
+               $count++; 
+            }
+        }
+        return view('newProblem')->with('myMessagesCount', $count);
+    }
+
+    public function uploadProblem(Request $request){
+        $s3 = Storage::disk('s3');
+        if($request->hasFile('file')){
+            $file = $request->file('file');
+            $fileName = $file->getClientOriginalName();
+            $file->move(storage_path(). '/uploads', $fileName);
+            
+            $file2 = storage_path(). '/uploads/'. $fileName;
+            $s3->put($fileName, fopen($file2,'r+'), 'public');   
+        }
+
+        
         
     }
 }

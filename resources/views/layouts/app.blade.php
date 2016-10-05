@@ -83,8 +83,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
     <!-- Socket.IO -->
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script src="../../../js/socketClient.js"></script>
+    
     <script src="../../../js/app.js"></script>
+    @section('jsSocket')
+    @show
     <!-- {{-- <script src="{{ elixir('js/app.js') }}"></script> --}} -->
 </body>
 </html>

@@ -22,8 +22,10 @@
     <link href="../../../css/style.css" rel="stylesheet">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
     <link href="../../../css/plugins/cropper/cropper.min.css" rel="stylesheet">
+    <link href="../../../css/plugins/iCheck/custom.css" rel="stylesheet">
         <!-- Sweet Alert -->
     <link href="../../../css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="../../../css/plugins/dropzone/basic.css" rel="stylesheet">
     <link href="../../../css/plugins/dropzone/dropzone.css" rel="stylesheet">
     <!-- Toastr style -->
     <link href="../../../css/plugins/toastr/toastr.min.css" rel="stylesheet">
@@ -95,7 +97,7 @@
                     <div class="logo-element">KBK</div>
                 </li>
                 <!-- Admin side menu -->
-                <li style="margin-top:-4px"><a href="/home"><i class="fa fa-home"></i>
+                <li style="margin-top:-4px" ><a href="/home"><i class="fa fa-home"></i>
                         <span class="nav-label" id="mngu">Home</span></a></li>
                 @if(Auth::user()->is('admin'))
                     
@@ -104,18 +106,24 @@
 
                     <li><a href="/home/manage"><i class="fa fa-area-chart"></i>
                         <span class="nav-label">Statistics</span></a></li>
+                    <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
+                        <span class="nav-label">Assigned to me </span></a></li>
+
+                @elseif(Auth::user()->is('moderator'))
+                    <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
+                        <span class="nav-label">Assigned to me </span></a></li>
+                    
                 @elseif(Auth::user()->is('regular'))
-                    <li style="margin-top:-4px"><a href="/home/manage"><i class="fa fa-plus"></i>
+                    <li style="margin-top:-4px"><a href="/home/newproblem"><i class="fa fa-plus"></i>
                         <span class="nav-label" id="mngu">Submit problem</span></a></li>
+                    <li style="margin-top:-4px"><a href="/home/newproblem"><i class="fa fa-book" aria-hidden="true"></i>
+                        <span class="nav-label" id="mngu">My problems</span></a></li>
                 @endif
                  
                     <li style="margin-top:-4px"><a href="/home/edit"><i class="fa fa-cog"></i>
                         <span class="nav-label">Edit profile</span></a></li>
 
-                    <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
-                    <span class="nav-label">Assigned to me </span></a></li>
-                    
-                    <li>
+                        <li>
                         <a href="/home/inbox"><i class="fa fa-envelope"></i>
                             <span id="mailBox"class="nav-label">Mailbox 
 
@@ -197,6 +205,7 @@
             src="../../../js/plugins/flot/jquery.flot.pie.js"></script>
     <script
             src="../../../js/plugins/flot/jquery.flot.symbol.js"></script>
+
     <script
             src="../../../js/plugins/flot/jquery.flot.time.js"></script>
 
@@ -238,18 +247,31 @@
     <script src="../../../js/plugins/dropzone/dropzone.js"></script>
     <!-- Socket.IO -->
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script src="../../../js/socketClient.js"></script>
     <!-- Toastr script -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
     <script src="../../../js/plugins/toastr/toastr.min.js"></script>
     <script src="../../../js/app.js"></script>
-     
+    @section('jsSocket')
 
+    @show
+    <!-- iCheck -->
+    <script src="../../../js/plugins/iCheck/icheck.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.i-checks').iCheck({
+                    checkboxClass: 'icheckbox_square-green',
+                    radioClass: 'iradio_square-green',
+                });
+            });
+        </script>
     <script>
 
-        $(document).ready(
+        $(document).ready(function() {
 
-                function() {
+
+
+
+
                     var $image = $(".image-crop > img")
             $($image).cropper({
                 aspectRatio: 1.618,
@@ -496,26 +518,7 @@
                     });
                 });
     </script>
-    <script type="text/javascript">
-        var baseUrl = "{{url('/home/saveImage')}}";
-        var token = "{{ Session::getToken() }}";
-        Dropzone.autoDiscover = false;
-        var myDropzone = new Dropzone("div#dropzoneFileUpload", {
-            url: baseUrl,
-            params: {
-                _token: token
-            }
-        });
-        Dropzone.options.myAwesomeDropzone = {
-            paramName: "file", // The name that will be used to transfer the file
-            maxFilesize: 2, // MB
-            addRemoveLinks: false,
-            maxFiles: 1,
-            accept: function(file, done) {
- 
-            },
-        };
-    </script>
+   
 </body>
 </body>
 </html>
