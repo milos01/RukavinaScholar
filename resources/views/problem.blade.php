@@ -29,7 +29,10 @@
 
                                         <div>
                                             <div class="image-imitation">
-                                                [media type(video, text doc, string)]
+                                                <!-- [media type(video, text doc, string)] -->
+                                                @foreach($problem->files as $file)
+                                                	<a href="https://s3.amazonaws.com/kbk300test/{{$file->fileName}}" download="{{$file->fileName}}">{{$file->fileName}}</a><br/>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -53,9 +56,8 @@
 
                                         <br/>
                                         <br/>
-                                        There are many variations of passages of Lorem Ipsum available, but the majority
-                                        have suffered alteration in some form, by injected humour, or randomised words
-                                        which don't look even slightly believable.
+                                        
+                                       
                                     </div>
                                     <dl class="small m-t-md">
                                         <dt>From</dt>
@@ -65,10 +67,28 @@
                                     <hr>
                                     
                                         
-                                    
-                                    
-                                  
+                                   
+	                                    @if(Auth::user()->is('moderator') || Auth::user()->is('admin'))
+                                            <div class="small text-muted">
+
+                                            @foreach($problem->offers as $offer)
+                                                @if(Auth::user()->id == $offer->person_from)
+                                                    <p>${{$offer->price}} bidded</p>
+                                                @endif
+                                             @endforeach
                                        
+                                             </div>
+                                        <hr/>
+	                                    @endif
+
+
+                                                    <b>Bid price</b>
+                                                    <div class = "input-group" style="width:200px">
+                                                        <span class = "input-group-addon">$</span>
+                                                        <input type = "number" class =" form-control">
+                                                     </div>
+                                               
+                                  	
                                     
                                     <div>
                                         <div class="btn-group">

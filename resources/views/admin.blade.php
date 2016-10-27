@@ -13,23 +13,23 @@
 
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../../css/bootstrap.min.css"
+    <link href="../../../../css/bootstrap.min.css"
           rel="stylesheet">
-    <link href="../../../font-awesome/css/font-awesome.css"
+    <link href="../../../../font-awesome/css/font-awesome.css"
           rel="stylesheet">
 
-    <link href="../../../css/animate.css" rel="stylesheet">
-    <link href="../../../css/style.css" rel="stylesheet">
+    <link href="../../../../css/animate.css" rel="stylesheet">
+    <link href="../../../../css/style.css" rel="stylesheet">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-    <link href="../../../css/plugins/cropper/cropper.min.css" rel="stylesheet">
-    <link href="../../../css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="../../../../css/plugins/cropper/cropper.min.css" rel="stylesheet">
+    <link href="../../../../css/plugins/iCheck/custom.css" rel="stylesheet">
         <!-- Sweet Alert -->
-    <link href="../../../css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
-    <link href="../../../css/plugins/dropzone/basic.css" rel="stylesheet">
-    <link href="../../../css/plugins/dropzone/dropzone.css" rel="stylesheet">
+    <link href="../../../../css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="../../../../css/plugins/dropzone/basic.css" rel="stylesheet">
+    <link href="../../../../css/plugins/dropzone/dropzone.css" rel="stylesheet">
     <!-- Toastr style -->
-    <link href="../../../css/plugins/toastr/toastr.min.css" rel="stylesheet">
-    <link href="../../../css/tooltip.css" rel="stylesheet">
+    <link href="../../../../css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../../../../css/tooltip.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Lato';
@@ -82,7 +82,7 @@
 						<span> 
                         
                         <img alt="image" class="img-circle"
-                                    src="../../../img/{{Auth::user()->picture}}" width="53px" height="53px" />
+                                    src="../../../../img/{{Auth::user()->picture}}" width="53px" height="53px" />
                                     
 						</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
                                     class="clear"> <span class="block m-t-xs"> <strong
@@ -186,76 +186,76 @@
     </div>
     <!-- Mainly scripts -->
     
-    <script src="../../../js/jquery-2.1.1.js"></script>
-    <script src="../../../js/bootstrap.min.js"></script>
+    <script src="../../../../js/jquery-2.1.1.js"></script>
+    <script src="../../../../js/bootstrap.min.js"></script>
     <script
-            src="../../../js/plugins/metisMenu/jquery.metisMenu.js"></script>
+            src="../../../../js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script
-            src="../../../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+            src="../../../../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
     <!-- Flot -->
-    <script src="../../../js/plugins/flot/jquery.flot.js"></script>
+    <script src="../../../../js/plugins/flot/jquery.flot.js"></script>
     <script
-            src="../../../js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+            src="../../../../js/plugins/flot/jquery.flot.tooltip.min.js"></script>
     <script
-            src="../../../js/plugins/flot/jquery.flot.spline.js"></script>
+            src="../../../../js/plugins/flot/jquery.flot.spline.js"></script>
     <script
-            src="../../../js/plugins/flot/jquery.flot.resize.js"></script>
+            src="../../../../js/plugins/flot/jquery.flot.resize.js"></script>
     <script
-            src="../../../js/plugins/flot/jquery.flot.pie.js"></script>
+            src="../../../../js/plugins/flot/jquery.flot.pie.js"></script>
     <script
-            src="../../../js/plugins/flot/jquery.flot.symbol.js"></script>
+            src="../../../../js/plugins/flot/jquery.flot.symbol.js"></script>
 
     <script
-            src="../../../js/plugins/flot/jquery.flot.time.js"></script>
+            src="../../../../js/plugins/flot/jquery.flot.time.js"></script>
 
     <!-- Peity -->
     <script
-            src="../../../js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="../../../js/demo/peity-demo.js"></script>
+            src="../../../../js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="../../../../js/demo/peity-demo.js"></script>
 
     <!-- Custom and plugin javascript -->
-    <script src="../../../js/inspinia.js"></script>
-    <script src="../../../js/plugins/pace/pace.min.js"></script>
+    <script src="../../../../js/inspinia.js"></script>
+    <script src="../../../../js/plugins/pace/pace.min.js"></script>
 
     <!-- jQuery UI -->
-    <script src="../../../js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../../../../js/plugins/jquery-ui/jquery-ui.min.js"></script>
 
     <!-- Jvectormap -->
     <script
-            src="../../../js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+            src="../../../../js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
     <script
-            src="../../../js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+            src="../../../../js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 
     <!-- EayPIE -->
     <script
-            src="../../../js/plugins/easypiechart/jquery.easypiechart.js"></script>
+            src="../../../../js/plugins/easypiechart/jquery.easypiechart.js"></script>
 
     <!-- Sparkline -->
     <script
-            src="../../../js/plugins/sparkline/jquery.sparkline.min.js"></script>
+            src="../../../../js/plugins/sparkline/jquery.sparkline.min.js"></script>
 
     <!-- Sparkline demo data  -->
-    <script src="../../../js/demo/sparkline-demo.js"></script>
+    <script src="../../../../js/demo/sparkline-demo.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
     <!-- Image cropper -->
-    <script src="../../../js/plugins/cropper/cropper.min.js"></script>
+    <script src="../../../../js/plugins/cropper/cropper.min.js"></script>
 
    
-    <script src="../../../js/plugins/sweetalert/sweetalert.min.js"></script>
-    <script src="../../../js/plugins/dropzone/dropzone.js"></script>
+    <script src="../../../../js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="../../../../js/plugins/dropzone/dropzone.js"></script>
     <!-- Socket.IO -->
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <!-- Toastr script -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
-    <script src="../../../js/plugins/toastr/toastr.min.js"></script>
-    <script src="../../../js/app.js"></script>
+    <script src="../../../../js/plugins/toastr/toastr.min.js"></script>
+    <script src="../../../../js/app.js"></script>
     @section('jsSocket')
 
     @show
     <!-- iCheck -->
-    <script src="../../../js/plugins/iCheck/icheck.min.js"></script>
+    <script src="../../../../js/plugins/iCheck/icheck.min.js"></script>
         <script>
             $(document).ready(function () {
                 $('.i-checks').iCheck({

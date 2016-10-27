@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\User;
+use App\Offer;
+use App\File;
 use App\Problem;
-use Auth;
+use Auth,Zipper;
 use Illuminate\Support\Facades\Storage;
 class ProblemController extends Controller
 {
@@ -104,14 +106,46 @@ class ProblemController extends Controller
         $s3 = Storage::disk('s3');
         if($request->hasFile('file')){
             $file = $request->file('file');
+
             $fileName = $file->getClientOriginalName();
             $file->move(storage_path(). '/uploads', $fileName);
-            
             $file2 = storage_path(). '/uploads/'. $fileName;
+
             $s3->put($fileName, fopen($file2,'r+'), 'public');   
         }
+    }
+
+    public function newproblemsubmit(Request $request){
+        $user = Auth::user()->id;
+        $problem = new Problem();
+        $problem->subject = $request->probName;
+        $problem->person_from = $user;
+        $problem->main_slovler = 1;
+        $problem->problem_description = $request->probDescription;
+        $problem->took = 0;
+        $problem->waiting = 1;
+        $problem->save();
 
         
-        
+        foreach ($request->selectedFiles as $value) {
+            $file = new File();
+            $file->problem()->associate($problem);
+            $file->fileName = $value;
+            $file->save();
+        }
+        // $file->files()->associate($user);
+
+        // dd($request->all());
+    }
+
+    public function problemDownload($id){
+        $s3 = Storage::disk('s3');
+        // dd($s3->url('test.txt'));
+        // return response()->download($s3->url('test.txt'));
+    }
+
+    public function getproblemoffers(Request $request){
+        $problemOffers = Problem::findorFail($request->probId)->offers;
+        return $problemOffers->toArray();
     }
 }

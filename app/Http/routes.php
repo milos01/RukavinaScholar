@@ -22,6 +22,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::group(['prefix'=>'home', 'middleware' => 'auth'], function () {
 		Route::get('/', 'HomeController@index');
 		Route::get('problem/{id}', 'ProblemController@showProblem');
+		Route::get('problem/{id}/download', 'ProblemController@problemDownload');
+		Route::get('problem/{id}/payment/{pyid}', 'PaymentController@problemPaymentShow');
 		Route::get('myproblem/{id}', 'ProblemController@showMyProblem');
 		Route::get('upgrade/{id}', 'UserController@upgradeAdmin');
 		Route::get('downgrade/{id}', 'UserController@donwgradeAdmin');
@@ -42,6 +44,8 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('api/application/deleteWorker', 'ProblemController@deleteWorker');
 		Route::get('api/application/getuserproblems', 'ProblemController@getAllProblems');
 		Route::get('api/application/getuser', 'UserController@getApiUser');
+		Route::post('api/application/newproblemsubmit', 'ProblemController@newproblemsubmit');
+		Route::post('api/application/getproblemoffers', 'ProblemController@getproblemoffers');
 
 		Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function(){
 			Route::get('manage', function(){

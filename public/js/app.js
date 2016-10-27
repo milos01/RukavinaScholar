@@ -2,6 +2,7 @@
 var app = angular.module('kbkApp', ['ngAnimate'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
+
         
  });
 // socket = io('http://localhost:3000');
@@ -48,6 +49,9 @@ app.controller('sendMessageController', function($scope, $http ) {
     };
 });
 
+app.controller('downloadController', function($scope){
+  
+});
 // socket.on('newMessageN', function (data) {
 //           console.log("radiiiiiii");
 //           $('#mailBox').append('<div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white"></div>');
@@ -298,7 +302,7 @@ app.service('searchService2', function($http){
 
 app.controller('showProblemController', function($scope, $http){
     $scope.loading = true;
-
+    $scope.noFound = 'No problem found!';
     return $http({
         method: 'GET',
         url: 'home/api/application/getuserproblems',
@@ -316,11 +320,24 @@ app.controller('showProblemController', function($scope, $http){
     });
 });
 
-app.controller('newProblemController', function($scope){
+app.controller('newProblemController', function($scope, $http){
   $scope.addProblemSubmit = function(){
       
-      // alert($scope.probName + " " + $scope.probDescription);
-      console.log(selectedFiles);
+      alert($scope.probName + " " + $scope.probDescription + " " +$scope.answer +" "+selectedFiles);
+   
+      return $http({
+        method: 'POST',
+        url: '/home/api/application/newproblemsubmit',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: {probName: $scope.probName, probDescription: $scope.probDescription, probType: $scope.answer, selectedFiles: selectedFiles}
+    }).then(function(res){
+      console.log(res.data);
+    }).finally(function() {
+      // called no matter success or failure
+    });
+
   }
 });
 
@@ -337,13 +354,93 @@ if($('#uploadHolderr').is(':visible')){
                         console.log(file);
                         selectedFiles.push(file.name);
                         if (file.name == "a.jpg") {
-                          done("Naha, you don'tt.");
+                          done("Naha, you don't.");
                         }
                         else { done(); }
                   }
                 };
             }
 
+app.directive('problemShowDirective', function ($compile, $http, $parse) {
+  return {
+    scope: {
+    problem: '='
+  },
+    link: function (scope, element, attrs) {
+      if (scope.problem.waiting == 0) {
+      var el1 = angular.element('<div class="dropdown"><button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span></button><ul class="dropdown-menu" id="offersHolder"></ul></div>');
+      $compile(el1)(scope);
+      elm = element.find("#dropDownMenu"); 
+      elm.append(el1);
+      $http({
+        method: 'POST',
+        url: '/home/api/application/getproblemoffers',
+        headers: {
+            "Content-Type": "application/json"
+        },
+          data: {probId: scope.problem.id}
+        }).then(function(res){
+          
+          
+            console.log(res.data);
+          
+   
+            angular.forEach(res.data, function(value, key) {
+              // console.log(view);
+              var el2 = angular.element('<li ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+' <span ng-show="hoverEdit'+key+'"> -select</span></a></li>');
+              $compile(el2)(scope);
+              elm = element.find("#offersHolder"); 
+              elm.append(el2);
+           
+            });
+           
+            
+          
+      });
+        }else{
+            // var $dd = $('#dropDownMenu');
+            // $dd.html('sadas');
+            
+            var el3 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true"></i> pending...</span>');
+            $compile(el3)(scope);
+            elm3 = element.find("#statusHolder"); 
+            elm3.append(el3);
+            // $("#dropDownMenu").prop('disabled',true);
+          }
+      
+        scope.hoverItem = function(key){
+          var string = "hoverEdit"+key;
+          var newModel = $parse(string);
+          newModel.assign(scope, true);
+            // Assigns a value to it
+            // 
+                // varScope = true;
+            }
+            
+            scope.hoverOut = function(key){
+                var string = "hoverEdit"+key;
+                var model = $parse(string);
+                // Assigns a value to it
+                model.assign(scope, false);
+               
+            };
+
+        // scope.deletePatient = function(pacId, e){
+        //    e.preventDefault();
+        //    $http({
+        //         method: 'POST',
+        //         url: '/home/deletepatient',
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         },
+        //         data: {id: pacId}
+        //     }).then(function(res){
+        //       alert(res.data);
+        //     });
+        // }
+    }
+  }
+});
 // app.directive('animateOnLoad', function($animateCss) {
 //     return {
 //       'link': function(scope, element) {
@@ -354,3 +451,52 @@ if($('#uploadHolderr').is(':visible')){
 //       }
 //     };
 // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -135,7 +135,7 @@
                                                     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="color:#1ab394"></i>
                                                     <!-- <span class="sr-only">Loading...</span> -->
                                                 </div>
-                                                <tr ng-repeat="problem in problems | filter:{took:0} | filter: search" ng-cloak>
+                                                <tr ng-repeat="problem in problems | filter:{took:0} | filter: search" problem-show-directive problem="problem" ng-cloak>
                                                     
                                                         <td style="padding: 0px;color:black">
                                                             <a href="/home/problem/<%problem.id%>">
@@ -161,7 +161,7 @@
                                                         <td style="padding: 0px">
                                                             <a href="/home/problem/<%problem.id%>">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678" >
-                                                                    <span style="color:red" ng-bind="Type of problem"></span>
+                                                                    <span style="color:red">Type of problem</span>
                                                                 </div>
                                                             </a>
                                                         </td>
@@ -176,15 +176,26 @@
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px;text-align: center">
-                                                            <a href="#">
-                                                                <div  style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    <i class="fa fa-paperclip" style=""> Attached</i>
+                                                            
+                                                                <div  style="width:100%;height:100%;padding:8px;color:#737678" >
+                                                                    <div id="statusHolder">
+                                                                    </div>
+
+                                                                    <div id="dropDownMenu">
+                                                                       <!--  <div class="dropdown">
+                                                                            <button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span>
+                                                                            </button>
+                                                                                <ul class="dropdown-menu" id="offersHolder">
+                                                                                </ul>
+                                                                        </div> -->
+                                                                    </div>
+
                                                                 </div>
-                                                            </a>
+                                                            
                                                         </td>
 
                                                 </tr>
-                                                <p ng-show="(problems | filter:{took:0} | filter: search).length == 0" style="text-align:center;margin-top:40px;position: relative;">No problems found!</p>
+                                                <p ng-show="(problems | filter:{took:0} | filter: search).length == 0" style="text-align:center;margin-top:40px;position: relative;" ng-bind="noFound"></p>
                                            
                                             </tbody>
                                         </table>

@@ -28,4 +28,14 @@ class Problem extends Model
     public function main_solver(){
         return $this->belongsTo('App\User', 'main_slovler');
     }
+
+    public function files()
+    {
+        return $this->hasMany('App\File');
+    }
+
+    public function offers()
+    {
+        return $this->hasMany('App\Offer');
+    }
 }

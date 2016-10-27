@@ -22,11 +22,11 @@ class UsersTableSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'name' => 'Nikola',
-            'lastName' => 'Andric',
-            'role' => 'moderator',
+            'name' => 'Regular',
+            'lastName' => 'User',
+            'role' => 'regular',
             'picture' => 'a1.jpg',
-            'email' => 'nikola@gmail.com',
+            'email' => 'regular@gmail.com',
             'password' => Hash::make('pass'),
             'created_at' => '2008-10-29 14:56:59',
         ]);

@@ -35,12 +35,16 @@
                                  <div class="hr-line-dashed"></div>
                                 <div class="form-group"><label class="col-sm-2 control-label">Problem category</label>
                                   <div class="col-sm-10">
-                                            <div class="i-checks">
-                                                <label> <input type="radio" value="option1" name="a"> <i></i> Option one </label>
-                                            </div>
-                                        <div class="i-checks">
-                                                <label> <input type="radio" checked="" value="option2" name="a"> <i></i> Option two checked </label>
-                                        </div>
+                                           
+                                                <label> <input type="radio"  name="chType" ng-model="answer" value="math"> <i></i> Math </label>
+                                            
+                                      
+                                                <label> <input type="radio" name="chType" ng-model="answer" value="phisics"> <i></i> Phisics </label>
+                                       
+                                       
+                                                <label> <input type="radio" name="chType" ng-model="answer" value="programming"> <i></i> Programming </label>
+                                      
+                                      
                                   </div>
                                 </div>
                                
