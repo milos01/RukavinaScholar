@@ -46,6 +46,7 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('api/application/getuser', 'UserController@getApiUser');
 		Route::post('api/application/newproblemsubmit', 'ProblemController@newproblemsubmit');
 		Route::post('api/application/getproblemoffers', 'ProblemController@getproblemoffers');
+		Route::post('api/application/placeOffer', 'PaymentController@placeOffer');
 
 		Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function(){
 			Route::get('manage', function(){

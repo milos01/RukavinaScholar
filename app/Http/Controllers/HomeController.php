@@ -34,8 +34,6 @@ class HomeController extends Controller
                $count++; 
             }
         }
-        
-        
         return view('homeCenter')->with('myMessagesCount', $count);
     }
 

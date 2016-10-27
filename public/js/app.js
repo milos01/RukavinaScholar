@@ -305,15 +305,28 @@ app.controller('showProblemController', function($scope, $http){
     $scope.noFound = 'No problem found!';
     return $http({
         method: 'GET',
-        url: 'home/api/application/getuserproblems',
+        url: 'home/api/application/getuser',
         headers: {
             "Content-Type": "application/json"
         },
         data: {}
     }).then(function(res){
-      
-      $scope.problems = res.data;
-      console.log($scope.problems);
+        if (res.data.role == "regular") {
+
+        }else{
+        $http({
+            method: 'GET',
+            url: 'home/api/application/getuserproblems',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: {}
+        }).then(function(res){
+          
+          $scope.problems = res.data;
+          console.log($scope.problems);
+        });
+      }
     }).finally(function() {
       // called no matter success or failure
       $scope.loading = false;
@@ -340,7 +353,15 @@ app.controller('newProblemController', function($scope, $http){
 
   }
 });
+//Custom Date filter
+app.filter('dateFilter', function($filter) {
+  // In the return function, we must pass in a single parameter which will be the data we will work on.
+  // We have the ability to support multiple other parameters that can be passed into the filter optionally
+  return function(input, format) {
+       return $filter('date')(new Date(input), format);
+}
 
+});
 if($('#uploadHolderr').is(':visible')){
                 Dropzone.options.dropzoneForm = {
                     addRemoveLinks: true,
@@ -387,7 +408,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse) {
    
             angular.forEach(res.data, function(value, key) {
               // console.log(view);
-              var el2 = angular.element('<li ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+' <span ng-show="hoverEdit'+key+'"> -select</span></a></li>');
+              var el2 = angular.element('<li ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+' <span ng-show="hoverEdit'+key+'">  <i>-select</i></span></a></li>');
               $compile(el2)(scope);
               elm = element.find("#offersHolder"); 
               elm.append(el2);
@@ -440,6 +461,30 @@ app.directive('problemShowDirective', function ($compile, $http, $parse) {
         // }
     }
   }
+});
+
+app.controller('bidingController', function($scope, $http){
+  $scope.placeBid = function(probId){
+    var offer = $scope.biddingOffer;
+        $http({
+            method: 'POST',
+            url: '/home/api/application/placeOffer',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: {probId: probId, price: offer}
+        }).then(function(res){
+          swal({
+            title: "Success",
+            text: "Successfully bidded $"+offer+" on this task",
+            type: "success",
+            timer: 1500,
+            showConfirmButton: false
+          });
+
+          $("#offerPlace").html("<p>$"+offer+" bidded</p>");
+        });
+  };
 });
 // app.directive('animateOnLoad', function($animateCss) {
 //     return {

@@ -30,6 +30,8 @@
     <!-- Toastr style -->
     <link href="../../../../css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <link href="../../../../css/tooltip.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="../../../../css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Lato';
@@ -250,6 +252,8 @@
     <!-- Toastr script -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
     <script src="../../../../js/plugins/toastr/toastr.min.js"></script>
+    <!-- Sweet alert -->
+    <script src="../../../../js/plugins/sweetalert/sweetalert.min.js"></script>
     <script src="../../../../js/app.js"></script>
     @section('jsSocket')
 

@@ -64,12 +64,12 @@
                                         <dd>{{$problem->user_from->name}} {{$problem->user_from->lastName}}</dd>
                                        
                                     </dl>
-                                    <hr>
+                                    <hr/>
                                     
                                         
                                    
 	                                    @if(Auth::user()->is('moderator') || Auth::user()->is('admin'))
-                                            <div class="small text-muted">
+                                            <div class="small text-muted" id="offerPlace">
 
                                             @foreach($problem->offers as $offer)
                                                 @if(Auth::user()->id == $offer->person_from)
@@ -82,13 +82,21 @@
 	                                    @endif
 
 
-                                                    <b>Bid price</b>
-                                                    <div class = "input-group" style="width:200px">
-                                                        <span class = "input-group-addon">$</span>
-                                                        <input type = "number" class =" form-control">
-                                                     </div>
+                                        <!-- <b>Bid price</b> -->
+                                        <div class="container" style="margin-left: -15px;margin-bottom: 20px" ng-controller="bidingController">
+                                            <form name="offerForm" ng-submit="placeBid({{$problem->id}})" novalidate>
+                                            <div class = "input-group pull-left" style="width:150px">
+                                                
+                                                <span class = "input-group-addon">$</span>
                                                
-                                  	
+                                                    <input type = "number" class =" form-control" ng-model="biddingOffer" required>
+                                                    <!-- <span ng-show="offerForm.biddingOffer.$error.required" style="float: left">Please enter something!</span>    -->
+                                                
+                                                
+                                                </div>
+                                                <button class="btn btn-primary pull-left" type="submit" style="border-radius: 0px" ng-disabled="offerForm.$invalid">Bid</button>
+                                                </form>
+                                  	     </div>
                                     
                                     <div>
                                         <div class="btn-group">

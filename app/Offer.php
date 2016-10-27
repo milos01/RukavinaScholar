@@ -19,7 +19,7 @@ class Offer extends Model
         return $this->belongsTo('App\Problem');
     }
 
-    public function person_from(){
+    public function personFrom(){
         return $this->belongsTo('App\User', 'person_from');
     }
 

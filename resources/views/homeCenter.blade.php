@@ -6,7 +6,7 @@
 <div class="wrapper wrapper-content animated fadeIn">
 
                 <div class="p-w-md m-t-sm">
-                    <div class="row">
+                    <!-- <div class="row">
 
                         <div class="col-sm-4">
                             <h1 class="m-b-xs">
@@ -53,7 +53,7 @@
 
                             <table class="table small m-t-sm">
                                 <tbody>
-                               <!--  <tr>
+                                 <tr>
                                     <td>
                                         <strong>142</strong> Projects
 
@@ -78,7 +78,7 @@
                                     <td>
                                         <strong>32</strong> Clients
                                     </td>
-                                </tr> -->
+                                </tr> 
                                 </tbody>
                             </table>
 
@@ -87,7 +87,7 @@
                         </div>
 
                        
-                    </div>
+                    </div> -->
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -100,7 +100,11 @@
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label class="control-label" for="product_name">Project Name</label>
+                                            @if(Auth::user()->is('regular'))
+                                                <label class="control-label" for="product_name">My tasks</label>
+                                            @else
+                                                <label class="control-label" for="product_name">All tasks</label>
+                                            @endif
                                                 <input type="text" id="product_name" name="product_name" placeholder="Project Name" class="form-control" ng-model="search.subject">
                                             </div>
                                         </div>
@@ -161,7 +165,7 @@
                                                         <td style="padding: 0px">
                                                             <a href="/home/problem/<%problem.id%>">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678" >
-                                                                    <span style="color:red">Type of problem</span>
+                                                                    <span ng-bind="problem.problem_type"></span>
                                                                 </div>
                                                             </a>
                                                         </td>
@@ -171,7 +175,7 @@
                                                         <td style="padding: 0px">
                                                             <a href="/home/problem/<%problem.id%>">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678" >
-                                                                     <span ng-bind="problem.created_at | date:'medium' "></span>
+                                                                     <span ng-bind="problem.created_at | dateFilter: 'MM/dd/yyyy @ h:mma'"></span>
                                                                 </div>
                                                             </a>
                                                         </td>

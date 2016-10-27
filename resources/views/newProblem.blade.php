@@ -36,13 +36,13 @@
                                 <div class="form-group"><label class="col-sm-2 control-label">Problem category</label>
                                   <div class="col-sm-10">
                                            
-                                                <label> <input type="radio"  name="chType" ng-model="answer" value="math"> <i></i> Math </label>
+                                                <label> <input type="radio"  name="chType" ng-model="answer" value="Math"> <i></i> Math </label>
                                             
                                       
-                                                <label> <input type="radio" name="chType" ng-model="answer" value="phisics"> <i></i> Phisics </label>
+                                                <label> <input type="radio" name="chType" ng-model="answer" value="Physics"> <i></i> Physics </label>
                                        
                                        
-                                                <label> <input type="radio" name="chType" ng-model="answer" value="programming"> <i></i> Programming </label>
+                                                <label> <input type="radio" name="chType" ng-model="answer" value="Programming"> <i></i> Programming </label>
                                       
                                       
                                   </div>

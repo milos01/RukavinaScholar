@@ -12,7 +12,7 @@ class PaymentController extends Controller
 {
     public function problemPaymentShow($problemId, $offerId){
     	$problem = Problem::findorFail($problemId);
-    	$offer = Offer::with('person_from')->findorFail($offerId);
+    	$offer = Offer::with('personFrom')->findorFail($offerId);
     	// dd($offer);
     	$myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
         $count = 0;
@@ -22,5 +22,24 @@ class PaymentController extends Controller
             }
         }
     	return view('payment')->with('problem', $problem)->with('myMessagesCount', $count)->with('offer', $offer);
+    }
+
+    public function placeOffer(Request $request){
+    	$problemId = $request->probId;
+    	$problem = Problem::findorFail($problemId);
+    	$problem->waiting = 0;
+    	$price = $request->price;
+
+    	$offer = new Offer();
+    	$offer->problem()->associate($problem);
+    	$offer->personFrom()->associate(Auth::user());
+    	$offer->price = $price;
+
+    	if ($offer->save() and $problem->save()) {
+    		return response()->json("Ok");
+    	}
+
+    	return response()->json("Server error");
+
     }
 }
