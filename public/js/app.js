@@ -583,7 +583,7 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
         }).then(function(res){
           var offers = res.data.offers;
           if (offers.length == 0) {
-            var el3 = angular.element('');
+            var el3 = angular.element('<form name="offerForm" ng-submit="placeBid({{$problem->id}})" novalidate><div class = "input-group pull-left" style="width:150px;padding:5px 0px"><span class = "input-group-addon">$</span><input type = "number" class =" form-control" ng-model="biddingOffer" required></div><button class="btn btn-primary" type="submit" style="border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid</button></form>');
             $compile(el3)($scope);
             elm3 = $element.find("#offerPlace"); 
             console.log(elm3);
@@ -604,7 +604,7 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
             }else if(check02){
               angular.forEach(offers, function(value, key) {
                 if (lUser.id == value.person_from) {
-                  var el3 = angular.element('<span>Already bidded $'+value.price+'</span>');
+                  var el3 = angular.element('<span style="padding:13px 0px;position:absolute">Already bidded $'+value.price+'</span>');
                   $compile(el3)($scope);
                   elm3 = $element.find("#offerPlace"); 
                   elm3.append(el3);
