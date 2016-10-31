@@ -11,8 +11,6 @@
 |
 */
 use App\User;
-
-Route::group(['middleware' => ['web']], function () {
     Route::get('/', ['middleware' => 'guest', function () {
     	return view('welcome');
 	}]);
@@ -47,6 +45,8 @@ Route::group(['middleware' => ['web']], function () {
 		Route::post('api/application/newproblemsubmit', 'ProblemController@newproblemsubmit');
 		Route::post('api/application/getproblemoffers', 'ProblemController@getproblemoffers');
 		Route::post('api/application/placeOffer', 'PaymentController@placeOffer');
+		Route::post('api/application/makePayment', 'PaymentController@makePayment');
+		Route::get('api/application/getOneUserProblems', 'ProblemController@getOneUserProblems');
 
 		Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function(){
 			Route::get('manage', function(){
@@ -64,4 +64,3 @@ Route::group(['middleware' => ['web']], function () {
 		Route::get('edit', 'UserController@editUser');
 		Route::post('uploadProblem', 'ProblemController@uploadProblem');
 	});
-});

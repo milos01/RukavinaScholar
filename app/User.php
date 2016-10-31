@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function problems()
     {
-        return $this->belongsToMany('App\Problem', 'user_problem', 'user_id', 'problem_id');
+        return $this->belongsToMany('App\Problem', 'user_problem', 'user_id', 'problem_id')->withTimestamps();
     }
 
 }

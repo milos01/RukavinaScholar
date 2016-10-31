@@ -5,6 +5,34 @@ var app = angular.module('kbkApp', ['ngAnimate'], function($interpolateProvider)
 
         
  });
+
+app.factory('loggedUserService', function($http) {
+        
+        var loggedUserService =  {
+            user: function() {
+            var promise =  $http({
+                  method: 'GET',
+                  url: 'home/api/application/getuser',
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  data: {}
+              }).then(function(res){
+                return res.data;
+              });
+               return promise;
+            }
+        };
+        return loggedUserService;
+});
+
+app.controller('mainController', function($scope, loggedUserService){
+  // $scope.loggedUsers = loggedUserService.loggedUser();
+  loggedUserService.user().then(function(d) {
+    loggedUser = d;
+  });
+  
+});
 // socket = io('http://localhost:3000');
 if($(".chDiscussion").is(":visible")){
   $cont = $(".chDiscussion");
@@ -302,6 +330,7 @@ app.service('searchService2', function($http){
 
 app.controller('showProblemController', function($scope, $http){
     $scope.loading = true;
+    $scope.colourIncludes = [];
     $scope.noFound = 'No problem found!';
     return $http({
         method: 'GET',
@@ -311,8 +340,43 @@ app.controller('showProblemController', function($scope, $http){
         },
         data: {}
     }).then(function(res){
+        var loggedUser = res.data;
         if (res.data.role == "regular") {
+          $http({
+            method: 'GET',
+            url: 'home/api/application/getOneUserProblems',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: {}
+          }).then(function(res){
+          
+          $scope.problems = res.data;
+          $scope.includeColour = function(colour) {
+              var i = $.inArray(colour, $scope.colourIncludes);
+              if (i > -1) {
+                  $scope.colourIncludes.splice(i, 1);
+              } else {
+                  $scope.colourIncludes.push(colour);
+              }
+           }
 
+           $scope.colourFilter = function(fruit) {
+             
+              if ($scope.colourIncludes.length > 0) {
+                  if ($.inArray(fruit.problem_type, $scope.colourIncludes) < 0)
+                      return;
+              }
+              
+              return fruit;
+            }
+
+            $scope.tookFilter = function(problem){
+              return problem;
+            }
+
+            
+          });
         }else{
         $http({
             method: 'GET',
@@ -324,13 +388,44 @@ app.controller('showProblemController', function($scope, $http){
         }).then(function(res){
           
           $scope.problems = res.data;
-          console.log($scope.problems);
+          $scope.includeColour = function(colour) {
+              var i = $.inArray(colour, $scope.colourIncludes);
+              if (i > -1) {
+                  $scope.colourIncludes.splice(i, 1);
+              } else {
+                  $scope.colourIncludes.push(colour);
+              }
+           }
+
+           $scope.colourFilter = function(fruit) {
+             
+              if ($scope.colourIncludes.length > 0) {
+                  if ($.inArray(fruit.problem_type, $scope.colourIncludes) < 0)
+                      return;
+              }
+              
+              return fruit;
+            }
+            $scope.tookFilter = function(problem){
+              if(problem.took == '0'){
+                return problem;
+              }
+            }
+          // console.log($scope.colourIncludes);
         });
+
+        
+      
+        
+    
+         
       }
     }).finally(function() {
       // called no matter success or failure
       $scope.loading = false;
     });
+
+
 });
 
 app.controller('newProblemController', function($scope, $http){
@@ -387,64 +482,72 @@ app.directive('problemShowDirective', function ($compile, $http, $parse) {
     scope: {
     problem: '='
   },
-    link: function (scope, element, attrs) {
-      if (scope.problem.waiting == 0) {
-      var el1 = angular.element('<div class="dropdown"><button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span></button><ul class="dropdown-menu" id="offersHolder"></ul></div>');
-      $compile(el1)(scope);
-      elm = element.find("#dropDownMenu"); 
-      elm.append(el1);
-      $http({
-        method: 'POST',
-        url: '/home/api/application/getproblemoffers',
-        headers: {
-            "Content-Type": "application/json"
-        },
-          data: {probId: scope.problem.id}
-        }).then(function(res){
-          
-          
-            console.log(res.data);
-          
-   
-            angular.forEach(res.data, function(value, key) {
-              // console.log(view);
-              var el2 = angular.element('<li ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+' <span ng-show="hoverEdit'+key+'">  <i>-select</i></span></a></li>');
-              $compile(el2)(scope);
-              elm = element.find("#offersHolder"); 
-              elm.append(el2);
-           
-            });
-           
+    link: function (scope, element, attrs) {     
+      if (loggedUser.role == 'regular') {
+        if (scope.problem.waiting == 0 && scope.problem.took == 0) {
+        var el1 = angular.element('<div class="dropdown"><button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span></button><ul class="dropdown-menu" id="offersHolder"></ul></div>');
+        $compile(el1)(scope);
+        elm = element.find("#dropDownMenu"); 
+        elm.append(el1);
+        $http({
+          method: 'POST',
+          url: '/home/api/application/getproblemoffers',
+          headers: {
+              "Content-Type": "application/json"
+          },
+            data: {probId: scope.problem.id}
+          }).then(function(res){
             
-          
-      });
-        }else{
-            // var $dd = $('#dropDownMenu');
-            // $dd.html('sadas');
             
-            var el3 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true"></i> pending...</span>');
+              console.log(res.data);
+            
+     
+              angular.forEach(res.data, function(value, key) {
+                // console.log(view);
+                var el2 = angular.element('<li ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+' <span ng-show="hoverEdit'+key+'">  <i>-select</i></span></a></li>');
+                $compile(el2)(scope);
+                elm = element.find("#offersHolder"); 
+                elm.append(el2);
+             
+              });
+             
+              
+            
+        });
+          }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
+              var el1 = angular.element('<span><i class="fa fa-pencil" aria-hidden="true"></i> under work</span>');
+              $compile(el1)(scope);
+              elm = element.find("#statusHolder"); 
+              elm.append(el1);
+          }else{
+              // var $dd = $('#dropDownMenu');
+              // $dd.html('sadas');
+              
+              var el3 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true"></i> pending...</span>');
+              $compile(el3)(scope);
+              elm3 = element.find("#statusHolder"); 
+              elm3.append(el3);
+              // $("#dropDownMenu").prop('disabled',true);
+            }
+          }else{
+            var el3 = angular.element('<span><button class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> View</button></span>');
             $compile(el3)(scope);
             elm3 = element.find("#statusHolder"); 
             elm3.append(el3);
-            // $("#dropDownMenu").prop('disabled',true);
           }
-      
-        scope.hoverItem = function(key){
-          var string = "hoverEdit"+key;
-          var newModel = $parse(string);
-          newModel.assign(scope, true);
-            // Assigns a value to it
-            // 
-                // varScope = true;
-            }
+          scope.hoverItem = function(key){
+            var string = "hoverEdit"+key;
+            var newModel = $parse(string);
+            newModel.assign(scope, true);
+          }
             
-            scope.hoverOut = function(key){
-                var string = "hoverEdit"+key;
-                var model = $parse(string);
-                // Assigns a value to it
-                model.assign(scope, false);
+          scope.hoverOut = function(key){
+              var string = "hoverEdit"+key;
+              var model = $parse(string);
+               // Assigns a value to it
+              model.assign(scope, false);
                
-            };
+          };
 
         // scope.deletePatient = function(pacId, e){
         //    e.preventDefault();
@@ -466,7 +569,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse) {
 app.controller('bidingController', function($scope, $http){
   $scope.placeBid = function(probId){
     var offer = $scope.biddingOffer;
-        $http({
+        return $http({
             method: 'POST',
             url: '/home/api/application/placeOffer',
             headers: {
@@ -483,6 +586,29 @@ app.controller('bidingController', function($scope, $http){
           });
 
           $("#offerPlace").html("<p>$"+offer+" bidded</p>");
+        });
+  };
+});
+
+app.controller('makePaymentController', function($scope, $http){
+  $scope.makePayment = function(){
+    var sloId = $("#slovlerId").val();
+    var probId = $("#problemId").val();
+    return $http({
+            method: 'POST',
+            url: '/home/api/application/makePayment',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: {probId: probId, sloId: sloId}
+        }).then(function(res){
+          swal({
+            title: "Success",
+            text: "Successfully payed",
+            type: "success",
+            timer: 1500,
+            showConfirmButton: false
+          });
         });
   };
 });

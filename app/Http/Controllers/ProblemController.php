@@ -14,7 +14,7 @@ class ProblemController extends Controller
 {
 	public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     public function showProblem($id){
@@ -47,7 +47,7 @@ class ProblemController extends Controller
     	$problem->took = 1;
         $problem->main_slovler = $luser->id;
     	$problem->save();
-        $luser->problems()->attach($problem->id /*array('message' => $message, 'read' => 0, 'group_start' => $min, 'group_end' => $max, 'last' => 1)*/);
+        
 
     	return redirect('/home');
     }
@@ -147,5 +147,11 @@ class ProblemController extends Controller
     public function getproblemoffers(Request $request){
         $problemOffers = Problem::findorFail($request->probId)->offers;
         return $problemOffers->toArray();
+    }
+
+    public function getOneUserProblems(){
+        $userProblems = Problem::where('person_from', Auth::user()->id)->get();
+        // dd($userProblems);
+        return $userProblems->toArray();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Problem;
 use App\Offer;
+use App\User;
 use Auth;
 use App\Http\Requests;
 
@@ -41,5 +42,19 @@ class PaymentController extends Controller
 
     	return response()->json("Server error");
 
+    }
+
+    public function makePayment(Request $request){
+    	$probId = $request->probId;
+    	$problem = Problem::findorFail($probId);
+    	$problem->took = 1;
+    	$luser = User::findorFail($request->sloId);
+    	$luser->problems()->attach($probId /*array('message' => $message, 'read' => 0, 'group_start' => $min, 'group_end' => $max, 'last' => 1)*/);
+    	if ($problem->save()) {
+    		return response()->json('Ok');
+    	}else{
+    		return response()->json('Server error');
+    	}
+    	
     }
 }

@@ -95,17 +95,24 @@
 
 
 
-                                <div class="ibox-content" style="min-height: 100px">
+                                <div class="ibox-content" style="min-height: 100px" ng-controller="showProblemController">
 
                                     <div class="row">
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-8">
                                             <div class="form-group">
                                             @if(Auth::user()->is('regular'))
                                                 <label class="control-label" for="product_name">My tasks</label>
                                             @else
                                                 <label class="control-label" for="product_name">All tasks</label>
                                             @endif
-                                                <input type="text" id="product_name" name="product_name" placeholder="Project Name" class="form-control" ng-model="search.subject">
+                                            <div class="container" style="width:100">
+                                                <input  type="text" id="product_name" name="product_name" placeholder="Task Name" class="form-control" ng-model="search.subject" style="float:left;width: 300px;margin-left: -15px">
+                                                <div class="container" style="width: 300px;float: left;padding: 6px;margin-left: 30px">
+                                                    <label class="checkbox-inline"><input type="checkbox" ng-click="includeColour('Programming')"/> Programming</label>
+                                                    <label class="checkbox-inline"><input type="checkbox" ng-click="includeColour('Math')" /> Math</label>
+                                                    <label class="checkbox-inline"><input type="checkbox" ng-click="includeColour('Physics')"/> Physics</label>
+                                                </div>
+                                            </div>
                                             </div>
                                         </div>
                                         <!-- <div class="col-sm-2">
@@ -131,7 +138,7 @@
                                         </div> -->
                                     </div>
 
-                                    <div class="table-responsive" ng-controller="showProblemController">
+                                    <div class="table-responsive" style="overflow-x: visible">
                                         <table class="table table-striped">
                                         
                                             <tbody>
@@ -139,7 +146,7 @@
                                                     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="color:#1ab394"></i>
                                                     <!-- <span class="sr-only">Loading...</span> -->
                                                 </div>
-                                                <tr ng-repeat="problem in problems | filter:{took:0} | filter: search" problem-show-directive problem="problem" ng-cloak>
+                                                <tr ng-repeat="problem in problems | filter:tookFilter | filter: search | filter:colourFilter" problem-show-directive problem="problem" ng-cloak>
                                                     
                                                         <td style="padding: 0px;color:black">
                                                             <a href="/home/problem/<%problem.id%>">
@@ -199,7 +206,8 @@
                                                         </td>
 
                                                 </tr>
-                                                <p ng-show="(problems | filter:{took:0} | filter: search).length == 0" style="text-align:center;margin-top:40px;position: relative;" ng-bind="noFound"></p>
+                                                
+                                                <p ng-show="(problems | filter: tookFilter | filter: search | filter:colourFilter).length == 0" style="text-align:center;margin-top:40px;position: relative;" ng-bind="noFound"></p>
                                            
                                             </tbody>
                                         </table>
