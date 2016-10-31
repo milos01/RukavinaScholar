@@ -118,8 +118,6 @@
                 @elseif(Auth::user()->is('regular'))
                     <li style="margin-top:-4px"><a href="/home/newproblem"><i class="fa fa-plus"></i>
                         <span class="nav-label" id="mngu">Submit problem</span></a></li>
-                    <li style="margin-top:-4px"><a href="/home/newproblem"><i class="fa fa-book" aria-hidden="true"></i>
-                        <span class="nav-label" id="mngu">My problems</span></a></li>
                 @endif
                  
                     <li style="margin-top:-4px"><a href="/home/edit"><i class="fa fa-cog"></i>

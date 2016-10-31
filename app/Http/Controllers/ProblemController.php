@@ -111,7 +111,8 @@ class ProblemController extends Controller
             $file->move(storage_path(). '/uploads', $fileName);
             $file2 = storage_path(). '/uploads/'. $fileName;
 
-            $s3->put($fileName, fopen($file2,'r+'), 'public');   
+            $s3->put($fileName, fopen($file2,'r+'), 'public');
+            unlink($file2);   
         }
     }
 
@@ -121,6 +122,7 @@ class ProblemController extends Controller
         $problem->subject = $request->probName;
         $problem->person_from = $user;
         $problem->main_slovler = 1;
+        $problem->problem_type = $request->probType;
         $problem->problem_description = $request->probDescription;
         $problem->took = 0;
         $problem->waiting = 1;
@@ -153,5 +155,11 @@ class ProblemController extends Controller
         $userProblems = Problem::where('person_from', Auth::user()->id)->get();
         // dd($userProblems);
         return $userProblems->toArray();
+    }
+
+    public function getProblem(Request $request){
+        $problem = Problem::with('offers')->findorFail($request->probId);
+
+        return $problem->toArray();
     }
 }

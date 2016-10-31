@@ -47,6 +47,7 @@ use App\User;
 		Route::post('api/application/placeOffer', 'PaymentController@placeOffer');
 		Route::post('api/application/makePayment', 'PaymentController@makePayment');
 		Route::get('api/application/getOneUserProblems', 'ProblemController@getOneUserProblems');
+		Route::post('api/application/getProblem', 'ProblemController@getProblem');
 
 		Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function(){
 			Route::get('manage', function(){

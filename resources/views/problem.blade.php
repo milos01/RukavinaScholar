@@ -49,7 +49,7 @@
                                     </div>
                                     <hr>
 
-                                    <h4>Problem description</h4>
+                                    <h4>Task description</h4>
 
                                     <div class="small text-muted">
                                         {{$problem->problem_description}}
@@ -64,43 +64,27 @@
                                         <dd>{{$problem->user_from->name}} {{$problem->user_from->lastName}}</dd>
                                        
                                     </dl>
-                                    <hr/>
-                                    
-                                        
-                                   
-	                                    @if(Auth::user()->is('moderator') || Auth::user()->is('admin'))
-                                            <div class="small text-muted" id="offerPlace">
+                                    <div class="container" style="margin-left: -15px;margin-bottom: 20px;margin-top: -40px" ng-controller="bidingController" ng-init="init('{{$problem->id}}')" >
+                                        <div id="bidFormHolder" style="height: 30px"></div>
+                                        <hr/> 
+                                            <div class="small text-muted" style="height: 10px">
+                                                <p  id="offerPlace" style="">
 
-                                            @foreach($problem->offers as $offer)
-                                                @if(Auth::user()->id == $offer->person_from)
-                                                    <p>${{$offer->price}} bidded</p>
-                                                @endif
-                                             @endforeach
-                                       
-                                             </div>
+                                                    <!-- <form name="offerForm" ng-submit="placeBid({{$problem->id}})" novalidate>
+                                                          <div class = "input-group pull-left" style="width:150px;">
+                                                          <span class = "input-group-addon">$</span>
+                                                          <input type = "number" class =" form-control" ng-model="biddingOffer" required>
+                                                            
+                                                          <button class="btn btn-primary pull-left" type="submit" style="border-radius: 0px" ng-disabled="offerForm.$invalid">Bid</button>
+                                                    </form> -->
+                                                </p>
+                                            </div>
                                         <hr/>
-	                                    @endif
-
-
-                                        <!-- <b>Bid price</b> -->
-                                        <div class="container" style="margin-left: -15px;margin-bottom: 20px" ng-controller="bidingController">
-                                            <form name="offerForm" ng-submit="placeBid({{$problem->id}})" novalidate>
-                                            <div class = "input-group pull-left" style="width:150px">
-                                                
-                                                <span class = "input-group-addon">$</span>
-                                               
-                                                    <input type = "number" class =" form-control" ng-model="biddingOffer" required>
-                                                    <!-- <span ng-show="offerForm.biddingOffer.$error.required" style="float: left">Please enter something!</span>    -->
-                                                
-                                                
-                                                </div>
-                                                <button class="btn btn-primary pull-left" type="submit" style="border-radius: 0px" ng-disabled="offerForm.$invalid">Bid</button>
-                                                </form>
-                                  	     </div>
+                                    </div>
                                     
                                     <div>
                                         <div class="btn-group">
-                                            <a href="{{url('home/takeProblem',$problem->id)}}" style="color:#676A6C"><button class="btn btn-white btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true" style="color:#ed5565"></i> Take it</button></a>
+                                           <!--  <a href="{{url('home/takeProblem',$problem->id)}}" style="color:#676A6C"><button class="btn btn-white btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true" style="color:#ed5565"></i> Take it</button></a> -->
                                             <a href="{{url('/home')}}"  style="color: white"><button class="btn btn-danger btn-sm"><i class="fa fa-angle-left" aria-hidden="true"></i> Back to home </button></a>
                                         </div>
                                     </div>

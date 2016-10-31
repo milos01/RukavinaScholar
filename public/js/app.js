@@ -12,7 +12,7 @@ app.factory('loggedUserService', function($http) {
             user: function() {
             var promise =  $http({
                   method: 'GET',
-                  url: 'home/api/application/getuser',
+                  url: '/home/api/application/getuser',
                   headers: {
                       "Content-Type": "application/json"
                   },
@@ -566,28 +566,80 @@ app.directive('problemShowDirective', function ($compile, $http, $parse) {
   }
 });
 
-app.controller('bidingController', function($scope, $http){
-  $scope.placeBid = function(probId){
-    var offer = $scope.biddingOffer;
-        return $http({
+app.controller('bidingController', function($scope, $http, $compile, $element, loggedUserService){
+  
+  $scope.init = function(id){
+    loggedUserService.user().then(function(d) {
+    var lUser = d;
+    var check = false;
+    var check02 = false;
+    return $http({
             method: 'POST',
-            url: '/home/api/application/placeOffer',
+            url: '/home/api/application/getProblem',
             headers: {
                 "Content-Type": "application/json"
             },
-            data: {probId: probId, price: offer}
+            data: {probId: id}
         }).then(function(res){
-          swal({
-            title: "Success",
-            text: "Successfully bidded $"+offer+" on this task",
-            type: "success",
-            timer: 1500,
-            showConfirmButton: false
-          });
-
-          $("#offerPlace").html("<p>$"+offer+" bidded</p>");
+          var offers = res.data.offers;
+          if (offers.length == 0) {
+            var el3 = angular.element('');
+            $compile(el3)($scope);
+            elm3 = $element.find("#offerPlace"); 
+            console.log(elm3);
+            elm3.append(el3);
+          }else{
+            angular.forEach(offers, function(value, key) {
+                if (lUser.id != value.person_from) {
+                  check = true;
+                }else{
+                  check02 = true;
+                }
+            });
+            if (check && !check02) {
+              var el3 = angular.element('<span>form1</span>');
+              $compile(el3)($scope);
+              elm3 = $element.find("#offerPlace"); 
+              elm3.append(el3);
+            }else if(check02){
+              angular.forEach(offers, function(value, key) {
+                if (lUser.id == value.person_from) {
+                  var el3 = angular.element('<span>Already bidded $'+value.price+'</span>');
+                  $compile(el3)($scope);
+                  elm3 = $element.find("#offerPlace"); 
+                  elm3.append(el3);
+                }
+              });
+              
+            }
+          }
+        }).finally(function(){
+          // $scope.loading02 = false;
         });
-  };
+  // $scope.placeBid = function(probId){
+  //   var offer = $scope.biddingOffer;
+  //       return $http({
+  //           method: 'POST',
+  //           url: '/home/api/application/placeOffer',
+  //           headers: {
+  //               "Content-Type": "application/json"
+  //           },
+  //           data: {probId: probId, price: offer}
+  //       }).then(function(res){
+  //         swal({
+  //           title: "Success",
+  //           text: "Successfully bidded $"+offer+" on this task",
+  //           type: "success",
+  //           timer: 1500,
+  //           showConfirmButton: false
+  //         });
+
+  //         $("#offerPlace").html("<p>$"+offer+" bidded</p>");
+  //       });
+  // };
+  });
+};
+
 });
 
 app.controller('makePaymentController', function($scope, $http){
@@ -610,6 +662,7 @@ app.controller('makePaymentController', function($scope, $http){
             showConfirmButton: false
           });
         });
+
   };
 });
 // app.directive('animateOnLoad', function($animateCss) {
