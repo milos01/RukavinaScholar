@@ -530,7 +530,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse) {
               // $("#dropDownMenu").prop('disabled',true);
             }
           }else{
-            var el3 = angular.element('<span><button class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> View</button></span>');
+            var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> View</button></span>');
             $compile(el3)(scope);
             elm3 = element.find("#statusHolder"); 
             elm3.append(el3);
