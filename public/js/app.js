@@ -6,6 +6,20 @@ var app = angular.module('kbkApp', ['ngAnimate'], function($interpolateProvider)
         
  });
 
+app.factory('alertSerice', function() {
+        return {
+            successSweet: function(title, type, text) {
+                swal({
+                  title: title,
+                  text: text,
+                  type: type,
+                  timer: 1500,
+                  showConfirmButton: false
+                });
+            }
+        };
+});
+
 app.factory('loggedUserService', function($http) {
         
         var loggedUserService =  {
@@ -25,6 +39,8 @@ app.factory('loggedUserService', function($http) {
         };
         return loggedUserService;
 });
+
+
 
 app.controller('mainController', function($scope, loggedUserService){
   // $scope.loggedUsers = loggedUserService.loggedUser();
@@ -352,6 +368,7 @@ app.controller('showProblemController', function($scope, $http){
           }).then(function(res){
           
           $scope.problems = res.data;
+         
           $scope.includeColour = function(colour) {
               var i = $.inArray(colour, $scope.colourIncludes);
               if (i > -1) {
@@ -428,10 +445,10 @@ app.controller('showProblemController', function($scope, $http){
 
 });
 
-app.controller('newProblemController', function($scope, $http){
+app.controller('newProblemController', function($scope, $http, alertSerice){
   $scope.addProblemSubmit = function(){
       
-      alert($scope.probName + " " + $scope.probDescription + " " +$scope.answer +" "+selectedFiles);
+      // alert($scope.probName + " " + $scope.probDescription + " " +$scope.answer +" "+selectedFiles);
    
       return $http({
         method: 'POST',
@@ -441,7 +458,7 @@ app.controller('newProblemController', function($scope, $http){
         },
         data: {probName: $scope.probName, probDescription: $scope.probDescription, probType: $scope.answer, selectedFiles: selectedFiles}
     }).then(function(res){
-      console.log(res.data);
+      alertSerice.successSweet('Success', 'success', 'Successfully submitted new task');
     }).finally(function() {
       // called no matter success or failure
     });
@@ -477,7 +494,7 @@ if($('#uploadHolderr').is(':visible')){
                 };
             }
 
-app.directive('problemShowDirective', function ($compile, $http, $parse) {
+app.directive('problemShowDirective', function ($compile, $http, $parse, loggedUserService) {
   return {
     scope: {
     problem: '='
@@ -530,10 +547,24 @@ app.directive('problemShowDirective', function ($compile, $http, $parse) {
               // $("#dropDownMenu").prop('disabled',true);
             }
           }else{
-            var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> View</button></span>');
-            $compile(el3)(scope);
-            elm3 = element.find("#statusHolder"); 
-            elm3.append(el3);
+           
+            if (scope.problem.offers.length == 0) {
+              var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> View</button></span>');
+              $compile(el3)(scope);
+              elm3 = element.find("#statusHolder"); 
+              elm3.append(el3);
+            }else{
+              angular.forEach(scope.problem.offers, function(value, key) {
+                console.log(value.person_from);
+                if (value.person_from == lUser.id) {
+                  var el2 = angular.element('<p>you bidded</p>');
+                  $compile(el2)(scope);
+                  elm = element.find("#statusHolder"); 
+                  elm.append(el2);
+                }
+              });        
+            }
+          
           }
           scope.hoverItem = function(key){
             var string = "hoverEdit"+key;
@@ -566,11 +597,12 @@ app.directive('problemShowDirective', function ($compile, $http, $parse) {
   }
 });
 
-app.controller('bidingController', function($scope, $http, $compile, $element, loggedUserService){
+app.controller('bidingController', function($scope, $http, $compile, $element, loggedUserService, alertSerice){
   
   $scope.init = function(id){
     loggedUserService.user().then(function(d) {
     var lUser = d;
+    if (lUser.role != 'regular') {
     var check = false;
     var check02 = false;
     return $http({
@@ -581,9 +613,10 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
             },
             data: {probId: id}
         }).then(function(res){
+          var formBidElement = '<form name="offerForm" ng-submit="placeBid()" novalidate><div class = "input-group pull-left" style="width:150px;padding:5px 0px"><span class = "input-group-addon">$</span><input type = "number" class =" form-control" ng-model="biddingOffer" required></div><button class="btn btn-primary" type="submit" style="border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid</button></form>';
           var offers = res.data.offers;
           if (offers.length == 0) {
-            var el3 = angular.element('<form name="offerForm" ng-submit="placeBid({{$problem->id}})" novalidate><div class = "input-group pull-left" style="width:150px;padding:5px 0px"><span class = "input-group-addon">$</span><input type = "number" class =" form-control" ng-model="biddingOffer" required></div><button class="btn btn-primary" type="submit" style="border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid</button></form>');
+            var el3 = angular.element(formBidElement);
             $compile(el3)($scope);
             elm3 = $element.find("#offerPlace"); 
             console.log(elm3);
@@ -597,7 +630,7 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
                 }
             });
             if (check && !check02) {
-              var el3 = angular.element('<span>form1</span>');
+              var el3 = angular.element(formBidElement);
               $compile(el3)($scope);
               elm3 = $element.find("#offerPlace"); 
               elm3.append(el3);
@@ -613,36 +646,31 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
               
             }
           }
+          $scope.placeBid = function(){
+            var offer = $scope.biddingOffer;
+              return $http({
+                  method: 'POST',
+                  url: '/home/api/application/placeOffer',
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  data: {probId: id, price: offer}
+              }).then(function(res){
+                
+                alertSerice.successSweet('Success', 'success', 'Successfully bidded $'+offer+' on this task');
+                $("#offerPlace").html('<span style="padding:13px 0px;position:absolute">Already bidded $'+offer+'</span>');
+              });
+          };
         }).finally(function(){
           // $scope.loading02 = false;
         });
-  // $scope.placeBid = function(probId){
-  //   var offer = $scope.biddingOffer;
-  //       return $http({
-  //           method: 'POST',
-  //           url: '/home/api/application/placeOffer',
-  //           headers: {
-  //               "Content-Type": "application/json"
-  //           },
-  //           data: {probId: probId, price: offer}
-  //       }).then(function(res){
-  //         swal({
-  //           title: "Success",
-  //           text: "Successfully bidded $"+offer+" on this task",
-  //           type: "success",
-  //           timer: 1500,
-  //           showConfirmButton: false
-  //         });
-
-  //         $("#offerPlace").html("<p>$"+offer+" bidded</p>");
-  //       });
-  // };
+    }
   });
 };
 
 });
 
-app.controller('makePaymentController', function($scope, $http){
+app.controller('makePaymentController', function($scope, $http, alertSerice){
   $scope.makePayment = function(){
     var sloId = $("#slovlerId").val();
     var probId = $("#problemId").val();
@@ -654,13 +682,7 @@ app.controller('makePaymentController', function($scope, $http){
             },
             data: {probId: probId, sloId: sloId}
         }).then(function(res){
-          swal({
-            title: "Success",
-            text: "Successfully payed",
-            type: "success",
-            timer: 1500,
-            showConfirmButton: false
-          });
+          alertSerice.successSweet('Success', 'success', 'Successfully payed');
         });
 
   };

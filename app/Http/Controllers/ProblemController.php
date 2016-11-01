@@ -53,7 +53,7 @@ class ProblemController extends Controller
     }
 
     public function getAllProblems(){
-        $allProblems = Problem::all();
+        $allProblems = Problem::with('offers')->get();
 
         return json_encode($allProblems);
     }
