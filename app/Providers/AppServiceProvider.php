@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\User;
+use App\Problem;
+
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,6 +18,17 @@ class AppServiceProvider extends ServiceProvider
     {
         
         view()->share('key', 'value');
+
+        User::deleting(function ($user) {
+            $problems = Problem::all();
+            foreach ($problems as $problem) {
+                if ($problem->person_from == $user->id) {
+                    $problem->delete();
+                }
+            }
+            return $problems;
+        });
+        
     }
     /**
      * Register any application services.

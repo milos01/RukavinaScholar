@@ -72,7 +72,7 @@
                                 <table class="table table-hover">
                                     <tbody>
 									@foreach($users as $user)
-										@if($user->email != Auth::user()->email && !$user->is('regular'))
+										@if($user->email != Auth::user()->email)
 	                                    <tr>
 	                                        <td class="project-status">
 	                                        @if($user->is('moderator'))
@@ -103,12 +103,51 @@
 	                                            
 	                                        </td>
 	                                        <td class="project-actions">
-	                                            <a href="#" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
-	                                            <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+	                                            <a href="#" class="btn btn-white btn-sm"><i class="fa fa-eye"></i> View </a>
+	                                            <a href="{{url('/home/manage/deleteUser',[$user->id])}}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete </a>
 	                                        </td>
 	                                    </tr>
 	                                    @endif
-                                    @endforeach
+                                    @endforeach  
+                                    @foreach($deletedUsers as $user)
+										@if($user->email != Auth::user()->email)
+	                                    <tr  style="background: rgba(237, 86, 102, .1)">
+	                                        <td class="project-status">
+	                                        @if($user->is('moderator'))
+	                                            <a href="{{url('/home/upgrade', $user->id)}}" class="btn btn-primary btn-s">Make admin</a>
+	                                        @elseif($user->is('admin'))
+	                                        	<a href="{{url('/home/downgrade', $user->id)}}" class="btn btn-default btn-s">Downgrade</a>
+	                                        @endif
+	                                        </td>
+	                                        <td class="project-title">
+	                                            <a href="{{url('/home', $user->id)}}">{{ $user->name }} {{$user->lastName}}
+	                                            	@if($user->is('moderator'))
+	                                            		(Moderator)
+	                                        		@elseif($user->is('admin'))
+	                                        			(Admin)
+	                                        		@endif
+	                                            </a>
+	                                            <br/>
+	                                            <small>Signed up: {{$user->created_at->format('m/d/Y')}}</small><br/>
+	                                            <small>Deleted at: {{$user->deleted_at->format('m/d/Y')}}</small>
+	                                        </td>
+	                                        <td class="project-completion">
+	                                                <small>Activity: {{$user->effect}}%</small>
+	                                                <div class="progress progress-mini">
+	                                                    <div style="width: {{$user->effect}}%;" class="progress-bar"></div>
+	                                                </div>
+	                                        </td>
+	                                        <td class="project-people">
+	                                            <a href=""><img alt="image" class="img-circle" src="../../img/{{$user->picture}}"></a>
+	                                            
+	                                        </td>
+	                                        <td class="project-actions">
+	                                            <!-- <a href="#" class="btn btn-white btn-sm"><i class="fa fa-eye"></i> View </a> -->
+	                                            <a href="{{url('/home/manage/deleteUser',[$user->id])}}" class="btn btn-info btn-sm"><i class="fa fa-check"></i> Activate </a>
+	                                        </td>
+	                                    </tr>
+	                                    @endif
+                                    @endforeach 
                                     </tbody>
                                 </table>
                             </div>

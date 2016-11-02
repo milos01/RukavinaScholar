@@ -150,4 +150,10 @@ class UserController extends Controller
         $user = Auth::user();
         return $user;
     }
+
+    public function deleteUser($id){
+        $user = User::findorFail($id);
+        $user->delete();
+        return back();
+    }
 }
