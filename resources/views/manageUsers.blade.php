@@ -13,11 +13,11 @@
 @stop
 @section('manageUsers')
 	<!-- Modal -->
-	<div id="addMemnerModal" class="modal fade" role="dialog">
+	<div id="addMemberModal" class="modal fade" role="dialog">
 	  <div class="modal-dialog" style="width:400px">
 
 	    <!-- Modal content-->
-	     <form method="POST" action="{{ url('/home/addStaff') }}" name="addStaffForm" novalidate>
+	     <form method="POST" action="{{ url('/home/manage/addStaff') }}" name="addStaffForm" novalidate>
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -43,7 +43,7 @@
 	        		<p ng-show="addStaffForm.email.$error.email && !addStaffForm.email.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Email not valid</p>
                 </div>
              </div>
-	        <input type="text" class="form-control" placeholder="Password" name = "password" value="defpass" style="margin-top:10px" disabled>
+	        <input type="text" class="form-control" placeholder="Password" name = "password" value="defPass" style="margin-top:10px" disabled>
 	        </fieldset>
 	      </div>
 	      <div class="modal-footer">
@@ -64,7 +64,7 @@
                         <div class="ibox-title">
                             <h5>Staff list</h5>
                             <div class="ibox-tools">
-                                <a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addMemnerModal">Add new staff member</a>
+                                <a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addMemberModal">Add new staff member</a>
                             </div>
                         </div>
                         <div class="ibox-content">
@@ -76,9 +76,9 @@
 	                                    <tr>
 	                                        <td class="project-status">
 	                                        @if($user->is('moderator'))
-	                                            <a href="{{url('/home/upgrade', $user->id)}}" class="btn btn-primary btn-s">Make admin</a>
+	                                            <a href="{{url('/home/manage/upgrade', [$user->id])}}" class="btn btn-primary btn-s">Make admin</a>
 	                                        @elseif($user->is('admin'))
-	                                        	<a href="{{url('/home/downgrade', $user->id)}}" class="btn btn-default btn-s">Downgrade</a>
+	                                        	<a href="{{url('/home/manage/downgrade', [$user->id])}}" class="btn btn-default btn-s">Downgrade</a>
 	                                        @endif
 	                                        </td>
 	                                        <td class="project-title">
@@ -103,7 +103,7 @@
 	                                            
 	                                        </td>
 	                                        <td class="project-actions">
-	                                            <a href="#" class="btn btn-white btn-sm"><i class="fa fa-eye"></i> View </a>
+	                                            <a href="{{url('/home/user', [$user->id])}}" class="btn btn-white btn-sm"><i class="fa fa-eye"></i> View </a>
 	                                            <a href="{{url('/home/manage/deleteUser',[$user->id])}}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete </a>
 	                                        </td>
 	                                    </tr>
@@ -112,19 +112,15 @@
                                     @foreach($deletedUsers as $user)
 										@if($user->email != Auth::user()->email)
 	                                    <tr  style="background: rgba(237, 86, 102, .1)">
-	                                        <td class="project-status">
-	                                        @if($user->is('moderator'))
-	                                            <a href="{{url('/home/upgrade', $user->id)}}" class="btn btn-primary btn-s">Make admin</a>
-	                                        @elseif($user->is('admin'))
-	                                        	<a href="{{url('/home/downgrade', $user->id)}}" class="btn btn-default btn-s">Downgrade</a>
-	                                        @endif
-	                                        </td>
+	                                    	<td></td>
 	                                        <td class="project-title">
 	                                            <a href="{{url('/home', $user->id)}}">{{ $user->name }} {{$user->lastName}}
 	                                            	@if($user->is('moderator'))
-	                                            		(Moderator)
+	                                            		(Was moderator)
 	                                        		@elseif($user->is('admin'))
-	                                        			(Admin)
+	                                        			(Was admin)
+	                                        		@elseif($user->is('regular'))
+	                                        			(Was regular user)
 	                                        		@endif
 	                                            </a>
 	                                            <br/>
@@ -143,7 +139,7 @@
 	                                        </td>
 	                                        <td class="project-actions">
 	                                            <!-- <a href="#" class="btn btn-white btn-sm"><i class="fa fa-eye"></i> View </a> -->
-	                                            <a href="{{url('/home/manage/deleteUser',[$user->id])}}" class="btn btn-info btn-sm"><i class="fa fa-check"></i> Activate </a>
+	                                            <a href="{{url('/home/manage/activateUser',[$user->id])}}" class="btn btn-info btn-sm"><i class="fa fa-check"></i> Activate </a>
 	                                        </td>
 	                                    </tr>
 	                                    @endif

@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>403 Error</title>
+    <title>405 Error</title>
 
     <link href="../../../css/bootstrap.min.css" rel="stylesheet">
     <link href="../../../font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -21,10 +21,9 @@
 
     <div class="middle-box text-center animated fadeInDown">
         <h1>403</h1>
-        <h3 class="font-bold">Forbidden page</h3>
-
-        <div class="error-desc">
-            You don't have rights to access this page. We apologize.<br/>
+        <h3 class="font-bold">Method not allowed</h3>
+        
+         <div class="error-desc">
             You can go back to home page: <br/><a href="/home" class="btn btn-primary m-t">Home</a>
         </div>
     </div>

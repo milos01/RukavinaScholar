@@ -24,6 +24,7 @@ class InboxController extends Controller
     }
 
     public function showUsersMessages($id){
+        $toUser = User::findorFail($id);
     	$user = Auth::user();
     	if ($id < $user->id) {
     		$min = $id;
@@ -33,7 +34,6 @@ class InboxController extends Controller
     	   $max = $id;
         }
         
-        $toUser = User::find($id);
     	$myMessages = Auth::user()->fromMessages()->where('user_to', Auth::id())->orWhere('group_start',$min)->where('group_end', $max)->orderBy('pivot_id','ASC')->get();
 
         if(Auth::id() == $myMessages->last()->pivot->user_to){

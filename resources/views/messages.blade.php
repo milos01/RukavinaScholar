@@ -18,7 +18,7 @@
 	<div class="wrapper wrapper-content">
                         <div class="row" style="margin-top:-11px" >
 
-                            <div class="col-md-8 animated fadeInRight" style="overflow:hidden;padding:0px">
+                            <div class="col-md-8 animated fadeInRight" style="overflow:hidden;padding:0px" ng-controller="sendMessageController">
                                 <div class="chat-discussion chDiscussion"  style="background: #fff;height:63vh;overflow: auto;position:relative;padding-right:20px;margin-right:-20px">
                                     @foreach($myMessages as $message)
                                         <br>
@@ -46,13 +46,13 @@
                                             </div>
                                         @endif
                                     @endforeach
-
+                                    <div id="showNewMessage"></div>
                                     
                                     
                                 </div>
                                 <div class="chat-discussion"  style="background: #fff;height:10vh;border-top:1px solid #e7eaec">
                                     <div class="chat-message-form">
-                                        <div class="form-group" ng-controller="sendMessageController" style="float:left;">
+                                        <div class="form-group" style="float:left;">
                                             <form ng-submit="submitMessageForm()" name="sendMessageForm" novalidate>
                                                 <div class="form-group" ng-class="{ 'has-error' : sendMessageForm.message.$invalid && !sendMessageForm.message.$pristine }">
                                                     <div class="col-sm-7">

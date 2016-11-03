@@ -27,7 +27,7 @@ class MakeUserRequest extends Request
             'fname' => 'required|max:255',
             'lname' => 'required|max:255',
             'email' => 'required|unique:users|max:255',
-            'password' => 'required|max:255',
+            // 'password' => 'required|max:255',
         ];
     }
 }

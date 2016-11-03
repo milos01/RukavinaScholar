@@ -30,14 +30,14 @@
                 </div>
                 <!-- End send message modal -->
 	<div class="row animated fadeInRight" style="margin-top:20px">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>Profile Detail</h5>
                         </div>
                         <div>
                             <div class="ibox-content no-padding border-left-right">
-                                <img alt="image" class="img-responsive" src="../../img/profile_big.jpg">
+                                <img alt="image" class="img-responsive" src="../../img/{{$user->picture}}">
                             </div>
                             <div class="ibox-content profile-content">
                                 <h4><strong>{{$user->name}} {{$user->lastName}}</strong></h4>
@@ -56,7 +56,7 @@
                                 <div class="user-button">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#sendMessageModal"><i class="fa fa-envelope" ></i> Send Message</button>
+                                            <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" style="width:150px" data-target="#sendMessageModal"><i class="fa fa-envelope" ></i> Send Message</button>
                                         </div>
                                         <div class="col-md-6">
                                             <!-- <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-coffee"></i> Buy a coffee</button> -->

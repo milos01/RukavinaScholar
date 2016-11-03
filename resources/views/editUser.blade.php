@@ -22,20 +22,20 @@
                                 <li class=""><a data-toggle="tab" href="#tab-2"> Security</a></li>
                                 <li class=""><a data-toggle="tab" href="#tab-4"> Image</a></li>
                             </ul>
-                            <div class="tab-content">
+                            <div class="tab-content" ng-controller="editUserInfoController" ng-init="init({{Auth::user()}})">
                                 <div id="tab-1" class="tab-pane active">
                                     <div class="panel-body">
                                     	<form action="{{url('/home/updateUser')}}" method="POST" name="editBasicInfoForm" novalidate>
 	                                        <fieldset class="form-horizontal">
 	                                            <div class="form-group" ng-class="{ 'has-error' : editBasicInfoForm.firstName.$invalid && !editBasicInfoForm.firstName.$pristine }"><label class="col-sm-2 control-label">First name</label>
-	                                                <div class="col-sm-8"><input type="text" class="form-control" placeholder="{{Auth::user()->name}}" name="firstName" ng-model="user.firstName" capitalize-first required>
+	                                                <div class="col-sm-8"><input type="text" class="form-control" placeholder="" name="firstName" ng-model="firstName" capitalize-first required>
                                                          <p ng-show="editBasicInfoForm.firstName.$error.required && !editBasicInfoForm.firstName.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your first name is required</p>
                                                     </div>
 	                                            </div>
                                                
                 
 	                                            <div class="form-group" ng-class="{ 'has-error' : editBasicInfoForm.lastName.$invalid && !editBasicInfoForm.lastName.$pristine}"><label class="col-sm-2 control-label">Last name</label>
-	                                                <div class="col-sm-8"><input type="text" class="form-control" placeholder="{{Auth::user()->lastName}}" name="lastName" ng-model="user.lastName" capitalize-first required>
+	                                                <div class="col-sm-8"><input type="text" class="form-control" placeholder="{{Auth::user()->lastName}}" name="lastName" ng-model="lastName" capitalize-first required>
                                                     <p ng-show="editBasicInfoForm.lastName.$error.required && !editBasicInfoForm.lastName.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your last name is required</p>
                                                     </div>
 	                                            </div>

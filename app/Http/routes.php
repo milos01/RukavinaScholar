@@ -23,9 +23,6 @@ use App\User;
 		Route::get('problem/{id}/download', 'ProblemController@problemDownload');
 		Route::get('problem/{id}/payment/{pyid}', 'PaymentController@problemPaymentShow');
 		Route::get('myproblem/{id}', 'ProblemController@showMyProblem');
-		Route::get('upgrade/{id}', 'UserController@upgradeAdmin');
-		Route::get('downgrade/{id}', 'UserController@donwgradeAdmin');
-		Route::post('addStaff', 'UserController@addStaff');
 		Route::post('updateUser', 'UserController@updateUser');
 		Route::post('saveImage', 'UserController@saveImage');
 		Route::post('updatePassword', 'UserController@updatePassword');
@@ -49,21 +46,15 @@ use App\User;
 		Route::get('api/application/getOneUserProblems', 'ProblemController@getOneUserProblems');
 		Route::post('api/application/getProblem', 'ProblemController@getProblem');
 
-		Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function(){
-			Route::get('manage', function(){
-				$users = User::all();
-				$deletedUsers = User::onlyTrashed()->get();
-				$myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-		        $count = 0;
-		        foreach ($myMessagess as $key => $message) {
-		            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-		               $count++; 
-		            }
-		        }
-				return view('/manageUsers')->with('users', $users)->with('myMessagesCount', $count)->with('deletedUsers', $deletedUsers);
-			});
+		Route::group(['middleware' => 'admin'], function(){
+			Route::get('manage', 'UserController@showManage');
+			Route::get('manage/upgrade/{id}', 'UserController@upgradeAdmin');
+			Route::get('manage/downgrade/{id}', 'UserController@donwgradeAdmin');
+			Route::get('manage/deleteUser/{id}', 'UserController@deleteUser');
+			Route::get('manage/activateUser/{id}', 'UserController@activateUser');
+			Route::post('manage/addStaff', 'UserController@addStaff');
 		});
-		Route::get('manage/deleteUser/{id}', 'UserController@deleteUser');
+		
 		Route::get('edit', 'UserController@editUser');
 		Route::post('uploadProblem', 'ProblemController@uploadProblem');
 	});

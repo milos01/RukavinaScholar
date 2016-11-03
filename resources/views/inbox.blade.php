@@ -32,10 +32,10 @@
                 </h2>
                 <div class="mail-tools tooltip-demo m-t-md">
                     
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left"><i class="fa fa-refresh"></i> Refresh</button>
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-eye"></i> </button>
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-exclamation"></i> </button>
-                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-trash-o"></i> </button>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" disabled><i class="fa fa-refresh"></i> Refresh</button>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" disabled><i class="fa fa-eye"></i> </button>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" disabled><i class="fa fa-exclamation"></i> </button>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" disabled><i class="fa fa-trash-o"></i> </button>
 
                 </div>
             </div>
@@ -87,7 +87,7 @@
                                 </a></td>
 		                    @endif
 		                    
-		                    <td class="text-right mail-date" style="padding-top: 19px"><small>{{$message->created_at->format('m/d/Y')}}</small></td>
+		                    <td class="text-right mail-date" style="padding-top: 19px"><small>{{$message->pivot->created_at->format('m/d/Y')}}</small></td>
 		                </tr>
                 @endforeach
                 </tbody>

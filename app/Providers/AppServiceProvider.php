@@ -28,6 +28,16 @@ class AppServiceProvider extends ServiceProvider
             }
             return $problems;
         });
+
+        User::updating(function ($user) {
+            $problems = Problem::onlyTrashed()->get();
+            foreach ($problems as $problem) {
+                if ($problem->person_from == $user->id) {
+                    $problem->restore();
+                }
+            }
+            return $problems;
+        });
         
     }
     /**

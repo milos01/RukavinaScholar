@@ -21,12 +21,13 @@ class UserController extends Controller
      */
     public function addStaff(MakeUserRequest $request)
     {
-          $user = new User;
+        $user = new User;
 
         $user->name = $request->fname;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        $user->password = Hash::make('defPass');
         $user->lastName = $request->lname;
+        $user->picture = "defPic.png";
         $user->role = 'moderator';
 
         if ($user->save()) {
@@ -115,6 +116,18 @@ class UserController extends Controller
         //     return json_encode("jeayt");
         // }
     }
+    public function showManage(){
+        $users = User::all();
+        $deletedUsers = User::onlyTrashed()->get();
+        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+            $count = 0;
+            foreach ($myMessagess as $key => $message) {
+                if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
+                    $count++; 
+                }
+            }
+            return view('/manageUsers')->with('users', $users)->with('myMessagesCount', $count)->with('deletedUsers', $deletedUsers);
+    }
 
     public function updatePassword(UpdatePasswordRequest $request){
         $user = Auth::user();
@@ -154,6 +167,12 @@ class UserController extends Controller
     public function deleteUser($id){
         $user = User::findorFail($id);
         $user->delete();
+        return back();
+    }
+
+    public function activateUser($id){
+        $user = User::onlyTrashed()->findorFail($id);
+        $user->restore();
         return back();
     }
 }
