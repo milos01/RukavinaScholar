@@ -35,7 +35,10 @@ class InboxController extends Controller
         }
         
     	$myMessages = Auth::user()->fromMessages()->where('user_to', Auth::id())->orWhere('group_start',$min)->where('group_end', $max)->orderBy('pivot_id','ASC')->get();
-
+        if ($myMessages == "[]") {
+            abort(404);
+        }
+        
         if(Auth::id() == $myMessages->last()->pivot->user_to){
     	   $myMessages->last()->pivot->read = 1;
     	   $myMessages->last()->pivot->save();

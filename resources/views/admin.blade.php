@@ -61,6 +61,27 @@
           /* standard transition styles */
           opacity:1;
         }
+        .arrow-up {
+          width: 10px; 
+          height: 10px; 
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          position: absolute;
+          margin-top: -10px;
+          margin-left: 5px;
+          border-bottom: 10px solid black;
+        }
+
+        .arrow-up2 {
+          width: 0; 
+          height: 0; 
+          border-left: 9px solid transparent;
+          border-right: 9px solid transparent;
+          position: absolute;
+          margin-top: -9px;
+          margin-left: 6px;
+          border-bottom: 9px solid white;
+        }
     </style>
 </head>
 <body id="app-layout" ng-app="kbkApp">
@@ -109,11 +130,27 @@
                     <li><a href="/home/manage"><i class="fa fa-area-chart"></i>
                         <span class="nav-label">Statistics</span></a></li>
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
-                        <span class="nav-label">Assigned to me </span></a></li>
+                        <span class="nav-label">Assigned to me
+                            @if($assigns != 0)
+                               
+                                <div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white">
+
+                                </div>
+                            @endif 
+                        </span>
+                        </a>
+                    </li>
 
                 @elseif(Auth::user()->is('moderator'))
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
-                        <span class="nav-label">Assigned to me </span></a></li>
+                        <span class="nav-label">Assigned to me 
+                            @if($assigns != 0)
+                               
+                                <div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white">
+
+                                </div>
+                            @endif 
+                        </span></a></li>
                     
                 @elseif(Auth::user()->is('regular'))
                     <li style="margin-top:-4px"><a href="/home/newproblem"><i class="fa fa-plus"></i>
@@ -125,7 +162,7 @@
 
                         <li>
                         <a href="/home/inbox"><i class="fa fa-envelope"></i>
-                            <span id="mailBox"class="nav-label">Mailbox 
+                            <span id="mailBox"class="nav-label">Mailbox ({{$mess}})
 
                             @if($myMessagesCount != 0)
                                
@@ -162,9 +199,16 @@
                 </ul>
 
             </nav>
-
-            <div class="" id="responseDiv2" style="width:250px;max-height:200px;border:1px solid gray;position: absolute;margin-top:-5px;display:none;margin-left:70px;z-index: 999;background-color: white;z-index:9999;border-radius:2px;box-shadow: 0px 1px 3px #888888;">
-                  
+            <div>
+           
+                <div class="" id="responseDiv2" style="width:250px;max-height:200px;border:1px solid gray;position: absolute;margin-top:-5px;display:none;margin-left:70px;z-index: 999;background-color: white;z-index:9999;border-radius:2px;box-shadow: 0px 1px 3px #888888;">
+                     <div class='arrow-up'></div>
+                     <div class='arrow-up2'></div>
+                     <div id="responseDiv22">
+                         
+                     </div>
+                      
+                </div>
             </div>
             <!-- <div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div> -->
         </div>

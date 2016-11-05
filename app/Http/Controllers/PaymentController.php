@@ -48,8 +48,9 @@ class PaymentController extends Controller
     	$probId = $request->probId;
     	$problem = Problem::findorFail($probId);
     	$problem->took = 1;
+        $problem->main_slovler = $request->sloId; 
     	$luser = User::findorFail($request->sloId);
-    	$luser->problems()->attach($probId /*array('message' => $message, 'read' => 0, 'group_start' => $min, 'group_end' => $max, 'last' => 1)*/);
+    	$luser->problems()->attach($probId, ['read' => 0]);
     	if ($problem->save()) {
     		return response()->json('Ok');
     	}else{

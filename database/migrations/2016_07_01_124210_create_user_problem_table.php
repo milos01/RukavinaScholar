@@ -18,6 +18,7 @@ class CreateUserProblemTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('problem_id')->unsigned();
             $table->foreign('problem_id')->references('id')->on('problems');
+            $table->integer('read')->unsigned();
             $table->timestamps();
         });
     }

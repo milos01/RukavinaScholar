@@ -34,6 +34,9 @@ class HomeController extends Controller
                $count++; 
             }
         }
+
+        // $myAssigns = Auth::user()->problems()->where('read', 0)->get();
+
         return view('homeCenter')->with('myMessagesCount', $count);
     }
 

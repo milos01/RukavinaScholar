@@ -13,7 +13,7 @@
     </li>                
 @stop
 @section('manageUsers')
-    {{$offer->personFrom}}
+    {{$offer}}
     <div class="wrapper wrapper-content animated fadeInRight">
 
 

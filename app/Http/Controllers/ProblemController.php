@@ -57,11 +57,12 @@ class ProblemController extends Controller
 
         return json_encode($allProblems);
     }
-
+   
 
     public function assigned(){
     	$authId = Auth::id();
     	$myProblems = Auth::user()->problems;
+        $this->readAssigns($myProblems);
         $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
         $count = 0;
         foreach ($myMessagess as $key => $message) {
@@ -69,7 +70,18 @@ class ProblemController extends Controller
                $count++; 
             }
         }
-    	return view('myProblems')->with('myProblems', $myProblems)->with('myMessagesCount', $count);
+
+        $myAssigns = Auth::user()->problems()->where('read', 0)->get();
+    	return view('myProblems')->with('myProblems', $myProblems)->with('myMessagesCount', $count)->with('myAssigns', count($myAssigns));
+    }
+
+    private function readAssigns($problems){
+        foreach ($problems as $value) {
+            if ($value->pivot->read == 0) {
+                $value->pivot->read = 1;
+                $value->pivot->save();
+            }
+        }
     }
 
     public function addMate(Request $request){

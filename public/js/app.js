@@ -261,22 +261,21 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
     $scope.search2 = function(){
             
         searchService2.search($scope.keywords).then(function(response){
-          console.log(response.data);
             if( !$("#top-search").val() ){
-              $("#responseDiv2").hide();
+              $("#responseDiv2").fadeOut(50);
             }else{
 
-            $("#responseDiv2").text("");
+            $("#responseDiv22").text("");
 
             $("#responseDiv2").fadeIn(150);
             if(response.data.length === 0){
-                $("#responseDiv2").html(" <div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
+                $("#responseDiv22").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
             }else{
               for (var i = response.data.length - 1; i >= 0; i--) {
                   
-                  var divDiv = "</div><a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
+                  var divDiv = "<a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
     
-                  angular.element(document.getElementById('responseDiv2')).append($compile(divDiv)($scope));
+                  angular.element(document.getElementById('responseDiv22')).append($compile(divDiv)($scope));
                   $scope.addMateFunction = function(userId, problemId){
                       $http({
                           method: 'POST',

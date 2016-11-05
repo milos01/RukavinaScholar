@@ -96,7 +96,7 @@
                                                         <td style="padding: 0px">
                                                             <a href="{{url('/home/myproblem',$myProblem->id)}}">
                                                                 <div style="width:100%;height:100%;padding:8px;color:#737678">
-                                                                    {{$myProblem->created_at->format('m/d/Y')}}
+                                                                    Assigned: {{$myProblem->pivot->created_at->format('m/d/Y')}}
                                                                 </div>
                                                             </a>
                                                         </td>
@@ -115,6 +115,7 @@
                                                             </a>
                                                         </td>
                                                     </tr>
+
                                                 @endforeach
                                              @endif
                                             </tbody>

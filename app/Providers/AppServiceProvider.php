@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\User;
 use App\Problem;
+use Auth;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -16,9 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        
-        view()->share('key', 'value');
-
+          
         User::deleting(function ($user) {
             $problems = Problem::all();
             foreach ($problems as $problem) {
