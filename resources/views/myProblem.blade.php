@@ -76,10 +76,10 @@
                                             <dt>Search for moderators</dt>
                                             <input type="text" id="searchInput" class="form-control" style="margin-bottom:20px;width:250px" ng-model="keywords" ng-change="search()">
                                             <input type="hidden" value="{{$problem->id}}" id="problemId">
-                                            <div id="itemsHolder" style="position: absolute;width: 500px;height: 120px;margin-top:-54px;margin-left:250px;">
+                                            <div id="itemsHolder" style="position: absolute;height: 120px;margin-top:-54px;margin-left:250px;">
                                             @foreach($problem->users as $user)
                                                 @if($user->id != Auth::user()->id)
-                                                <div class="" id="menuSearchItem{{$user->id}}plus{{$problem->id}}" style="border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px ">
+                                                <div class="" id="menuSearchItem{{$user->id}}plus{{$problem->id}}" style="border-bottom:2px solid red;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px ">
                                                     {{$user->name}} {{$user->lastName}} 
                                                 <i class="fa fa-times" aria-hidden="true" style="cursor:pointer" ng-click="deleteWorker({{$problem->id}},{{$user->id}})"></i></div>
                                                 @endif
@@ -89,7 +89,10 @@
                                     
                                     
                                         
-                                        <div class="" id="responseDiv" style="width:250px;max-height:200px;border:1px solid red;position: absolute;margin-top:-17px;z-index: 999;background-color: white;display: none">
+                                        <div id="resDiv" style="width:250px;max-height:200px;position: absolute;margin-top:-17px;z-index: 999;background-color: white;">
+                                            
+                                                
+                                            
                                             
                                         </div>
                                         @else
@@ -103,7 +106,21 @@
                                             <dd>
                                             @foreach($problem->users as $user)
                                                 @if($user->id != $problem->main_solver->id)
-                                                    {{$user->name}} {{$user->lastName}} &nbsp;
+
+                                                    @if($user == $problem->users->last())
+                                                        @if(Auth::user()->id == $user->id)
+                                                            <strong><i>You &nbsp;</i></strong>
+                                                        @else
+                                                            <strong><i>{{$user->name}} {{$user->lastName}}</i></strong> &nbsp;
+                                                        @endif
+                                                    @else
+                                                        @if(Auth::user()->id == $user->id)
+                                                            <strong><i>You, &nbsp;</i></strong>
+                                                        @else
+                                                            <strong><i>{{$user->name}} {{$user->lastName}},</i></strong> &nbsp;
+                                                        @endif
+                                                    @endif
+                                                   
                                                 @endif
                                             @endforeach
                                             </dd>

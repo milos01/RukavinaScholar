@@ -144,7 +144,7 @@ class UserController extends Controller
 
     public function getApiUsers(Request $request){
         $keyword = $request->input('username');
-        $allUsers = User::where(DB::raw("CONCAT(`name`, ' ', `lastName`)"), 'LIKE', '%'.$keyword.'%')->where(function($q) {
+        $allUsers = User::with('problems')->where(DB::raw("CONCAT(`name`, ' ', `lastName`)"), 'LIKE', '%'.$keyword.'%')->where(function($q) {
           $q->where('role', 'admin')
             ->orWhere('role', 'moderator');
       })->where('id','!=', Auth::id())->get();
@@ -156,7 +156,7 @@ class UserController extends Controller
         $keyword = $request->input('username');
         $allUsers = User::where(DB::raw("CONCAT(`name`, ' ', `lastName`)"), 'LIKE', '%'.$keyword.'%')->where('id','!=', Auth::id())->get();
 
-        return json_encode($allUsers);
+        return $allUsers->toArray();
     }
 
     public function getApiUser(){

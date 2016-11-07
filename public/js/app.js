@@ -217,25 +217,42 @@ $(document).mouseup(function (e)
 
 app.controller('userSearchController',function($scope, $compile, $http, searchService, searchService2){ 
     var problemId = $("#problemId").val();
+     
     $scope.search = function(){
 
         searchService.search($scope.keywords).then(function(response){
-          console.log(response.data);
+          
+          var check001 = false;
           if( !$("#searchInput").val() ){
-              $("#responseDiv").hide();
+              $("#resDiv").fadeOut(150);
             }else{
-            $("#responseDiv").text("");
+            $("#resDiv").text("");
 
-            $("#responseDiv").fadeIn(150);
+            $("#resDiv").fadeIn(150);
             if(response.data.length === 0){
-                $("#responseDiv").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
+
+                $("#resDiv").html("<div style='border:1px solid red;'><div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div></div>");
             }else{
+              
               for (var i = response.data.length - 1; i >= 0; i--) {
+                var check = false;
+                angular.forEach(response.data[i].problems, function(value, key) {
+                  if(!check){
+                    console.log(value.pivot);
+                    if (problemId == value.pivot.problem_id) {
+                       
+                        check = true;
+                        check001 = true;
+                    }
+                  }
+                });
+                if (!check) {
                   
-                  var divDiv = "<div style='padding:10px' class='searchResults' ng-click='addMateFunction("+response.data[i].id+","+problemId+")'>"+response.data[i].name+" "+response.data[i].lastName+"</div>";
+                  var divDiv = "<div style='border:1px solid red;'><div style='padding:10px' class='searchResults' ng-click='addMateFunction("+response.data[i].id+","+problemId+")'>"+response.data[i].name+" "+response.data[i].lastName+"</div></div>";
     
-                  angular.element(document.getElementById('responseDiv')).append($compile(divDiv)($scope));
+                  angular.element(document.getElementById('resDiv')).append($compile(divDiv)($scope));
                   $scope.addMateFunction = function(userId, problemId){
+                      $("#resDiv").fadeOut(150);
                       $http({
                           method: 'POST',
                           url: '/home/api/application/addModerator',
@@ -243,7 +260,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                       }).then(function successCallback(response) {
                           console.log(response.data);
                           // var item = $("#menuSearchItem").text("aa");
-                          $("#itemsHolder").append("<div class='' id='menuSearchItem"+userId+"plus"+problemId+"' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<div id='iks' style='float:right;margin-left:2px'></div></div>");
+                          $("#itemsHolder").append("<div class='' id='menuSearchItem"+userId+"plus"+problemId+"' style='border-bottom:2px solid red;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<div id='iks' style='float:right;margin-left:2px'></div></div>");
                         var html="<i class='fa fa-times' aria-hidden='true' style='cursor:pointer' ng-click='deleteWorker("+problemId+", "+userId+")'></i>" ;
                         angular.element(document.getElementById('iks')).append($compile(html)($scope));
 
@@ -252,8 +269,17 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                       });
                   };
                   
+            
+                  }
+                  
               }
+            
+             
             };
+
+            if (check001) {
+              // $("#responseDiv").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");    
+            }
           }
         });
     };
