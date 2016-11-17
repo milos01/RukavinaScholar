@@ -19,6 +19,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function showUserProfile($id){
+        $user = User::findOrFail($id);
+        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+        $count = 0;
+        foreach ($myMessagess as $key => $message) {
+            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
+               $count++; 
+            }
+        }
+        return view('userProfile')->with('user',$user)->with('myMessagesCount', $count);
+     }
+
     public function addStaff(MakeUserRequest $request)
     {
         $user = new User;

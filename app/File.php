@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class File extends Model
 {
+
     protected $table = 'files';
     protected $fillable = [
         
@@ -16,8 +17,4 @@ class File extends Model
         
     ];
 
-    public function problem()
-    {
-        return $this->belongsTo('App\Problem');
-    }
 }

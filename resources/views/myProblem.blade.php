@@ -73,8 +73,8 @@
                                         </dl>
 
                                         <div class="small text-muted" ng-controller="userSearchController">
-                                            <dt>Search for moderators</dt>
-                                            <input type="text" id="searchInput" class="form-control" style="margin-bottom:20px;width:250px" ng-model="keywords" ng-change="search()">
+                                            <dt>Search for moderators (find co-worker for this task)</dt>
+                                            <input type="text" id="searchInput" class="form-control" style="margin-bottom:20px;width:254px" ng-model="keywords" ng-change="search()">
                                             <input type="hidden" value="{{$problem->id}}" id="problemId">
                                             <div id="itemsHolder" style="position: absolute;height: 120px;margin-top:-54px;margin-left:250px;">
                                             @foreach($problem->users as $user)
@@ -130,10 +130,13 @@
                                     <div>
                                         <div class="btn-group">
                                             <!-- <button class="btn btn-white btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true"></i><a href="{{url('home/takeProblem',$problem->id)}}" style="color:#676A6C"> Take it</a></button> -->
-                                            <button class="btn btn-danger btn-sm"><i class="fa fa-angle-left" aria-hidden="true"></i><a href="{{url('/home/assigned')}}"  style="color: white"> Back to problems </a></button>
+                                            <a href="{{url('/home/assigned')}}" class="btn btn-danger btn-sm" type="button"><i class="fa fa-angle-left" aria-hidden="true" ></i> Back to problems </a>
+                                            @if($problem->main_slovler == Auth::id())
+                                                <a href=""  ng-controller="MyCtrldd" class="btn btn-success btn-sm" type="button" ng-click="showDetails()"><i class="fa fa-check" aria-hidden="true" ></i> Post solution </a>
+                                            @endif
                                         </div>
                                     </div>
-
+                                    
 
 
                                 </div>
@@ -143,6 +146,24 @@
                      
                     </div>
 
+                </div>
+                <div class="col-lg-12 modUpdate" style="display: none">
+                    <div class="ibox product-detail">
+                        <div class="ibox-content">
+
+                            <div class="row">
+                                <div class="form-group" id="uploadHolder2">
+                                 <p style="margin-left: 10px;font-weight: bold">Upload solution</p>
+                                    <form action="/home/api/application/uploadSolution" class="dropzone" id="dropzoneForm2" style="border: 1px dashed gray;width:99%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
+                                        <div class="fallback">
+                                           <input name="file" type="file" id="fileSelected" ng-mdoel="aa" multiple />
+                                        </div>
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}"/> 
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
            </div>

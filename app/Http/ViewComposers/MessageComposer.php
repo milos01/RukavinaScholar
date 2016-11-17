@@ -25,8 +25,13 @@ class MessageComposer
      */
     public function compose(View $view)
     {
-        $view->with('mess','testMess');
-        // $myAssigns = Auth::user()->problems()->where('read', 0)->get();
-        // $view->with('assigns', count($myAssigns));
+        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
+        $count = 0;
+        foreach ($myMessagess as $key => $message) {
+            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
+               $count++; 
+            }
+        }
+        $view->with('myMessagesCount', $count);
     }
 }

@@ -162,12 +162,12 @@
 
                         <li>
                         <a href="/home/inbox"><i class="fa fa-envelope"></i>
-                            <span id="mailBox"class="nav-label">Mailbox ({{$mess}})
+                            <span id="mailBox"class="nav-label">Mailbox
 
                             @if($myMessagesCount != 0)
                                
                                 <div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white">
-                                    <!-- {{$myMessagesCount}} -->
+                                    {{$myMessagesCount}}
                                 </div>
                             @endif  
                             </span>
@@ -179,7 +179,7 @@
         </div>
     </nav>
 
-    <div id="page-wrapper" class="gray-bg">
+    <div id="page-wrapper" class="gray-bg" style="min-height: 100vh">
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top white-bg" role="navigation"
                  style="margin-bottom: 0">

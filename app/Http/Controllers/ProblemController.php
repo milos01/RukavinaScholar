@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Offer;
 use App\File;
+use App\ProblemFiles;
 use App\Problem;
 use Auth,Zipper;
-use Illuminate\Support\Facades\Storage;
+use Crypt;
 class ProblemController extends Controller
 {
 	public function __construct()
@@ -114,21 +115,8 @@ class ProblemController extends Controller
         return view('newProblem')->with('myMessagesCount', $count);
     }
 
-    public function uploadProblem(Request $request){
-        $s3 = Storage::disk('s3');
-        if($request->hasFile('file')){
-            $file = $request->file('file');
-
-            $fileName = $file->getClientOriginalName();
-            $file->move(storage_path(). '/uploads', $fileName);
-            $file2 = storage_path(). '/uploads/'. $fileName;
-
-            $s3->put($fileName, fopen($file2,'r+'), 'public');
-            unlink($file2);   
-        }
-    }
-
     public function newproblemsubmit(Request $request){
+        
         $user = Auth::user()->id;
         $problem = new Problem();
         $problem->subject = $request->probName;
@@ -140,16 +128,22 @@ class ProblemController extends Controller
         $problem->waiting = 1;
         $problem->save();
 
-        
+
         foreach ($request->selectedFiles as $value) {
             $file = new File();
-            $file->problem()->associate($problem);
-            $file->fileName = $value;
+            $file->fileName = hash('md5', $value) . '.' . substr($value, -3);
             $file->save();
+
+            $probFile = new ProblemFiles();
+            $probFile->file()->associate($file);
+            $probFile->problem()->associate($problem);
+            $probFile->save();
         }
+
+        
         // $file->files()->associate($user);
 
-        // dd($request->all());
+        dd($problem->files);
     }
 
     public function problemDownload($id){

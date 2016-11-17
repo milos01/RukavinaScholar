@@ -29,20 +29,20 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group"><label class="col-sm-2 control-label">Description</label>
-                                    <div class="col-sm-10"><textarea class="form-control" style="resize:none;height:200px" ng-model="probDescription"></textarea>
+                                    <div class="col-sm-10"><textarea class="form-control" style="resize:none;height:200px" ng-model="probDescription" required></textarea>
                                     </div>
                                 </div>
                                  <div class="hr-line-dashed"></div>
                                 <div class="form-group"><label class="col-sm-2 control-label">Problem category</label>
                                   <div class="col-sm-10" style="margin-top:7px">
                                            
-                                                <label> <input type="radio"  name="chType" ng-model="answer" value="Math"> <i></i> Math </label>
+                                                <label> <input type="radio"  name="chType" ng-model="answer" value="Math" ng-required="!answer"> <i></i> Math </label>
                                             
                                       
-                                                <label style="margin-left: 15px"> <input type="radio" name="chType" ng-model="answer" value="Physics"> <i></i> Physics </label>
+                                                <label style="margin-left: 15px"> <input type="radio" name="chType" ng-model="answer" value="Physics" ng-required="!answer"> <i></i> Physics </label>
                                        
                                        
-                                                <label style="margin-left: 15px"> <input type="radio" name="chType" ng-model="answer" value="Programming"> <i></i> Programming </label>
+                                                <label style="margin-left: 15px"> <input type="radio" name="chType" ng-model="answer" value="Programming" ng-required="!answer"> <i></i> Programming </label>
                                       
                                       
                                   </div>
@@ -52,18 +52,21 @@
                             <div class="hr-line-dashed"></div>
                             
                             <div class="form-group" id="uploadHolderr">
-                                    <form action="/home/uploadProblem" class="dropzone" id="dropzoneForm" style="border: 1px dashed gray;width:99%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
+                                    <form action="/home/api/application/uploadProblem" class="dropzone" id="dropzoneForm" style="border: 1px dashed gray;width:99%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
                                         <div class="fallback">
                                            <input name="file" type="file" id="fileSelected" ng-mdoel="aa" multiple />
                                         </div>
                                         <input type="hidden" name="_token" value="{{csrf_token()}}"/> 
+                                        <!-- <span class="dz-upload2"></span> -->
                                     </form>
                             </div>
                             <div class="hr-line-dashed"></div>
                              <div class="form-group" style="margin-bottom: 53px">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary" ng-click="addProblemSubmit()" ng-disabled="newProblemForm.$invalid">Submit problem</button>
+                                        <button class="btn btn-primary" ng-click="addProblemSubmit()" id="showSubmitButton"  style="display: none">With params</button>
+                                        <button class="btn btn-primary" ng-click="addProblemSubmit()" id="showSubmitButton2" ng-disabled="newProblemForm.$invalid" style="">Without params</button>
                                     </div>
+
                             </div>
                         </div>
                     </div>

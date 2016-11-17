@@ -483,7 +483,7 @@ app.controller('newProblemController', function($scope, $http, alertSerice){
       
       // alert($scope.probName + " " + $scope.probDescription + " " +$scope.answer +" "+selectedFiles);
    
-      return $http({
+    return $http({
         method: 'POST',
         url: '/home/api/application/newproblemsubmit',
         headers: {
@@ -497,6 +497,35 @@ app.controller('newProblemController', function($scope, $http, alertSerice){
     });
 
   }
+
+  if($('#uploadHolderr').is(':visible')){
+                $("#showSubmitButton2").show();
+                Dropzone.options.dropzoneForm = {
+                    addRemoveLinks: true,
+                    removedfile: function(file) {
+                        alert(file.name);
+                    },
+                    paramName: "file", // The name that will be used to transfer the file
+                    maxFilesize: 1024, // MB
+                    dictDefaultMessage: "<strong>Drop files or click here to upload. </strong>",
+                    accept: function(file, done) {
+                      console.log(selectedFiles.length);
+                        if(selectedFiles.length >= 0){
+                            $("#showSubmitButton2").hide();
+                        }
+                        selectedFiles.push(file.name);
+
+                        if (file.name == "a.jpg") {
+                          done("Naha, you don't.");
+                        }
+                        else { done(); }
+                    },
+                    queuecomplete: function(file){
+                        $("#showSubmitButton").fadeIn(100);
+                        
+                    }
+                };
+  }
 });
 //Custom Date filter
 app.filter('dateFilter', function($filter) {
@@ -507,26 +536,25 @@ app.filter('dateFilter', function($filter) {
 }
 
 });
-if($('#uploadHolderr').is(':visible')){
-                Dropzone.options.dropzoneForm = {
+
+if($('.modUpdate').css('display') == 'none'){
+                Dropzone.options.dropzoneForm2= {
                     addRemoveLinks: true,
                     removedfile: function(file) {
                         alert(file.name);
                     },
                     paramName: "file", // The name that will be used to transfer the file
                     maxFilesize: 1024, // MB
-                    dictDefaultMessage: "<strong>Drop files here or click to upload. </strong>",
+                    dictDefaultMessage: "<strong>Drop files or click here to upload. </strong>",
                     accept: function(file, done) {
-                        console.log(file);
                         selectedFiles.push(file.name);
                         if (file.name == "a.jpg") {
                           done("Naha, you don't.");
                         }
                         else { done(); }
-                  }
+                    }
                 };
             }
-
 app.directive('problemShowDirective', function ($compile, $http, $parse, loggedUserService) {
   return {
     scope: {
@@ -728,6 +756,11 @@ app.controller('editUserInfoController', function($scope){
   };
 });
 
+app.controller('MyCtrldd', function($scope){
+  $scope.showDetails = function(){
+    $('.modUpdate').toggle();
+  }
+});
 // app.directive('animateOnLoad', function($animateCss) {
 //     return {
 //       'link': function(scope, element) {
