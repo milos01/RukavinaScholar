@@ -32,7 +32,15 @@
 
                                         <div>
                                             <div class="image-imitation">
-                                                [media type(video, text doc, string)]
+                                                <!-- [media type(video, text doc, string)] -->
+                                                <i class="fa fa-cloud-download fa-5x" aria-hidden="true" style="position: relative;color:#686b6d"></i>
+                                                @if(count($problem->files) != 0)
+                                                    @foreach($problem->files as $file)
+                                                        <br><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">{{$file->file->fileName}}</a><br/>
+                                                    @endforeach
+                                                @else
+                                                    <p>No files uploaded.</p>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -51,7 +59,7 @@
 
                                     <h4>Problem description</h4>
 
-                                    <div class="small text-muted">
+                                    <div class="">
                                         {{$problem->problem_description}}
 
                                         <br/>
@@ -60,14 +68,14 @@
                                         have suffered alteration in some form, by injected humour, or randomised words
                                         which don't look even slightly believable.
                                     </div>
-                                    <dl class="small m-t-md">
+                                    <dl class="m-t-md">
                                         <dt>From</dt>
                                         <dd>{{$problem->user_from->name}} {{$problem->user_from->lastName}}</dd>
                                        
                                     </dl>
                                     <hr>
                                         @if($problem->main_slovler == Auth::id())
-                                        <dl class="small m-t-md">
+                                        <dl class="m-t-md">
                                             <dt>Main solver</dt>
                                             <dd>You</dd>
                                         </dl>
@@ -96,12 +104,12 @@
                                             
                                         </div>
                                         @else
-                                        <dl class="small m-t-md">
+                                        <dl class="m-t-md">
                                             <dt>Main solver</dt>
                                             <dd>{{$problem->main_solver->name}} {{$problem->main_solver->lastName}}</dd>
                                        
                                         </dl>
-                                        <dl class="small m-t-md">
+                                        <dl class="m-t-md">
                                             <dt>Other people on this problem</dt>
                                             <dd>
                                             @foreach($problem->users as $user)
@@ -136,6 +144,22 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <div class="container" style="margin-left: -15px;margin-top: 15px;" >
+                                        @foreach($problem->solutions as $solution)
+                                            @if(substr($solution->file->fileName, -3) == "mp3")
+                                                <div class="container pull-left" style="margin-left:-15px;width:60px">
+                                                    <i class="fa fa-file-audio-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i>
+                                                    <p style="margin-left: 3px">{{substr($solution->file->fileName, -3)}}</p>
+                                                </div>
+                                            @elseif(substr($solution->file->fileName, -3) == "pdf")
+                                            @else
+                                                <div class="container pull-left" style="margin-left:-15px;width:60px" >
+                                                    <i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i>
+                                                    <p style="margin-left: 3px">{{substr($solution->file->fileName, -3)}}</p>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
                                     
 
 
@@ -151,13 +175,14 @@
                     <div class="ibox product-detail">
                         <div class="ibox-content">
 
-                            <div class="row">
+                            <div class="row" ng-controller="dropzoneSolutionController">
                                 <div class="form-group" id="uploadHolder2">
                                  <p style="margin-left: 10px;font-weight: bold">Upload solution</p>
                                     <form action="/home/api/application/uploadSolution" class="dropzone" id="dropzoneForm2" style="border: 1px dashed gray;width:99%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
                                         <div class="fallback">
                                            <input name="file" type="file" id="fileSelected" ng-mdoel="aa" multiple />
                                         </div>
+                                         <input type="hidden" name="prob_id" value="{{$problem->id}}"/> 
                                         <input type="hidden" name="_token" value="{{csrf_token()}}"/> 
                                     </form>
                                 </div>
@@ -171,4 +196,5 @@
 
 
         </div>
+        <div id="filesHolder"></div>
 @stop

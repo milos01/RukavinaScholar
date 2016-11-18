@@ -537,24 +537,32 @@ app.filter('dateFilter', function($filter) {
 
 });
 
-if($('.modUpdate').css('display') == 'none'){
-                Dropzone.options.dropzoneForm2= {
-                    addRemoveLinks: true,
-                    removedfile: function(file) {
-                        alert(file.name);
-                    },
-                    paramName: "file", // The name that will be used to transfer the file
-                    maxFilesize: 1024, // MB
-                    dictDefaultMessage: "<strong>Drop files or click here to upload. </strong>",
-                    accept: function(file, done) {
-                        selectedFiles.push(file.name);
-                        if (file.name == "a.jpg") {
-                          done("Naha, you don't.");
-                        }
-                        else { done(); }
-                    }
-                };
-            }
+app.controller('dropzoneSolutionController', function($scope, $element, $compile){
+  if($('.modUpdate').css('display') == 'none'){
+    Dropzone.options.dropzoneForm2= {
+      addRemoveLinks: true,
+      removedfile: function(file) {
+        alert(file.name);
+      },
+      paramName: "file", // The name that will be used to transfer the file
+      maxFilesize: 1024, // MB
+      dictDefaultMessage: "<strong>Drop files or click here to upload. Sol</strong>",
+      accept: function(file, done) {
+        selectedFiles.push(file.name);
+        // var el = angular.element('<div class="container pull-left" style="margin-left:-15px;width:60px" ><i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i><p style="margin-left: 3px">test</p></div>');
+        // $compile(el)($scope);
+        // elm = $element.find("#filesHolder"); 
+        // console.log(elm);
+        // elm.append(el);
+        if (file.name == "a.jpg") {
+          done("Naha, you don't.");
+        }
+        else { done(); }
+      }
+    };
+  }
+});
+
 app.directive('problemShowDirective', function ($compile, $http, $parse, loggedUserService) {
   return {
     scope: {

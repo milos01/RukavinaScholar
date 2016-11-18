@@ -44,6 +44,11 @@ class Problem extends Model
         return $this->hasMany('App\ProblemFiles');
     }
 
+    public function solutions()
+    {
+        return $this->hasMany('App\ProblemSolutions');
+    }
+
     public function offers()
     {
         return $this->hasMany('App\Offer');

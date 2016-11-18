@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\UploadFilesToS3;
+use App\File;
+use App\Problem;
+use App\ProblemSolutions;
 
 class UploadController extends Controller
 {
@@ -21,21 +24,32 @@ class UploadController extends Controller
 
             //Dispatch Upload file to Amazon S3 job  
             $this->dispatch(new UploadFilesToS3($fileName, $file2));
-            
-            // unlink($file2);   
+
+            //    
         }
     }
 
     public function uploadSolution(Request $request){
         if($request->hasFile('file')){
+
             $file = $request->file('file');
 
             $fileName = $file->getClientOriginalName();
             $file->move(storage_path(). '/uploads', $fileName);
             $file2 = storage_path(). '/uploads/'. $fileName;
 
-            // $this->s3->put($fileName, fopen($file2,'r+'), 'public');
-            unlink($file2);   
+            // $this->dispatch(new UploadFilesToS3($fileName, $file2));
+
+            $file = new File();
+            $file->fileName = hash('md5', $fileName) . '.' . substr($fileName, -3);
+            $file->save();
+
+            $problem = Problem::findorFail($request->prob_id);
+
+            $probSol = new ProblemSolutions();
+            $probSol->file()->associate($file);
+            $probSol->problem()->associate($problem);
+            $probSol->save();
         }
     }
 

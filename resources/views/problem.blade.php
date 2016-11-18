@@ -30,9 +30,23 @@
                                         <div>
                                             <div class="image-imitation">
                                                 <!-- [media type(video, text doc, string)] -->
-                                                @foreach($problem->files as $file)
-                                                	<a href="https://s3.amazonaws.com/kbk300test/{{$file->fileName}}" download="{{$file->fileName}}">{{$file->fileName}}</a><br/>
-                                                @endforeach
+                                            <i class="fa fa-cloud-upload fa-5x" aria-hidden="true" style="position: relative;color:#686b6d"></i>
+                                            @if(count($problem->files) != 0)
+                                                @if(Auth::user()->is('regular'))
+                                                  <p>You uploaded {{count($problem->files)}}
+                                                  @if(count($problem->files) == 1)
+                                                    file.</p>
+                                                  @else
+                                                    files.</p>
+                                                  @endif
+                                                @else
+                                                    @foreach($problem->files as $file)
+                                                        <a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">{{$file->file}}</a><br/>
+                                                    @endforeach
+                                                @endif
+                                            @else
+                                                <p>No files uploaded.</p>
+                                            @endif
                                             </div>
                                         </div>
                                     </div>
@@ -51,7 +65,7 @@
 
                                     <h4>Task description</h4>
 
-                                    <div class="small text-muted">
+                                    <div class="">
                                         {{$problem->problem_description}}
 
                                         <br/>
@@ -59,9 +73,23 @@
                                         
                                        
                                     </div>
+                                    <div class="m-t-md">
+                                    <dt>Posted</dt>
+                                        <dd>{{$problem->created_at->format('m/d/Y')}}
+                                        </dd>
+                                    </div>
+                                    <div class="m-t-md">
+                                        <dt>Task type</dt>
+                                        <dd>{{$problem->problem_type}}
+                                        </dd>
+                                    </div>
                                     <dl class="small m-t-md">
-                                        <dt>From</dt>
-                                        <dd>{{$problem->user_from->name}} {{$problem->user_from->lastName}}</dd>
+                                        
+
+                                        @if(!Auth::user()->is('regular'))
+                                            <dt>From</dt>
+                                            <dd><a href="/home/user/{{$problem->user_from->id}}">{{$problem->user_from->name}} {{$problem->user_from->lastName}}</a></dd>
+                                        @endif
                                        
                                     </dl>
                                     <div  class="m-t-md" style="border-top: 1px solid #eee; border-bottom: 1px solid #eee; height: 46px" ng-controller="bidingController" ng-init="init('{{$problem->id}}')" >
