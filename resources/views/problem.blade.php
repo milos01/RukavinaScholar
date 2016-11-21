@@ -30,18 +30,25 @@
                                         <div>
                                             <div class="image-imitation">
                                                 <!-- [media type(video, text doc, string)] -->
-                                            <i class="fa fa-cloud-upload fa-5x" aria-hidden="true" style="position: relative;color:#686b6d"></i>
-                                            @if(count($problem->files) != 0)
+                                            <i class="fa fa-cloud-download fa-5x" aria-hidden="true" style="position: relative;color:#686b6d"></i>
+                                            @if(count($problem->files) != 0 || count($problem->solutions) != 0)
                                                 @if(Auth::user()->is('regular'))
-                                                  <p>You uploaded {{count($problem->files)}}
-                                                  @if(count($problem->files) == 1)
-                                                    file.</p>
-                                                  @else
-                                                    files.</p>
-                                                  @endif
+                                                    @if($problem->took == 2 && $problem->waiting == 0)
+                                                        @foreach($problem->solutions as $file)
+                                                            <p>Your files are ready...</p>
+                                                            <br/><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">{{$file->file->fileName}}</a>
+                                                        @endforeach
+                                                    @else
+                                                        <p>You uploaded {{count($problem->    files)}}
+                                                        @if(count($problem->files) == 1)
+                                                            file.</p>
+                                                        @else
+                                                            files.</p>
+                                                    @endif
+                                                @endif
                                                 @else
                                                     @foreach($problem->files as $file)
-                                                        <a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">{{$file->file}}</a><br/>
+                                                        <br/><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">{{$file->file->fileName}}</a>
                                                     @endforeach
                                                 @endif
                                             @else
@@ -57,11 +64,14 @@
                                     <h2 class="font-bold m-b-xs">
                                         {{$problem->subject}}
                                     </h2>
-                                    <small></small>
-                                    <div class="m-t-md">
-                                        <h2 class="product-main-price"><small class="text-muted"></small> </h2>
-                                    </div>
-                                    <hr>
+                                    
+                                    
+                                       <div class="pull-right">
+                                            
+                                                <a href="{{url('/home')}}"  style="color: white"><button class="btn btn-danger btn-sm" style="margin-top: -60px"><i class="fa fa-angle-left" aria-hidden="true"></i> Back to home </button></a>
+                                           
+                                        </div>
+                                    <hr/>
 
                                     <h4>Task description</h4>
 
@@ -92,21 +102,22 @@
                                         @endif
                                        
                                     </dl>
-                                    <div  class="m-t-md" style="border-top: 1px solid #eee; border-bottom: 1px solid #eee; height: 46px" ng-controller="bidingController" ng-init="init('{{$problem->id}}')" >
+                                    <div class="m-t-md">
+                                        <dt>Status</dt>
+                                        @if($problem->took == 1 && $problem->waiting == 0)
+                                            <dd><span><i class="fa fa-pencil" aria-hidden="true" style="color:black"></i> Under work...</span></dd>
+                                        @elseif($problem->took == 2 && $problem->waiting == 0)
+                                            <dd><span><i class="fa fa-check" aria-hidden="true" style="color:green"></i> Finised</span></dd>
+                                        @elseif($problem->took == 0 && $problem->waiting == 1)
+                                            <dd><span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span></dd>
+                                        @endif
+                                        
+                                    </div>
+                                    <div  class="m-t-md" style="border-top: 1px solid #fff; border-bottom: 1px solid #fff; height: 46px" ng-controller="bidingController" ng-init="init('{{$problem->id}}')" >
                                         <div id="offerPlace">
                                   
                                        </div>
                                     </div>
-                                    
-                                    <div>
-                                        <div class="btn-group">
-                                           <!--  <a href="{{url('home/takeProblem',$problem->id)}}" style="color:#676A6C"><button class="btn btn-white btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true" style="color:#ed5565"></i> Take it</button></a> -->
-                                            <a href="{{url('/home')}}"  style="color: white"><button class="btn btn-danger btn-sm" style="margin-top: 15px;"><i class="fa fa-angle-left" aria-hidden="true"></i> Back to home </button></a>
-                                        </div>
-                                    </div>
-
-
-
                                 </div>
                             </div>
 

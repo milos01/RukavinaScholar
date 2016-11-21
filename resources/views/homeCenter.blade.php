@@ -1,4 +1,4 @@
-@extends('admin')
+ @extends('admin')
 @section('navName')
 	Home page
 @stop
@@ -99,7 +99,7 @@
 
                                     <div class="row">
                                         <div class="col-sm-8">
-                                            <div class="form-group">
+                                            <div class="form-group pull-left">
                                             @if(Auth::user()->is('regular'))
                                                 <label class="control-label" for="product_name">My tasks</label>
                                             @else
@@ -208,11 +208,12 @@
                                                 </tr>
                                                 
                                                 <p ng-show="(problems | filter: tookFilter | filter: search | filter:colourFilter).length == 0" style="text-align:center;margin-top:40px;position: relative;" ng-bind="noFound"></p>
+                                                
                                            
                                             </tbody>
                                         </table>
                                     </div>
-
+                                        <!-- <button style="width:120px;text-align:center;margin:auto" class="more btn btn-primary btn-block" ng-click="loadMore()">Load More!</button> -->
                                 </div>
                             </div>
                         </div>

@@ -45,6 +45,8 @@ class UploadController extends Controller
             $file->save();
 
             $problem = Problem::findorFail($request->prob_id);
+            $problem->took = 2;
+            $problem->save();
 
             $probSol = new ProblemSolutions();
             $probSol->file()->associate($file);

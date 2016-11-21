@@ -379,9 +379,10 @@ app.service('searchService2', function($http){
 
 app.controller('showProblemController', function($scope, $http){
     $scope.loading = true;
+    $scope.limit = 20;
     $scope.colourIncludes = [];
     $scope.noFound = 'No problem found!';
-    return $http({
+    $http({
         method: 'GET',
         url: 'home/api/application/getuser',
         headers: {
@@ -474,7 +475,14 @@ app.controller('showProblemController', function($scope, $http){
       // called no matter success or failure
       $scope.loading = false;
     });
+    
 
+    // $scope.loadMore = function() {
+    //   // var increamented = 
+    //   alert("uso");
+    //   $scope.limit += 10;
+    //   // $scope.limit = increamented > $scope.problems.length ? $scope.problems.length : increamented;
+    // };
 
 });
 
@@ -601,7 +609,12 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
             
         });
           }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
-              var el1 = angular.element('<span><i class="fa fa-pencil" aria-hidden="true"></i> under work</span>');
+              var el1 = angular.element('<span><i class="fa fa-pencil" aria-hidden="true" style="color:black"></i> Under work...</span>');
+              $compile(el1)(scope);
+              elm = element.find("#statusHolder"); 
+              elm.append(el1);
+          }else if(scope.problem.waiting == 0 && scope.problem.took == 2){
+              var el1 = angular.element('<span><i class="fa fa-check" aria-hidden="true" style="color:green"></i> Finished</span>');
               $compile(el1)(scope);
               elm = element.find("#statusHolder"); 
               elm.append(el1);
@@ -609,7 +622,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
               // var $dd = $('#dropDownMenu');
               // $dd.html('sadas');
               
-              var el3 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true"></i> pending...</span>');
+              var el3 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span>');
               $compile(el3)(scope);
               elm3 = element.find("#statusHolder"); 
               elm3.append(el3);

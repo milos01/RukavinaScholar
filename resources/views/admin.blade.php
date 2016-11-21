@@ -127,8 +127,13 @@
                     <li style="margin-top:-4px"><a href="/home/manage"><i class="fa fa-users"></i>
                         <span class="nav-label" id="mngu">Manage users</span></a></li>
 
-                    <li><a href="/home/manage"><i class="fa fa-area-chart"></i>
-                        <span class="nav-label">Statistics</span></a></li>
+                    <li><a href="#"><i class="fa fa-area-chart"></i>
+                        <span class="nav-label">Statistics
+                            <div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:11px;height:11px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white">
+                            <p style="margin-top: -4px; margin-left: 1px">!</p>
+
+                            </div>
+                        </span></a></li>
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
                         <span class="nav-label">Assigned to me
                             @if($assigns != 0)
