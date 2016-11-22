@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role',
+        'name', 'email', 'password',
     ];
 
     /**
@@ -35,7 +35,7 @@ class User extends Authenticatable
 
     public function is($role)
     {
-            if (  $this->role == $role)
+            if (  $this->role->name == $role)
             {
                 return true;
             }
@@ -45,6 +45,12 @@ class User extends Authenticatable
     /**
      * The roles that belong to the user.
      */
+    public function role()
+    {
+        return $this->belongsTo('App\Role');
+    }
+
+
     public function fromMessages()
     {
         return $this->belongsToMany('App\User', 'messages','user_from','user_to')->withPivot('created_at', 'message','read', 'id','last');

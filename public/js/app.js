@@ -391,7 +391,7 @@ app.controller('showProblemController', function($scope, $http){
         data: {}
     }).then(function(res){
         var loggedUser = res.data;
-        if (res.data.role == "regular") {
+        if (res.data.role.name == "regular") {
           $http({
             method: 'GET',
             url: 'home/api/application/getOneUserProblems',
@@ -577,7 +577,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
     problem: '='
   },
     link: function (scope, element, attrs) {     
-      if (loggedUser.role == 'regular') {
+      if (loggedUser.role.name == 'regular') {
         if (scope.problem.waiting == 0 && scope.problem.took == 0) {
         var el1 = angular.element('<div class="dropdown"><button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span></button><ul class="dropdown-menu" id="offersHolder"></ul></div>');
         $compile(el1)(scope);
@@ -684,7 +684,7 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
   $scope.init = function(id){
     loggedUserService.user().then(function(d) {
     var lUser = d;
-    if (lUser.role != 'regular') {
+    if (lUser.role.name != 'regular') {
     var check = false;
     var check02 = false;
     return $http({

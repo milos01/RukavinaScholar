@@ -113,7 +113,7 @@
                                         {{Auth::user()->name}} {{Auth::user()->lastName}}
                                         </strong>
 							</span> <span class="text-muted text-xs block">
-                            {{ucfirst(Auth::user()->role)}}
+                            {{ucfirst(Auth::user()->role->name)}}
 						    </span>
                         </a>
                     </div>

@@ -40,7 +40,7 @@ class UserController extends Controller
         $user->password = Hash::make('defPass');
         $user->lastName = $request->lname;
         $user->picture = "defPic.png";
-        $user->role = 'moderator';
+        $user->role_id = 2;
 
         if ($user->save()) {
             return redirect('/home/manage');
@@ -51,7 +51,7 @@ class UserController extends Controller
 
     public function upgradeAdmin($id){
         $user = User::find($id);
-        $user->role = 'admin';
+        $user->role_id = 3;
         if($user->save()){
             return redirect('/home/manage');
         }
@@ -60,7 +60,7 @@ class UserController extends Controller
 
     public function donwgradeAdmin($id){
         $user = User::find($id);
-        $user->role = 'moderator';
+        $user->role_id = 2;
         if($user->save()){
             return redirect('/home/manage');
         }
@@ -157,8 +157,8 @@ class UserController extends Controller
     public function getApiUsers(Request $request){
         $keyword = $request->input('username');
         $allUsers = User::with('problems')->where(DB::raw("CONCAT(`name`, ' ', `lastName`)"), 'LIKE', '%'.$keyword.'%')->where(function($q) {
-          $q->where('role', 'admin')
-            ->orWhere('role', 'moderator');
+          $q->where('role_id', '3')
+            ->orWhere('role_id', '2');
       })->where('id','!=', Auth::id())->get();
 
         return json_encode($allUsers);
@@ -172,8 +172,8 @@ class UserController extends Controller
     }
 
     public function getApiUser(){
-        $user = Auth::user();
-        return $user;
+        $user = User::with('role')->findorFail(Auth::id());
+        return $user->toArray();
     }
 
     public function deleteUser($id){
