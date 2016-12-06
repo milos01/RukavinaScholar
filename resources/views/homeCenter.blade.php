@@ -146,7 +146,7 @@
                                                     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="color:#1ab394"></i>
                                                     <!-- <span class="sr-only">Loading...</span> -->
                                                 </div>
-                                                <tr ng-repeat="problem in problems | filter:tookFilter | filter: search | filter:colourFilter" problem-show-directive problem="problem" ng-cloak>
+                                                <tr ng-repeat="problem in problems | filter:tookFilter | filter: search | filter:colourFilter" problem-show-directive problem="problem" user="{{Auth::id()}}" ng-cloak>
                                                     
                                                         <td style="padding: 0px;color:black">
                                                             <a href="/home/problem/<%problem.id%>">
@@ -187,7 +187,7 @@
                                                             </a>
                                                         </td>
                                                         <td style="padding: 0px;text-align: center">
-                                                            
+                                                            <a href="/home/problem/<%problem.id%>">
                                                                 <div  style="width:100%;height:100%;padding:8px;color:#737678" >
                                                                     <div id="statusHolder">
                                                                     </div>
@@ -202,7 +202,7 @@
                                                                     </div>
 
                                                                 </div>
-                                                            
+                                                            </a>
                                                         </td>
 
                                                 </tr>

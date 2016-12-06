@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-lg-12">
 
-                    <div class="ibox product-detail">
+                    <div class="ibox product-detail" >
                         <div class="ibox-content">
 
                             <div class="row">
@@ -39,7 +39,7 @@
                                                             <br/><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">{{$file->file->fileName}}</a>
                                                         @endforeach
                                                     @else
-                                                        <p>You uploaded {{count($problem->    files)}}
+                                                        <p>You uploaded {{count($problem->files)}}
                                                         @if(count($problem->files) == 1)
                                                             file.</p>
                                                         @else
@@ -93,12 +93,31 @@
                                         <dd>{{$problem->problem_type}}
                                         </dd>
                                     </div>
-                                    <dl class="small m-t-md">
+                                    <div class="m-t-md">
+                                    @if(Auth::user()->is('regular'))
+                                        @if($problem->took >= 1 && $problem->waiting == 0)
+                                            <dt>Solver on your task</dt>
+                                                <dd>
+                                                <div class="container" style="margin-left:-15px">
+                                                    <a href="/home/user/{{$problem->main_solver->id}}"><img src="../../img/{{$problem->main_solver->picture}}" width="30px" style="border-radius: 3px">
+                                                    {{$problem->main_solver->name}} {{$problem->main_solver->lastName}}
+                                                    </a>
+                                                </div>
+                                            </dd>
+                                        @endif
+                                    @endif
+                                    </div>
+                                    <dl class="m-t-md">
                                         
 
                                         @if(!Auth::user()->is('regular'))
                                             <dt>From</dt>
-                                            <dd><a href="/home/user/{{$problem->user_from->id}}">{{$problem->user_from->name}} {{$problem->user_from->lastName}}</a></dd>
+                                            <dd>
+                                                <div class="container" style="margin-left:-15px">
+                                                    <a href="/home/user/{{$problem->user_from->id}}"><img src="../../img/{{$problem->main_solver->picture}}" width="30px" style="border-radius: 3px">
+                                                        {{$problem->user_from->name}} {{$problem->user_from->lastName}}</a>
+                                                </div>
+                                            </dd>
                                         @endif
                                        
                                     </dl>

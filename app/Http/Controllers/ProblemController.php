@@ -130,8 +130,16 @@ class ProblemController extends Controller
 
 
         foreach ($request->selectedFiles as $value) {
+
+            $findExtension = strpos($value, ".");
+            $fp =  $findExtension;
+            $fileExt = substr($value, ++$fp, strlen($value));
+            $fileName = substr($value, 0, $findExtension);
+            $rightNow = Auth::id();
+         
+
             $file = new File();
-            $file->fileName = hash('md5', $value) . '.' . substr($value, -3);
+            $file->fileName = hash('md5', $fileName.'_'.$rightNow) . '.' . $fileExt;
             $file->save();
 
             $probFile = new ProblemFiles();

@@ -1,5 +1,6 @@
+(function (angular) {
 socket = io('http://localhost:3000');
-app.controller('loginController', function($scope, $http, $window){
+angular.module('kbkApp').controller('loginController', function($scope, $http, $window){
 
   $scope.loginFormSubmit = function(){
       var email = $scope.email;
@@ -26,3 +27,4 @@ app.controller('loginController', function($scope, $http, $window){
       });
   };
 });
+})(angular);

@@ -9,7 +9,10 @@
         "laravel/framework": "5.2.*",
         "league/flysystem-aws-s3-v3": "~1.0",
         "chumper/zipper": "^0.6.1",
-        "fzaninotto/faker": "^1.6"
+        "fzaninotto/faker": "^1.6",
+        "intervention/image": "^2.3",
+        "netshell/paypal": "dev-master",
+        "braintree/braintree_php": "^3.18"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",

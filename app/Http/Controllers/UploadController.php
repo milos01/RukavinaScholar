@@ -8,24 +8,57 @@ use App\Jobs\UploadFilesToS3;
 use App\File;
 use App\Problem;
 use App\ProblemSolutions;
+use Auth;
 
 class UploadController extends Controller
 {
 	
+    public function saveImage(Request $request){
+        if($request->hasFile('file')){
+            $input = $request->all();
+     
+            $rules = array(
+                'file' => 'image|max:3000',
+            );
+     
+            $validation = Validator::make($input, $rules);
+     
+            if ($validation->fails()) {
+                return Response::make($validation->errors->first(), 400);
+            }
+     
+            $destinationPath = 'uploads'; // upload path
+            $extension = $request->file('file')->getClientOriginalExtension(); // getting file extension
+            $fileName = time() . '.' . $extension;
+
+            // $upload_success = $request->file('file')->move(public_path('img'), $fileName); // uploading file to given path
+            Image::make($request->file('file'))->fit(200)->save(public_path('img/'.$fileName));
+
+            $user = Auth::user();
+            $user->picture = $fileName;
+
+            $user->save();
+        }
+    }
 
     public function uploadProblem(Request $request){
         
         if($request->hasFile('file')){
-            $file = $request->file('file');
 
-            $fileName = $file->getClientOriginalName();
-            $file->move(storage_path(). '/uploads', $fileName);
-            $file2 = storage_path(). '/uploads/'. $fileName;
+            $file = $request->file('file');
+            $path_parts = pathinfo($file->getClientOriginalName());
+            $fileName = $path_parts['filename'];
+            $fileExt = $path_parts['extension'];
+            $rightNow = Auth::id();
+
+            $hFileName = hash('md5', $fileName.'_'.$rightNow) . '.' . $fileExt;
+
+            $file->move(storage_path(). '/uploads', $hFileName);
+            $file2 = storage_path(). '/uploads/'. $hFileName;
 
             //Dispatch Upload file to Amazon S3 job  
-            $this->dispatch(new UploadFilesToS3($fileName, $file2));
+            $this->dispatch(new UploadFilesToS3($hFileName, $file2));
 
-            //    
         }
     }
 
@@ -33,15 +66,20 @@ class UploadController extends Controller
         if($request->hasFile('file')){
 
             $file = $request->file('file');
+            $path_parts = pathinfo($file->getClientOriginalName());
+            $fileName = $path_parts['filename'];
+            $fileExt = $path_parts['extension'];
 
-            $fileName = $file->getClientOriginalName();
-            $file->move(storage_path(). '/uploads', $fileName);
-            $file2 = storage_path(). '/uploads/'. $fileName;
+            $hFileName = hash('md5', $fileName) . '.' . $fileExt;
 
-            // $this->dispatch(new UploadFilesToS3($fileName, $file2));
+            $file->move(storage_path(). '/uploads', $hFileName);
+            $file2 = storage_path(). '/uploads/'. $hFileName;
+
+            //Dispatch Upload file to Amazon S3 job
+            $this->dispatch(new UploadFilesToS3($hFileName, $file2));
 
             $file = new File();
-            $file->fileName = hash('md5', $fileName) . '.' . substr($fileName, -3);
+            $file->fileName = $hFileName;
             $file->save();
 
             $problem = Problem::findorFail($request->prob_id);
@@ -54,5 +92,7 @@ class UploadController extends Controller
             $probSol->save();
         }
     }
+
+
 
 }

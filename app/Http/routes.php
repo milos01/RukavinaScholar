@@ -22,12 +22,11 @@
 		//User routes
 		Route::get('edit', 'UserController@editUser');
 		Route::post('updateUser', 'UserController@updateUser');
-		Route::post('saveImage', 'UserController@saveImage');
 		Route::get('user/{id}', 'UserController@showUserProfile');
 		Route::post('updatePassword', 'UserController@updatePassword');
+		Route::get('api/application/getuser', 'UserController@getApiUser');
 		Route::post('api/application/getusers','UserController@getApiUsers');
 		Route::post('api/application/getusers2','UserController@getApiUsers2');
-		Route::get('api/application/getuser', 'UserController@getApiUser');
 
 		//Problem routes
 		Route::get('problem/{id}', 'ProblemController@showProblem');
@@ -45,6 +44,7 @@
 		Route::post('api/application/getProblem', 'ProblemController@getProblem');
 
 		//Uplaod routes
+		Route::post('api/application/saveImage', 'UploadController@saveImage');
 		Route::post('api/application/uploadProblem', 'UploadController@uploadProblem');
 		Route::post('api/application/uploadSolution', 'UploadController@uploadSolution');
 
@@ -69,6 +69,14 @@
 			Route::get('manage/activateUser/{id}', 'UserController@activateUser');
 			Route::post('manage/addStaff', 'UserController@addStaff');
 		});
+
+		//Paypal routes
+		// Route::get('checkout', 'PaypalController@checkout');
+		// Route::get('getDone', 'PaypalController@getDone');
+		// Route::get('all', 'PaypalController@all');
+
+		//Braintree routes
+		Route::get('api/application/generateToken', 'BraintreeController@generateToken');
 		
 		
 		

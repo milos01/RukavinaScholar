@@ -19,6 +19,7 @@ class CreateOffersTable extends Migration
             $table->integer('person_from')->unsigned();
             $table->foreign('person_from')->references('id')->on('users');
             $table->float('price');
+            $table->longText('description');
             $table->timestamps();
         });
     }

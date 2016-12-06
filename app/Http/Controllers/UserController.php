@@ -9,7 +9,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\NewImageRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\User;
-use Hash, Auth,DB, Input, Validator, Response;
+use Hash, Auth,DB, Input, Validator, Response, Image;
 
 
 class UserController extends Controller
@@ -86,48 +86,7 @@ class UserController extends Controller
         }
     }
 
-    public function saveImage(Request $request){
-        $input = $request->all();
- 
-        $rules = array(
-            'file' => 'image|max:3000',
-        );
- 
-        $validation = Validator::make($input, $rules);
- 
-        if ($validation->fails()) {
-            return Response::make($validation->errors->first(), 400);
-        }
- 
-        $destinationPath = 'uploads'; // upload path
-        $extension = $request->file('file')->getClientOriginalExtension(); // getting file extension
-        $fileName = rand(11111, 99999) . '.' . $extension;
-
-        $upload_success = $request->file('file')->move(public_path('img'), $fileName); // uploading file to given path
-        $user = Auth::user();
-        $user->picture = $fileName;
-
-        $user->save();
-        if ($upload_success) {
-            return Response::json('success', 200);
-        } else {
-            return Response::json('error', 400);
-        }
-        // var_dump("aa");
-
-
-        // if ($request->file('picture')) {
-
-        //     $request->file('picture')->move(public_path('img'), $request->file('picture')->getClientOriginalName());
-        //     $user = Auth::user();
-        //     $user->picture = $request->file('picture')->getClientOriginalName();
-        //     if($user->save()){
-        //         return json_encode("jeay");
-        //     }
-        // }else{
-        //     return json_encode("jeayt");
-        // }
-    }
+    
     public function showManage(){
         $users = User::all();
         $deletedUsers = User::onlyTrashed()->get();

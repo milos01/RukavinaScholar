@@ -1,3 +1,4 @@
+(function (angular) {
 socket = io('http://localhost:3000');
 function init(){
 	$.ajax({
@@ -10,7 +11,7 @@ function init(){
 	});
 }
 init();
-app.controller('testController', function($scope){
+angular.module('kbkApp').controller('testController', function($scope){
 	$scope.clickTest = function(){
 		socket.emit('messageNotify', {email: 'jon@gmail.com'});
 	}
@@ -18,3 +19,4 @@ app.controller('testController', function($scope){
 socket.on('newMessageN',function(data){
 	alert('fuck.');
 });
+})(angular);

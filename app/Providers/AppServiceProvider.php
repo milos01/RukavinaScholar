@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\User;
 use App\Problem;
-use Auth;
+use Auth, DB, Event;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -37,7 +37,18 @@ class AppServiceProvider extends ServiceProvider
             }
             return $problems;
         });
-        
+
+        if (env('APP_ENV') === 'local') {
+            DB::connection()->enableQueryLog();
+        }
+        if (env('APP_ENV') === 'local') {
+            Event::listen('kernel.handled', function ($request, $response) {
+                if ( $request->has('sql-debug') ) {
+                    $queries = DB::getQueryLog();
+                    dump($queries);
+                }
+            });
+        }
     }
     /**
      * Register any application services.

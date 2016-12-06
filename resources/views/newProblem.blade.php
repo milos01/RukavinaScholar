@@ -14,14 +14,14 @@
     </li>                
 @stop
 @section('manageUsers')
-<div class="row" style="margin-top: 20px">
-                <div class="col-lg-12">
-                    <div class="ibox float-e-margins">
+<div class="row" style="margin-top: 20px" ng-controller="newProblemController">
+                <div class="col-lg-12" >
+                    <div id="showNewProblemForm" class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>Add new problem</h5>
                             
                         </div>
-                        <div class="ibox-content" ng-controller="newProblemController">
+                        <div class="ibox-content">
                             <form method="get" class="form-horizontal"  ng-submit="addProblemSubmit()" name="newProblemForm" novalidate>
                                 <div class="form-group"><label class="col-sm-2 control-label">Problem name/type</label>
 
@@ -63,10 +63,23 @@
                             <div class="hr-line-dashed"></div>
                              <div class="form-group" style="margin-bottom: 53px">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary" ng-click="addProblemSubmit()" id="showSubmitButton"  style="display: none">With params</button>
-                                        <button class="btn btn-primary" ng-click="addProblemSubmit()" id="showSubmitButton2" ng-disabled="newProblemForm.$invalid" style="">Without params</button>
+                                        <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton"  ng-disabled="newProblemForm.$invalid" style="display: none;">With params</button>
+                                        <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton2" ng-disabled="newProblemForm.$invalid" style="">Without params</button>
                                     </div>
 
+                            </div>
+                        </div>
+                    </div>
+                    <div id="showProblemConfirm" style="display: none" >
+                        <div class="ibox-content" >
+                            <div class="middle-box text-center animated fadeInDown" style="max-width: 600px;">
+                                <i class="fa fa-exchange fa-4x" aria-hidden="true"></i>
+
+                                <h4>Your problem is our concern now, all you need to do is sit, relax and wait for offers. After you receive offers you can choose one of them which suits you the best. </h4>
+
+                                <div class="error-desc" style="margin-bottom: 40px">
+                                    <br/><a href="/home" class="btn btn-primary">Back home</a>
+                                </div>
                             </div>
                         </div>
                     </div>

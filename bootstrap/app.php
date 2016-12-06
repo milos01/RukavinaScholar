@@ -41,6 +41,12 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+Braintree_Configuration::environment('sandbox');
+Braintree_Configuration::merchantId('rncvh66h38f4h3sm');
+Braintree_Configuration::publicKey('ptvzvyyvpftswmfm');
+Braintree_Configuration::privateKey('2323c02aa70b249a7949fb4fdb59066d');
+
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

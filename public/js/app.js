@@ -1,4 +1,5 @@
 
+(function (angular) {
 var app = angular.module('kbkApp', ['ngAnimate'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
@@ -20,26 +21,11 @@ app.factory('alertSerice', function() {
         };
 });
 
-app.factory('loggedUserService', function($http) {
-        
-        var loggedUserService =  {
-            user: function() {
-            var promise =  $http({
-                  method: 'GET',
-                  url: '/home/api/application/getuser',
-                  headers: {
-                      "Content-Type": "application/json"
-                  },
-                  data: {}
-              }).then(function(res){
-                return res.data;
-              });
-               return promise;
-            }
-        };
-        return loggedUserService;
+app.factory('selectedFilesService', function() {
+    return {
+        selectedFiles : []
+    };
 });
-
 
 
 app.controller('mainController', function($scope, loggedUserService){
@@ -54,7 +40,7 @@ if($(".chDiscussion").is(":visible")){
   $cont = $(".chDiscussion");
   $cont[0].scrollTop = $cont[0].scrollHeight;
 }
-var selectedFiles = [];
+// var selectedFiles = [];
 app.controller('sendMessageController', function($scope, $http,$compile, $element) {
 	 $scope.submitMessageForm = function() {
 	 	var message = $scope.message;
@@ -126,7 +112,30 @@ app.controller('downloadController', function($scope){
 //           toastr.success('You have new message')
 //         });
 
-
+app.controller('dropzoneImageController', function($scope, selectedFilesService){
+  Dropzone.options.dropzoneForm2= {
+      addRemoveLinks: true,
+      // removedfile: function(file) {
+      //   alert(file.name);
+      // },
+      paramName: "file", // The name that will be used to transfer the file
+      maxFilesize: 4, // MB
+      dictDefaultMessage: "<strong>Drop image or click here to upload.</strong>",
+      accept: function(file, done) {
+        selectedFilesService.selectedFiles.push(file.name);
+        console.log(selectedFilesService.selectedFiles.length)
+        // var el = angular.element('<div class="container pull-left" style="margin-left:-15px;width:60px" ><i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i><p style="margin-left: 3px">test</p></div>');
+        // $compile(el)($scope);
+        // elm = $element.find("#filesHolder"); 
+        // console.log(elm);
+        // elm.append(el);
+        if (file.name == "a.jpg") {
+          done("Naha, you don't.");
+        }
+        else { done(); }
+      }
+    };
+});
 
 
 app.directive('capitalizeFirst', function($parse) {
@@ -377,116 +386,9 @@ app.service('searchService2', function($http){
     }
 });
 
-app.controller('showProblemController', function($scope, $http){
-    $scope.loading = true;
-    $scope.limit = 20;
-    $scope.colourIncludes = [];
-    $scope.noFound = 'No problem found!';
-    $http({
-        method: 'GET',
-        url: 'home/api/application/getuser',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: {}
-    }).then(function(res){
-        var loggedUser = res.data;
-        if (res.data.role.name == "regular") {
-          $http({
-            method: 'GET',
-            url: 'home/api/application/getOneUserProblems',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {}
-          }).then(function(res){
-          
-          $scope.problems = res.data;
-         
-          $scope.includeColour = function(colour) {
-              var i = $.inArray(colour, $scope.colourIncludes);
-              if (i > -1) {
-                  $scope.colourIncludes.splice(i, 1);
-              } else {
-                  $scope.colourIncludes.push(colour);
-              }
-           }
 
-           $scope.colourFilter = function(fruit) {
-             
-              if ($scope.colourIncludes.length > 0) {
-                  if ($.inArray(fruit.problem_type, $scope.colourIncludes) < 0)
-                      return;
-              }
-              
-              return fruit;
-            }
 
-            $scope.tookFilter = function(problem){
-              return problem;
-            }
-
-            
-          });
-        }else{
-        $http({
-            method: 'GET',
-            url: 'home/api/application/getuserproblems',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {}
-        }).then(function(res){
-          
-          $scope.problems = res.data;
-          $scope.includeColour = function(colour) {
-              var i = $.inArray(colour, $scope.colourIncludes);
-              if (i > -1) {
-                  $scope.colourIncludes.splice(i, 1);
-              } else {
-                  $scope.colourIncludes.push(colour);
-              }
-           }
-
-           $scope.colourFilter = function(fruit) {
-             
-              if ($scope.colourIncludes.length > 0) {
-                  if ($.inArray(fruit.problem_type, $scope.colourIncludes) < 0)
-                      return;
-              }
-              
-              return fruit;
-            }
-            $scope.tookFilter = function(problem){
-              if(problem.took == '0'){
-                return problem;
-              }
-            }
-          // console.log($scope.colourIncludes);
-        });
-
-        
-      
-        
-    
-         
-      }
-    }).finally(function() {
-      // called no matter success or failure
-      $scope.loading = false;
-    });
-    
-
-    // $scope.loadMore = function() {
-    //   // var increamented = 
-    //   alert("uso");
-    //   $scope.limit += 10;
-    //   // $scope.limit = increamented > $scope.problems.length ? $scope.problems.length : increamented;
-    // };
-
-});
-
-app.controller('newProblemController', function($scope, $http, alertSerice){
+app.controller('newProblemController', function($scope, $http, alertSerice, selectedFilesService){
   $scope.addProblemSubmit = function(){
       
       // alert($scope.probName + " " + $scope.probDescription + " " +$scope.answer +" "+selectedFiles);
@@ -497,9 +399,13 @@ app.controller('newProblemController', function($scope, $http, alertSerice){
         headers: {
             "Content-Type": "application/json"
         },
-        data: {probName: $scope.probName, probDescription: $scope.probDescription, probType: $scope.answer, selectedFiles: selectedFiles}
+        data: {probName: $scope.probName, probDescription: $scope.probDescription, probType: $scope.answer, selectedFiles: selectedFilesService.selectedFiles}
     }).then(function(res){
       alertSerice.successSweet('Success', 'success', 'Successfully submitted new task');
+      $('#showNewProblemForm').hide();
+      $('#showProblemConfirm').show();
+
+      
     }).finally(function() {
       // called no matter success or failure
     });
@@ -510,19 +416,23 @@ app.controller('newProblemController', function($scope, $http, alertSerice){
                 $("#showSubmitButton2").show();
                 Dropzone.options.dropzoneForm = {
                     addRemoveLinks: true,
-                    removedfile: function(file) {
-                        alert(file.name);
+                    removedfile: function(file){
+                      var _ref;
+                      var name = file.name; 
+                      selectedFilesService.selectedFiles.splice(file.name, 1);
+                      console.log("remove :" +selectedFilesService.selectedFiles.length);
+                      return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;        
+              
                     },
                     paramName: "file", // The name that will be used to transfer the file
                     maxFilesize: 1024, // MB
-                    dictDefaultMessage: "<strong>Drop files or click here to upload. </strong>",
+                    dictDefaultMessage: "<strong>Drop files or click here to upload.</strong>",
                     accept: function(file, done) {
-                      console.log(selectedFiles.length);
-                        if(selectedFiles.length >= 0){
+                        if(selectedFilesService.selectedFiles.length >= 0){
                             $("#showSubmitButton2").hide();
                         }
-                        selectedFiles.push(file.name);
-
+                        selectedFilesService.selectedFiles.push(file.name);
+                        console.log("add :" + selectedFilesService.selectedFiles.length);
                         if (file.name == "a.jpg") {
                           done("Naha, you don't.");
                         }
@@ -545,7 +455,7 @@ app.filter('dateFilter', function($filter) {
 
 });
 
-app.controller('dropzoneSolutionController', function($scope, $element, $compile){
+app.controller('dropzoneSolutionController', function($scope, $element, $compile, selectedFilesService){
   if($('.modUpdate').css('display') == 'none'){
     Dropzone.options.dropzoneForm2= {
       addRemoveLinks: true,
@@ -556,7 +466,7 @@ app.controller('dropzoneSolutionController', function($scope, $element, $compile
       maxFilesize: 1024, // MB
       dictDefaultMessage: "<strong>Drop files or click here to upload. Sol</strong>",
       accept: function(file, done) {
-        selectedFiles.push(file.name);
+        selectedFilesService.selectedFiles.push(file.name);
         // var el = angular.element('<div class="container pull-left" style="margin-left:-15px;width:60px" ><i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i><p style="margin-left: 3px">test</p></div>');
         // $compile(el)($scope);
         // elm = $element.find("#filesHolder"); 
@@ -574,7 +484,8 @@ app.controller('dropzoneSolutionController', function($scope, $element, $compile
 app.directive('problemShowDirective', function ($compile, $http, $parse, loggedUserService) {
   return {
     scope: {
-    problem: '='
+    problem: '=',
+    user: '='
   },
     link: function (scope, element, attrs) {     
       if (loggedUser.role.name == 'regular') {
@@ -631,15 +542,19 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
           }else{
            
             if (scope.problem.offers.length == 0) {
-              var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> View</button></span>');
+              var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> No offers</button></span>');
               $compile(el3)(scope);
               elm3 = element.find("#statusHolder"); 
               elm3.append(el3);
             }else{
+              var el3 = angular.element('<span class="label label-default" title="bid counter on this project">'+ scope.problem.offers.length+'</span>');
+              $compile(el3)(scope);
+              elm3 = element.find("#statusHolder"); 
+              elm3.append(el3);
               angular.forEach(scope.problem.offers, function(value, key) {
                 console.log(value.person_from);
-                if (value.person_from == lUser.id) {
-                  var el2 = angular.element('<p>you bidded</p>');
+                if (value.person_from == scope.user) {
+                  var el2 = angular.element('<span class="label label-default" style="margin-left:5px;">You bidded</span>');
                   $compile(el2)(scope);
                   elm = element.find("#statusHolder"); 
                   elm.append(el2);
@@ -695,7 +610,7 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
             },
             data: {probId: id}
         }).then(function(res){
-          var formBidElement = '<form name="offerForm" ng-submit="placeBid()" novalidate><div class = "input-group pull-left" style="width:150px;padding:5px 0px"><span class = "input-group-addon">$</span><input type = "number" class =" form-control" ng-model="biddingOffer" required></div><button class="btn btn-primary" type="submit" style="border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid</button></form>';
+          var formBidElement = '<form name="offerForm" ng-submit="placeBid()" novalidate><div class = "input-group pull-left" style="width:150px;margin-right:10px"><span class = "input-group-addon">$</span><input type = "number" class =" form-control" ng-model="biddingOffer" style="height:54px;" required></div><p><textarea class="form-control" placeholder="e.g. Problem can be solved in 10 mins with 1 file attached..." style="width:500px;resize:none" ng-model="biddingDescription" required></textarea></p><button class="btn btn-primary" type="submit" style="float:left;border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid for this task</button></form>';
           var offers = res.data.offers;
           if (offers.length == 0) {
             var el3 = angular.element(formBidElement);
@@ -719,7 +634,7 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
             }else if(check02){
               angular.forEach(offers, function(value, key) {
                 if (lUser.id == value.person_from) {
-                  var el3 = angular.element('<span style="padding:13px 0px;position:absolute">Already bidded $'+value.price+'</span>');
+                  var el3 = angular.element('<hr><h3><span style="padding:13px 0px;position:absolute">Already bidded $'+value.price+'</span></h3>');
                   $compile(el3)($scope);
                   elm3 = $element.find("#offerPlace"); 
                   elm3.append(el3);
@@ -730,13 +645,14 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
           }
           $scope.placeBid = function(){
             var offer = $scope.biddingOffer;
+            var desc = $scope.biddingDescription;
               return $http({
                   method: 'POST',
                   url: '/home/api/application/placeOffer',
                   headers: {
                       "Content-Type": "application/json"
                   },
-                  data: {probId: id, price: offer}
+                  data: {probId: id, price: offer, description: desc}
               }).then(function(res){
                 
                 alertSerice.successSweet('Success', 'success', 'Successfully bidded $'+offer+' on this task');
@@ -793,6 +709,19 @@ app.controller('MyCtrldd', function($scope){
 //     };
 // });
 
+app.controller('braintreeController', function($scope, $http){
+
+    $http({
+        method: 'GET',
+        url: '/home/api/application/generateToken',
+        data: {}
+    }).then(function successCallback(res) {
+        braintree.setup(res.data.token, 'dropin', {
+          container: 'dropin-container'
+        });
+    });
+});
+})(angular);
 
 
 

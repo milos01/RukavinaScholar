@@ -147,6 +147,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -156,6 +157,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Chumper\Zipper\ZipperServiceProvider::class,
+        Netshell\Paypal\PaypalServiceProvider::class,
 
     ],
 
@@ -203,6 +205,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Zipper' => Chumper\Zipper\Zipper::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Paypal' => Netshell\Paypal\Facades\Paypal::class,
 
     ],
 

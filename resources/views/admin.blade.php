@@ -129,18 +129,12 @@
 
                     <li><a href="#"><i class="fa fa-area-chart"></i>
                         <span class="nav-label">Statistics
-                            <div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:11px;height:11px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white">
-                            <p style="margin-top: -4px; margin-left: 1px">!</p>
-
-                            </div>
+                            <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:white; margin-right: 1px"></i></span>
                         </span></a></li>
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
                         <span class="nav-label">Assigned to me
                             @if($assigns != 0)
-                               
-                                <div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white">
-
-                                </div>
+                               <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white">{{$assigns}}</span>
                             @endif 
                         </span>
                         </a>
@@ -150,10 +144,7 @@
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
                         <span class="nav-label">Assigned to me 
                             @if($assigns != 0)
-                               
-                                <div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white">
-
-                                </div>
+                               <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white">{{$assigns}}</span>
                             @endif 
                         </span></a></li>
                     
@@ -170,10 +161,7 @@
                             <span id="mailBox"class="nav-label">Mailbox
 
                             @if($myMessagesCount != 0)
-                               
-                                <div id="redDot" style="border-radius: 50%;padding: 2px 2px;width:10px;height:10px;background: red;font-size: 10px; position: absolute; left:33px;top:13px;color:white">
-                                    {{$myMessagesCount}}
-                                </div>
+                               <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white">{{$myMessagesCount}}</span>
                             @endif  
                             </span>
                             
@@ -301,7 +289,10 @@
     <script src="../../../../js/plugins/toastr/toastr.min.js"></script>
     <!-- Sweet alert -->
     <script src="../../../../js/plugins/sweetalert/sweetalert.min.js"></script>
+    
     <script src="../../../../js/app.js"></script>
+    <script src="../../../../js/components/user/userService.js"></script>
+    <script src="../../../../js/components/problem/problemCtrl.js"></script>
     @section('jsSocket')
 
     @show
@@ -313,6 +304,7 @@
                     checkboxClass: 'icheckbox_square-green',
                     radioClass: 'iradio_square-green',
                 });
+
             });
         </script>
     <script>
@@ -321,7 +313,7 @@
 
 
 
-
+$('[data-toggle="tooltip"]').tooltip(); 
 
                     var $image = $(".image-crop > img")
             $($image).cropper({
