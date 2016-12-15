@@ -1,5 +1,5 @@
 (function (angular) {
-socket = io('http://localhost:3000');
+// socket = io('http://localhost:3000');
 angular.module('kbkApp').controller('loginController', function($scope, $http, $window){
 
   $scope.loginFormSubmit = function(){
@@ -7,7 +7,7 @@ angular.module('kbkApp').controller('loginController', function($scope, $http, $
       var password = $scope.password;
       
       var remember = $scope.remember;
-      console.log(email);
+      
       $http({
         method: 'POST',
         url: '/login',
@@ -15,13 +15,13 @@ angular.module('kbkApp').controller('loginController', function($scope, $http, $
       }).then(function successCallback(response) {
         console.log(response);
         if(response.data == 'logedin'){
-          $window.location.href = '/home';
-          socket.emit('my other event', { email: email });
+           $window.location.href = '/home';
+           // socket.emit('my other event', { email: email });
 
           
 
         }
-        console.log(response);
+        
       }, function errorCallback(response) {
         alert('ne valja');
       });

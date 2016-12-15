@@ -1,22 +1,22 @@
 (function (angular) {
-socket = io('http://localhost:3000');
+// socket = io('http://localhost:3000');
 function init(){
 	$.ajax({
 	  url: '/home/api/application/getuser',
 	  method: 'GET',
 	  data: {} ,
 	  success: function(res){
-	  	socket.emit('homeLoad', {email: res.email});
+	  	// socket.emit('homeLoad', {email: res.email});
 	  }
 	});
 }
 init();
 angular.module('kbkApp').controller('testController', function($scope){
-	$scope.clickTest = function(){
-		socket.emit('messageNotify', {email: 'jon@gmail.com'});
-	}
+	// $scope.clickTest = function(){
+	// 	socket.emit('messageNotify', {email: 'jon@gmail.com'});
+	// }
 });
-socket.on('newMessageN',function(data){
-	alert('fuck.');
-});
+// socket.on('newMessageN',function(data){
+// 	alert('fuck.');
+// });
 })(angular);

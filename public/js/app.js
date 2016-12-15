@@ -503,10 +503,6 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
             data: {probId: scope.problem.id}
           }).then(function(res){
             
-            
-              console.log(res.data);
-            
-     
               angular.forEach(res.data, function(value, key) {
                 // console.log(view);
                 var el2 = angular.element('<li ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+' <span ng-show="hoverEdit'+key+'">  <i>-select</i></span></a></li>');
