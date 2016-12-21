@@ -5,10 +5,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\UploadFilesToS3;
+use App\Jobs\RemoveFileFromS3;
 use App\File;
 use App\Problem;
 use App\ProblemSolutions;
 use Auth;
+use Validator, Image;
 
 class UploadController extends Controller
 {
@@ -18,13 +20,13 @@ class UploadController extends Controller
             $input = $request->all();
      
             $rules = array(
-                'file' => 'image|max:3000',
+                'file' => 'image|max:3000|mimes:jpeg,jpg,png',
             );
      
             $validation = Validator::make($input, $rules);
      
             if ($validation->fails()) {
-                return Response::make($validation->errors->first(), 400);
+                return back();
             }
      
             $destinationPath = 'uploads'; // upload path
@@ -36,9 +38,10 @@ class UploadController extends Controller
 
             $user = Auth::user();
             $user->picture = $fileName;
-
             $user->save();
+            return back();
         }
+        return back();
     }
 
     public function uploadProblem(Request $request){
@@ -93,6 +96,17 @@ class UploadController extends Controller
         }
     }
 
+    public function removeUploadedFile(Request $request){
+        $file = $request->fileName;
+        $pos = strpos($file, ".");
+        $rightNow = Auth::id();
+        
+        $fileName = substr($file, 0, $pos);
+        $fileExt = substr($file, $pos, strlen($file));
 
+        
+        $hFileName = hash('md5', $fileName.'_'.$rightNow) . $fileExt;
+        $this->dispatch(new RemoveFileFromS3($hFileName));
+    }
 
 }

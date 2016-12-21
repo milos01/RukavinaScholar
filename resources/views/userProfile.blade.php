@@ -33,9 +33,7 @@
             <div class="row animated fadeInRight">
                 <div class="col-md-5 col-md-offset-3">
                     <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Profile Detail</h5>
-                        </div>
+                        
                         <div>
                             <div class="ibox-content no-padding border-left-right">
                                 <img alt="image" class="img-responsive" src="../../img/{{$user->picture}}">

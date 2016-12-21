@@ -27,6 +27,13 @@ app.factory('selectedFilesService', function() {
     };
 });
 
+app.service('removeFileS3Service', function($http){
+    return {
+        remove: function(fileName){
+            return $http.post('/home/api/application/removeUploadedFile', { "fileName" : fileName});
+        }
+    }
+});
 
 app.controller('mainController', function($scope, loggedUserService){
   // $scope.loggedUsers = loggedUserService.loggedUser();
@@ -308,7 +315,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
             }else{
               for (var i = response.data.length - 1; i >= 0; i--) {
                   
-                  var divDiv = "<a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
+                  var divDiv = "<a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'><a href='/home/user/"+response.data[i].id+"'><img src='../../img/"+response.data[i].picture+"' width='30px' style='border-radius: 3px; margin-right:10px'></a>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
     
                   angular.element(document.getElementById('responseDiv22')).append($compile(divDiv)($scope));
                   $scope.addMateFunction = function(userId, problemId){
@@ -321,7 +328,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                           // var item = $("#menuSearchItem").text("aa");
                           $("#itemsHolder").append("<div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<i class='fa fa-times' aria-hidden='true' style='cursor:pointer;float:right' ng-click='deleteWorker("+problemId+","+userId+")'></i></div>");
                       }, function errorCallback(response) {
-                          alert('ne valja');
+                          
                       });
                   };
                   
@@ -388,7 +395,7 @@ app.service('searchService2', function($http){
 
 
 
-app.controller('newProblemController', function($scope, $http, alertSerice, selectedFilesService){
+app.controller('newProblemController', function($scope, $http, alertSerice, selectedFilesService, removeFileS3Service){
   $scope.addProblemSubmit = function(){
       
       // alert($scope.probName + " " + $scope.probDescription + " " +$scope.answer +" "+selectedFiles);
@@ -420,9 +427,10 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
                       var _ref;
                       var name = file.name; 
                       selectedFilesService.selectedFiles.splice(file.name, 1);
-                      console.log("remove :" +selectedFilesService.selectedFiles.length);
+                      console.log("remove asdas :" +selectedFilesService.selectedFiles.length);
+                      removeFileS3Service.remove(name).then(function (){});
                       return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;        
-              
+                      
                     },
                     paramName: "file", // The name that will be used to transfer the file
                     maxFilesize: 1024, // MB
@@ -490,7 +498,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
     link: function (scope, element, attrs) {     
       if (loggedUser.role.name == 'regular') {
         if (scope.problem.waiting == 0 && scope.problem.took == 0) {
-        var el1 = angular.element('<div class="dropdown"><button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span></button><ul class="dropdown-menu" id="offersHolder"></ul></div>');
+        var el1 = angular.element('<div class="dropdown"><button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span></button><ul class="dropdown-menu" id="offersHolder" style="margin-left:-50px"></ul></div>');
         $compile(el1)(scope);
         elm = element.find("#dropDownMenu"); 
         elm.append(el1);
@@ -504,8 +512,8 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
           }).then(function(res){
             
               angular.forEach(res.data, function(value, key) {
-                // console.log(view);
-                var el2 = angular.element('<li ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+' <span ng-show="hoverEdit'+key+'">  <i>-select</i></span></a></li>');
+                console.log(value);
+                var el2 = angular.element('<li  ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+'<span style="color:#7d7d7d"><i> moderator says: "<span style="color:#">'+value.description.substring(0,15)+'...</span>"</i></span><!-- <span ng-show="hoverEdit'+key+'">  <i>-select</i></span>--> </a></li>');
                 $compile(el2)(scope);
                 elm = element.find("#offersHolder"); 
                 elm.append(el2);
@@ -584,7 +592,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
         //         data: {id: pacId}
         //     }).then(function(res){
         //       alert(res.data);
-        //     });
+        //     });https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.messenger.com%2Ft%2Fnikola.vorinski&h=ATN22LZwM5cR05F23qLX8JgsFYUadrAQyuliz5RiVJthT73PBT6Ph4yNTbWrqWkUCdZZU4hO222eLlmmZXaTGD8bD_wp_RtUhnCBOgPmPhML1cGTcwKHDpOEVLxcjf3rPaQw9Dmhtk6p2A
         // }
     }
   }
@@ -606,7 +614,10 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
             },
             data: {probId: id}
         }).then(function(res){
-          var formBidElement = '<form name="offerForm" ng-submit="placeBid()" novalidate><div class = "input-group pull-left" style="width:150px;margin-right:10px"><span class = "input-group-addon">$</span><input type = "number" class =" form-control" ng-model="biddingOffer" style="height:54px;" required></div><p><textarea class="form-control" placeholder="e.g. Problem can be solved in 10 mins with 1 file attached..." style="width:500px;resize:none" ng-model="biddingDescription" required></textarea></p><button class="btn btn-primary" type="submit" style="float:left;border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid for this task</button></form>';
+          var formBidElement = '<form name="offerForm" ng-submit="placeBid()" novalidate><div class = "input-group pull-left" style="width:150px;margin-right:10px"><span class = "input-group-addon">$</span><div class="form-group" ng-class="{ '+"'has-error'"+' : offerForm.biddingOffer.$invalid && !offerForm.biddingOffer.$pristine}"><input type = "number" min="1" class ="form-control" ng-model="biddingOffer" name="biddingOffer" style="height:54px;" required></div></div><div class="form-group" ng-class="{ '+"'has-error'"+' : offerForm.biddingDescription.$invalid && !offerForm.biddingDescription.$pristine}"><textarea class="form-control" placeholder="e.g. Problem can be solved in 10 mins with 1 file attached..." style="width:500px;resize:none" ng-model="biddingDescription" name="biddingDescription" required></textarea></div><button class="btn btn-primary" type="submit" style="float:left;border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid for this task</button></form>';
+          
+
+
           var offers = res.data.offers;
           if (offers.length == 0) {
             var el3 = angular.element(formBidElement);

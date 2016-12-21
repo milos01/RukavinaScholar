@@ -47,6 +47,7 @@
 		Route::post('api/application/saveImage', 'UploadController@saveImage');
 		Route::post('api/application/uploadProblem', 'UploadController@uploadProblem');
 		Route::post('api/application/uploadSolution', 'UploadController@uploadSolution');
+		Route::post('api/application/removeUploadedFile', 'UploadController@removeUploadedFile');
 
 		//Payment routes
 		Route::get('problem/{id}/payment/{pyid}', 'PaymentController@problemPaymentShow');

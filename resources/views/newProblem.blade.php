@@ -25,11 +25,11 @@
                             <form method="get" class="form-horizontal"  ng-submit="addProblemSubmit()" name="newProblemForm" novalidate>
                                 <div class="form-group"><label class="col-sm-2 control-label">Problem name/type</label>
 
-                                    <div class="col-sm-10"><input type="text" class="form-control" ng-model="probName" required></div>
+                                    <div class="col-sm-10"><input type="text" class="form-control" ng-model="probName" style="width: 80%" required></div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group"><label class="col-sm-2 control-label">Description</label>
-                                    <div class="col-sm-10"><textarea class="form-control" style="resize:none;height:200px" ng-model="probDescription" required></textarea>
+                                    <div class="col-sm-10"><textarea class="form-control" style="resize:none;height:200px;width: 80%" ng-model="probDescription" required></textarea>
                                     </div>
                                 </div>
                                  <div class="hr-line-dashed"></div>
@@ -52,7 +52,7 @@
                             <div class="hr-line-dashed"></div>
                             
                             <div class="form-group" id="uploadHolderr">
-                                    <form action="/home/api/application/uploadProblem" class="dropzone" id="dropzoneForm" style="border: 1px dashed gray;width:99%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
+                                    <form action="/home/api/application/uploadProblem" class="dropzone" id="dropzoneForm" style="border: 1px dashed gray;width:83%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
                                         <div class="fallback">
                                            <input name="file" type="file" id="fileSelected" ng-mdoel="aa" multiple />
                                         </div>
@@ -63,8 +63,8 @@
                             <div class="hr-line-dashed"></div>
                              <div class="form-group" style="margin-bottom: 53px">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton"  ng-disabled="newProblemForm.$invalid" style="display: none;">With params</button>
-                                        <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton2" ng-disabled="newProblemForm.$invalid" style="">Without params</button>
+                                        <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton"  ng-disabled="newProblemForm.$invalid" style="display: none;">Submit task</button>
+                                        <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton2" ng-disabled="newProblemForm.$invalid" style="">Submit task</button>
                                     </div>
 
                             </div>
