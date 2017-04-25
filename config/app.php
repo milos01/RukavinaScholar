@@ -148,6 +148,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        F2m2\Apidocs\ApidocsServiceProvider::class,
         /*
          * Application Service Providers...
          */

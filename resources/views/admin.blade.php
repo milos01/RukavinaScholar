@@ -261,6 +261,7 @@
     <!-- Jvectormap -->
     <script
             src="../../../../js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+
     <script
             src="../../../../js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 
@@ -289,7 +290,7 @@
     <script src="../../../../js/plugins/toastr/toastr.min.js"></script>
     <!-- Sweet alert -->
     <script src="../../../../js/plugins/sweetalert/sweetalert.min.js"></script>
-    
+    <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.js"></script>
     <script src="../../../../js/app.js"></script>
     <script src="../../../../js/components/user/userService.js"></script>
     <script src="../../../../js/components/problem/problemCtrl.js"></script>

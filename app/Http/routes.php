@@ -13,9 +13,11 @@
     Route::get('/', ['middleware' => 'guest', function () {
     	return view('welcome');
 	}]);
-
+    Route::get('docs', function(){
+        return View::make('docs.home.index');
+    });
 	Route::auth();
-
+	Route::get('/api/application/getuserbyemail','UserController@getApiUsersEmail');
 	Route::group(['prefix'=>'home', 'middleware' => 'auth'], function () {
 		Route::get('/', 'HomeController@index');
 
@@ -39,7 +41,7 @@
 		Route::post('api/application/deleteWorker', 'ProblemController@deleteWorker');
 		Route::get('api/application/getuserproblems', 'ProblemController@getAllProblems');
 		Route::post('api/application/newproblemsubmit', 'ProblemController@newproblemsubmit');
-		Route::post('api/application/getproblemoffers', 'ProblemController@getproblemoffers');
+		Route::post('api/application/getuserproblemoffer', 'ProblemController@getproblemoffers');
 		Route::get('api/application/getOneUserProblems', 'ProblemController@getOneUserProblems');
 		Route::post('api/application/getProblem', 'ProblemController@getProblem');
 
@@ -78,7 +80,6 @@
 
 		//Braintree routes
 		Route::get('api/application/generateToken', 'BraintreeController@generateToken');
-		
 		
 		
 	});

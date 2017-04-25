@@ -8,7 +8,7 @@
          <a href="{{url('/home')}}">Home</a>
      </li>
     <li class="active">
-    	<strong>Product edit</strong>
+    	<strong>Profile edit</strong>
     </li>                
 @stop
 @section('manageUsers')
@@ -97,6 +97,11 @@
                                 
                             </div>
                     </div>
+                    @if (session('error'))
+                        <div class="alert alert-danger" style="margin-top: 10px;">
+                            <strong>Danger!</strong> {{ session('error') }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

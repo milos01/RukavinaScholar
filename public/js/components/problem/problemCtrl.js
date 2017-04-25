@@ -60,8 +60,24 @@
             },
             data: {}
         }).then(function(res){
-          
           $scope.problems = res.data;
+          for (var i = res.data.length - 1; i >= 0; i--) {
+            $http({
+            method: 'POST',
+            url: 'home/api/application/getuserproblemoffer',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: {probId: res.data[i].id}
+            }).then(function(offers){
+              console.log(offers);
+            });   
+          }
+
+          for (var i = res.data.length - 1; i >= 0; i--) {
+            res.data[i].isCollapsed = true;
+            res.data[i].showDown = true;
+          }
           $scope.includeColour = function(colour) {
               var i = $.inArray(colour, $scope.colourIncludes);
               if (i > -1) {
@@ -98,6 +114,21 @@
       // called no matter success or failure
       $scope.loading = false;
     });
+
+    $scope.collapseMotion = function(problem){
+
+        problem.isCollapsed = !problem.isCollapsed;
+        if(problem.isCollapsed == true){
+          problem.showDown = true;
+          problem.showUp = false;
+        }else{
+          
+
+          problem.showDown = false;
+          problem.showUp = true;
+        }
+    
+    }
     
 
     // $scope.loadMore = function() {

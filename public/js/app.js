@@ -1,6 +1,6 @@
 
 (function (angular) {
-var app = angular.module('kbkApp', ['ngAnimate'], function($interpolateProvider) {
+app = angular.module('kbkApp', ['ngAnimate', 'ui.bootstrap'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
 
@@ -170,7 +170,7 @@ app.directive('passwordLength', function($timeout, $q, $http){
   require: 'ngModel',
   link: function(scope, elm, attr, model) {
             model.$asyncValidators.passwordLen = function() {
-                console.log(model.$viewValue.length);
+                console.log();
                 if(model.$viewValue.length >= 4 && model.$viewValue.length <= 10){
                   model.$setValidity('passlen', true);
                   return $q.resolve();
@@ -194,15 +194,18 @@ app.directive("passwordVerify", function() {
         link: function(scope, element, attrs, ctrl) {
             scope.$watch(function() {
                 var combined;
-
+                
                 if (scope.passwordVerify || ctrl.$viewValue) {
                     combined = scope.passwordVerify + '_' + ctrl.$viewValue;
                 }
                 return combined;
             }, function(value) {
+              if(scope.passwordVerify){
                 if (value) {
+                    console.log("s");
                     ctrl.$parsers.unshift(function(viewValue) {
                         var origin = scope.passwordVerify;
+
                         if (origin !== viewValue) {
                             ctrl.$setValidity("passwordVerify", false);
                             return undefined;
@@ -212,6 +215,7 @@ app.directive("passwordVerify", function() {
                         }
                     });
                 }
+              }
             });
         }
     };
@@ -247,7 +251,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
             $("#resDiv").fadeIn(150);
             if(response.data.length === 0){
 
-                $("#resDiv").html("<div style='border:1px solid red;'><div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div></div>");
+                $("#resDiv").html("<div style='border:1px solid #a9a9a9;'><div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div></div>");
             }else{
               
               for (var i = response.data.length - 1; i >= 0; i--) {
@@ -264,7 +268,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                 });
                 if (!check) {
                   
-                  var divDiv = "<div style='border:1px solid red;'><div style='padding:10px' class='searchResults' ng-click='addMateFunction("+response.data[i].id+","+problemId+")'>"+response.data[i].name+" "+response.data[i].lastName+"</div></div>";
+                  var divDiv = "<div style='border:1px solid #a9a9a9;'><div style='padding:10px' class='searchResults' ng-click='addMateFunction("+response.data[i].id+","+problemId+")'><a href='/home/user/"+response.data[i].id+"'><img src='../../img/"+response.data[i].picture+"' width='30px' style='border-radius: 3px; margin-right:10px'></a>"+response.data[i].name+" "+response.data[i].lastName+"</div></div>";
     
                   angular.element(document.getElementById('resDiv')).append($compile(divDiv)($scope));
                   $scope.addMateFunction = function(userId, problemId){
@@ -276,7 +280,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                       }).then(function successCallback(response) {
                           console.log(response.data);
                           // var item = $("#menuSearchItem").text("aa");
-                          $("#itemsHolder").append("<div class='' id='menuSearchItem"+userId+"plus"+problemId+"' style='border-bottom:2px solid red;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<div id='iks' style='float:right;margin-left:2px'></div></div>");
+                          $("#itemsHolder").append("<div class='' id='menuSearchItem"+userId+"plus"+problemId+"' style='border-bottom:2px solid red;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>bh"+response.data.name +" "+response.data.lastName+"<div id='iks' style='float:right;margin-left:2px'></div></div>");
                         var html="<i class='fa fa-times' aria-hidden='true' style='cursor:pointer' ng-click='deleteWorker("+problemId+", "+userId+")'></i>" ;
                         angular.element(document.getElementById('iks')).append($compile(html)($scope));
 
@@ -512,7 +516,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
           }).then(function(res){
             
               angular.forEach(res.data, function(value, key) {
-                console.log(value);
+                
                 var el2 = angular.element('<li  ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+'<span style="color:#7d7d7d"><i> moderator says: "<span style="color:#">'+value.description.substring(0,15)+'...</span>"</i></span><!-- <span ng-show="hoverEdit'+key+'">  <i>-select</i></span>--> </a></li>');
                 $compile(el2)(scope);
                 elm = element.find("#offersHolder"); 
@@ -544,6 +548,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
               // $("#dropDownMenu").prop('disabled',true);
             }
           }else{
+            console.log(scope.problem.offers);
            
             if (scope.problem.offers.length == 0) {
               var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> No offers</button></span>');
@@ -728,6 +733,40 @@ app.controller('braintreeController', function($scope, $http){
         });
     });
 });
+
+app.controller('reserPasswrdController', function($scope, $http){
+  $scope.findUser = function(){
+    var email = $scope.resetEmilAdderss;
+
+    $http({
+        method: 'GET',
+        url: '/api/application/getuserbyemail',
+        params: {"email" : email}
+    }).then(function successCallback(item) {
+      if(item.data.length === 0){
+        console.log("neam");
+        $scope.resetForm.resetEmilAdderss.$setValidity('userex', false);
+      }else{
+        $scope.resetForm.resetEmilAdderss.$setValidity('userex', true);
+      }
+    });
+  }
+
+
+  $scope.resetFormSubmit = function(){
+    $scope.showLoadMailIcon = true;
+    var email = $scope.resetEmilAdderss;
+    $http({
+        method: 'POST',
+        url: '/password/email',
+        data: {"email" : email}
+    }).then(function successCallback(item) {
+      $scope.showLoadMailIcon = false;
+      $scope.resetEmilAdderss="";
+    });
+  }
+});
+
 })(angular);
 
 

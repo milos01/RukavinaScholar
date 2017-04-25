@@ -65,7 +65,13 @@ class UserController extends Controller
             return redirect('/home/manage');
         }
     }
-
+    /**
+    * Display the specified resource.
+    * GET /user/{id}
+    *
+    * @param  int  $id  The id of a User
+    * @return Response
+    */
     public function editUser(){
         $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
         $count = 0;
@@ -103,9 +109,9 @@ class UserController extends Controller
     public function updatePassword(UpdatePasswordRequest $request){
         $user = Auth::user();
         $hashedPassword = Hash::make($request->newPassword);
-        if (Hash::check($user, $hashedPassword))
+        if (!Hash::check($request->oldPassword, $user->password))
         {
-            return "error";
+            return redirect('/home/edit#tab-2')->with('error', 'Current password isn\'t valid!');
         }
         $user->password = $hashedPassword;
         if ($user->save()) {
@@ -132,6 +138,12 @@ class UserController extends Controller
 
     public function getApiUser(){
         $user = User::with('role')->findorFail(Auth::id());
+        return $user->toArray();
+    }
+
+    public function getApiUsersEmail(Request $request){
+        $email = $request->input('email');
+        $user = User::with('role')->where('email', $email)->get();
         return $user->toArray();
     }
 

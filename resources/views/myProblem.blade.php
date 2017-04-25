@@ -97,7 +97,7 @@
                                     
                                     
                                         
-                                        <div id="resDiv" style="width:250px;max-height:200px;position: absolute;margin-top:-17px;z-index: 999;background-color: white;">
+                                        <div id="resDiv" style="width:254px;max-height:200px;position: absolute;margin-top:-17px;z-index: 999;background-color: white;">
                                             
                                                 
                                             

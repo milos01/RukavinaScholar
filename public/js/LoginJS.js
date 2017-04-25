@@ -1,7 +1,6 @@
 (function (angular) {
 // socket = io('http://localhost:3000');
-angular.module('kbkApp').controller('loginController', function($scope, $http, $window){
-
+app.controller('loginController', function($scope, $http, $window){
   $scope.loginFormSubmit = function(){
       var email = $scope.email;
       var password = $scope.password;
@@ -13,18 +12,22 @@ angular.module('kbkApp').controller('loginController', function($scope, $http, $
         url: '/login',
         data: { email: email, password: password, remember:remember}
       }).then(function successCallback(response) {
-        console.log(response);
         if(response.data == 'logedin'){
            $window.location.href = '/home';
-           // socket.emit('my other event', { email: email });
-
-          
-
+        }else{
+          $scope.loginForm1.email.$setValidity("wrongInputs", false);
+          $scope.loginForm1.password.$setValidity("wrongInputs", false);
         }
-        
       }, function errorCallback(response) {
         alert('ne valja');
       });
   };
+})
+
+app.controller('registerController', function($scope){
+  $scope.registerUserForm = function(){
+    alert("radi");
+  }
 });
+
 })(angular);

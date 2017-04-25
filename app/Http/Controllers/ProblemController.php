@@ -55,6 +55,10 @@ class ProblemController extends Controller
 
     public function getAllProblems(){
         $allProblems = Problem::with('offers')->get();
+        // dd($allProblems->main_solver->name);
+
+        // dd(Offer::with('personFrom')->find(1)->personFrom->name);
+        // $allProblems::->get();
 
         return json_encode($allProblems);
     }
@@ -121,7 +125,7 @@ class ProblemController extends Controller
         $problem = new Problem();
         $problem->subject = $request->probName;
         $problem->person_from = $user;
-        $problem->main_slovler = 1;
+        $problem->main_slovler = $user;
         $problem->problem_type = $request->probType;
         $problem->problem_description = $request->probDescription;
         $problem->took = 0;
@@ -162,7 +166,12 @@ class ProblemController extends Controller
 
     public function getproblemoffers(Request $request){
         $problemOffers = Problem::findorFail($request->probId)->offers;
-        return $problemOffers->toArray();
+        $offers = [];
+        foreach ($problemOffers as $key => $offer) {
+            $off = Offer::with('personFrom')->find($offer->id);
+            array_push($offers, $off);
+        }
+        return $offers;
     }
 
     public function getOneUserProblems(){

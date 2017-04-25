@@ -146,66 +146,74 @@
                                                     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="color:#1ab394"></i>
                                                     <!-- <span class="sr-only">Loading...</span> -->
                                                 </div>
-                                                <tr ng-repeat="problem in problems | filter:tookFilter | filter: search | filter:colourFilter" problem-show-directive problem="problem" user="{{Auth::id()}}" ng-cloak>
+
+
+                                                
+
+                                                <div ng-repeat="problem in problems | filter:tookFilter | filter: search | filter:colourFilter" problem-show-directive problem="problem" user="{{Auth::id()}}" ng-cloak>
                                                     
-                                                        <td style="padding: 0px;color:black">
-                                                            <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" ng-bind="$index + 1">
+                                                <div class="ibox" > 
+                                                    <div class="ibox-title" style="background: #f9f9f9">
+                                                        <div class="col-md-1" style="">
+                                                            <div style="" ng-bind="$index + 1"></div>
+                                                        </div>
+
+                                                        <div class="col-md-1" style="">
+                                                            <a href="home/problem/<%problem.id%>">
+                                                            <div style="" ng-bind="problem.subject"></div>
+                                                            </a>
+                                                        </div>
+
+                                                        <div class="col-md-1" style="">
+                                                            <div style="" ng-bind="problem.problem_description | limitTo:50"></div>
+                                                        </div>
+
+                                                        <div class="col-md-1" style="">
+                                                            <div style="" ng-bind="problem.problem_type"></div>
+                                                        </div>
+
+                                                        <div class="col-md-2" style="">
+                                                            <div style="" ng-bind="problem.created_at | dateFilter: 'MM/dd/yyyy @ h:mma'"></div>
+                                                        </div>
+
+                                                        
+                                                        <div class="col-md-1 pull-right">
+                                                            <div class="ibox-tools">
+                                                                <a class="collapse-link" ng-click="collapseMotion(problem)">
+                                                                    <span ng-show="problem.showUp">
+                                                                        <i class="fa fa-chevron-up"></i>
+                                                                    </span>
+
+                                                                    <span ng-show="problem.showDown">
+                                                                        <i class="fa fa-chevron-down"></i>
+                                                                    </span>
+                                                                   <!--  <i class="fa fa-chevron-down"></i> -->
+                                                                </a>
                                                                 
-                                                                </div>
-                                                            </a>
-                                                        </td>
-                                                        <td style="padding: 0px;">
-                                                            <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" ng-bind="problem.subject">
-                                                                
-                                                                </div>
-                                                            </a>
-                                                        </td>
-                                                        <td style="padding: 0px">
-                                                             <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" ng-bind="problem.problem_description | limitTo:50">
-                                                                    
-                                                                </div>
-                                                            </a>
-                                                        </td>
-                                                        <td style="padding: 0px">
-                                                            <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" >
-                                                                    <span ng-bind="problem.problem_type"></span>
-                                                                </div>
-                                                            </a>
-                                                        </td>
-                                                        <td style="padding: 0px">
-                                                           
-                                                        </td>
-                                                        <td style="padding: 0px">
-                                                            <a href="/home/problem/<%problem.id%>">
-                                                                <div style="width:100%;height:100%;padding:8px;color:#737678" >
-                                                                     <span ng-bind="problem.created_at | dateFilter: 'MM/dd/yyyy @ h:mma'"></span>
-                                                                </div>
-                                                            </a>
-                                                        </td>
-                                                        <td style="padding: 0px;text-align: center">
-                                                            <a href="/home/problem/<%problem.id%>">
-                                                                <div  style="width:100%;height:100%;padding:8px;color:#737678" >
-                                                                    <div id="statusHolder">
-                                                                    </div>
+                                                            </div>
+                                                        </div>
 
-                                                                    <div id="dropDownMenu">
-                                                                       <!--  <div class="dropdown">
-                                                                            <button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span>
-                                                                            </button>
-                                                                                <ul class="dropdown-menu" id="offersHolder">
-                                                                                </ul>
-                                                                        </div> -->
-                                                                    </div>
-
-                                                                </div>
-                                                            </a>
-                                                        </td>
-
-                                                </tr>
+                                                        <div class="col-md-2 pull-right" style="">
+                                                            <div id="statusHolder">
+                                                            </div>
+<!-- 
+                                                            <div id="dropDownMenu">
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span>
+                                                                    </button>
+                                                                        <ul class="dropdown-menu" id="offersHolder">
+                                                                        </ul>
+                                                                </div> 
+                                                            </div> -->
+                                                        </div>
+                                                    </div>
+                                                    <div class="collapse container" uib-collapse="problem.isCollapsed" style="background: antiquewhite;width: 100%">
+                                                        <div class="container" ng-repeat="offer in problem.offers">
+                                                            <%offer%>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                                </div>
                                                 
                                                 <p ng-show="(problems | filter: tookFilter | filter: search | filter:colourFilter).length == 0" style="text-align:center;margin-top:40px;position: relative;" ng-bind="noFound"></p>
                                                 

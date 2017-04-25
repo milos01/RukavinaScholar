@@ -1,82 +1,72 @@
 @extends('layouts.app')
 
+<!-- Main Content -->
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
-                        {!! csrf_field() !!}
+<section class="light-gray-bg pv-30 clearfix">
+                <div class="container">
+                    <!-- <div class="row"> -->
+                        
+                        <div ng-controller="registerController">
+                            <div class="pv-30 ph-20 feature-box bordered shadow text-center">
+                                <span class="icon default-bg circle"><i class="fa fa-btn fa-user"></i></span>
+                                <h3>Registration</h3>
+                                <div class="separator clearfix"></div>
+                                <p>Enter basic information about yourself</p>
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Name</label>
 
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="name" value="{{ old('name') }}">
+                                <form class="form-horizontal" name="registerForm" ng-submit="registerUserForm()" novalidate>
+                                    {!! csrf_field() !!}
 
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
+                                    <div class="form-group" ng-class="{ 'has-error' : registerForm.name.$invalid && !registerForm.name.$pristine }">
+                                        <label class="col-md-4 control-label">First name</label>
+
+                                        <div class="col-md-4"> 
+                                            <input type="text" class="form-control" name="name" ng-model="user.name" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{ 'has-error' : registerForm.last_name.$invalid && !registerForm.last_name.$pristine }">
+                                        <label class="col-md-4 control-label">Last name</label>
+
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" name="last_name" ng-model="user.last_name" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{ 'has-error' : registerForm.email.$invalid && !registerForm.email.$pristine }">
+                                        <label class="col-md-4 control-label">E-Mail Address</label>
+
+                                        <div class="col-md-4">
+                                            <input type="email" class="form-control" name="email" ng-model="user.email" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{ 'has-error' : registerForm.password.$invalid && !registerForm.password.$pristine }">
+                                        <label class="col-md-4 control-label">Password</label>
+
+                                        <div class="col-md-4">
+                                            <input type="password" class="form-control" name="password" ng-model="user.password" password-length password-verify="user.password_confirmation" required>
+                                        </div>
+                                        <p ng-show="registerForm.password.$error.passlen && !editPasswordForm.password.$error.required" style="font-size:14px;margin-right:28px;color:#ed5565;margin-top:-28px">Password must be in between 4 and 10 chars</p>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{ 'has-error' : registerForm.password_confirmation.$invalid && !registerForm.password_confirmation.$pristine }">
+                                        <label class="col-md-4 control-label">Confirm Password</label>
+
+                                        <div class="col-md-4">
+                                            <input type="password" class="form-control" name="password_confirmation" ng-model="user.password_confirmation" password-verify="user.password" required>
+                                        </div>
+                                        <p ng-show="registerForm.password_confirmation.$error.passwordVerify && !registerForm.password_confirmation.$error.required" style="font-size:14pxmargin-right:28px;color:#ed5565;margin-top:-28px">Passwords not same</p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary" ng-disabled="registerForm.$invalid">
+                                                <i class="fa fa-btn fa-user"></i> Register
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password_confirmation">
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-user"></i>Register
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 @endsection

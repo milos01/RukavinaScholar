@@ -127,8 +127,9 @@
                                             <dd><span><i class="fa fa-pencil" aria-hidden="true" style="color:black"></i> Under work...</span></dd>
                                         @elseif($problem->took == 2 && $problem->waiting == 0)
                                             <dd><span><i class="fa fa-check" aria-hidden="true" style="color:green"></i> Finised</span></dd>
-                                        @elseif($problem->took == 0 && $problem->waiting == 1)
+                                        @elseif($problem->took == 0 && $problem->waiting == 1 || $problem->took == 0 && $problem->waiting == 0)
                                             <dd><span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span></dd>
+                                     
                                         @endif
                                         
                                     </div>
