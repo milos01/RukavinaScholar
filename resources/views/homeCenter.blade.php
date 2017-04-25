@@ -180,11 +180,11 @@
                                                         <div class="col-md-1 pull-right">
                                                             <div class="ibox-tools">
                                                                 <a class="collapse-link" ng-click="collapseMotion(problem)">
-                                                                    <span ng-show="problem.showUp">
+                                                                    <span ng-show="problem.showUp" ng-cloak>
                                                                         <i class="fa fa-chevron-up"></i>
                                                                     </span>
 
-                                                                    <span ng-show="problem.showDown">
+                                                                    <span ng-show="problem.showDown" ng-cloak>
                                                                         <i class="fa fa-chevron-down"></i>
                                                                     </span>
                                                                    <!--  <i class="fa fa-chevron-down"></i> -->
@@ -208,9 +208,27 @@
                                                         </div>
                                                     </div>
                                                     <div class="collapse container" uib-collapse="problem.isCollapsed" style="background: antiquewhite;width: 100%">
-                                                        <div class="container" ng-repeat="offer in problem.offers">
-                                                            <%offer%>
+                                                        <!-- <a href="home/problem/<%offer.id%>"> -->
+                                                        <div class="row" ng-repeat="offer in problem.offers" style="padding: 10px 5px">
+
+                                                            <div class="col-md-1" style="">
+                                                               
+                                                            </div>
+
+                                                            <div class="col-md-5" style="background: #fdf0e0;">
+                                                                
+                                                                Offer description: <%offer.description | limitTo:50%>
+                                                                
+                                                            </div>
+
+                                                            <div class="col-md-1 pull-right" style="">
+                                                               $<%offer.price%>
+                                                            </div>
+                                                            <div class="col-md-2 pull-right" style="">
+                                                               <div style="" ng-bind="offer.created_at | dateFilter: 'MM/dd/yyyy @ h:mma'"></div>
+                                                            </div>
                                                         </div> 
+                                                        <!-- </a> -->
                                                     </div>
                                                 </div>
                                                 </div>

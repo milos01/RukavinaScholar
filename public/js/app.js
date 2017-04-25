@@ -502,31 +502,11 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
     link: function (scope, element, attrs) {     
       if (loggedUser.role.name == 'regular') {
         if (scope.problem.waiting == 0 && scope.problem.took == 0) {
-        var el1 = angular.element('<div class="dropdown"><button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Offers<span class="caret"></span></button><ul class="dropdown-menu" id="offersHolder" style="margin-left:-50px"></ul></div>');
-        $compile(el1)(scope);
-        elm = element.find("#dropDownMenu"); 
-        elm.append(el1);
-        $http({
-          method: 'POST',
-          url: '/home/api/application/getproblemoffers',
-          headers: {
-              "Content-Type": "application/json"
-          },
-            data: {probId: scope.problem.id}
-          }).then(function(res){
-            
-              angular.forEach(res.data, function(value, key) {
-                
-                var el2 = angular.element('<li  ng-mouseover="hoverItem('+key+')" ng-mouseleave="hoverOut('+key+')" ><a href="/home/problem/'+scope.problem.id+'/payment/'+value.id+'">$'+value.price+'<span style="color:#7d7d7d"><i> moderator says: "<span style="color:#">'+value.description.substring(0,15)+'...</span>"</i></span><!-- <span ng-show="hoverEdit'+key+'">  <i>-select</i></span>--> </a></li>');
-                $compile(el2)(scope);
-                elm = element.find("#offersHolder"); 
-                elm.append(el2);
-             
-              });
-             
-              
-            
-        });
+          var el1 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span>');
+          $compile(el1)(scope);
+          elm = element.find("#statusHolder"); 
+          elm.append(el1);
+     
           }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
               var el1 = angular.element('<span><i class="fa fa-pencil" aria-hidden="true" style="color:black"></i> Under work...</span>');
               $compile(el1)(scope);

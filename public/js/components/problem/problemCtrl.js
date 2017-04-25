@@ -60,23 +60,38 @@
             },
             data: {}
         }).then(function(res){
+ 
           $scope.problems = res.data;
-          for (var i = res.data.length - 1; i >= 0; i--) {
-            $http({
-            method: 'POST',
-            url: 'home/api/application/getuserproblemoffer',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {probId: res.data[i].id}
-            }).then(function(offers){
-              console.log(offers);
-            });   
-          }
+
+          // for (i = res.data.length - 1; i >= 0; i--) {
+          //   console.log(i);
+          //   c = i;
+          //   $http({
+          //   method: 'POST',
+          //   url: 'home/api/application/getuserproblemoffer',
+          //   headers: {
+          //       "Content-Type": "application/json"
+          //   },
+          //   data: {probId: res.data[i].id}
+          //   }).then(function(offers){
+          //     console.log(c);
+          //     // for (var i = res.data.length - 1; i >= 0; i--) {
+                
+          //      // res.data[i].offersList = offers.data;
+          //     // }
+          //   });   
+          // }
 
           for (var i = res.data.length - 1; i >= 0; i--) {
             res.data[i].isCollapsed = true;
-            res.data[i].showDown = true;
+            console.log(res.data[i].offers.length);
+            if(res.data[i].offers.length === 0){
+              res.data[i].showDown = false;
+              res.data[i].showUp = false;
+            }else{
+              res.data[i].showDown = true;
+            }
+            
           }
           $scope.includeColour = function(colour) {
               var i = $.inArray(colour, $scope.colourIncludes);
