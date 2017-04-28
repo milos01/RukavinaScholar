@@ -183,6 +183,22 @@ app.directive('passwordLength', function($timeout, $q, $http){
   }
 });
 
+app.directive('myOffer', function(loggedUserService) {
+  return {
+    restrict: 'A',
+    scope: {
+      offer: '=',
+    },
+    link: function(scope) {
+      loggedUserService.user().then(function(user) {
+        if(user.id === scope.offer.person_from){
+          scope.offer.isMine = 'Your offer:';
+        }
+      });
+      
+    }
+  };
+});
 
 
 app.directive("passwordVerify", function() {
@@ -427,24 +443,24 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
                 $("#showSubmitButton2").show();
                 Dropzone.options.dropzoneForm = {
                     addRemoveLinks: true,
+                    maxFilesize: 15,
+                    acceptedFiles: ".png, .jpg, .jpeg, .zip",
                     removedfile: function(file){
                       var _ref;
                       var name = file.name; 
                       selectedFilesService.selectedFiles.splice(file.name, 1);
-                      console.log("remove asdas :" +selectedFilesService.selectedFiles.length);
                       removeFileS3Service.remove(name).then(function (){});
                       return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;        
                       
                     },
                     paramName: "file", // The name that will be used to transfer the file
-                    maxFilesize: 1024, // MB
-                    dictDefaultMessage: "<strong>Drop files or click here to upload.</strong>",
+                    dictDefaultMessage: "<strong>Drop files or click here to upload. (max. 15MB)<br>Accepted files: .png, .jpg, .jpeg, .zip</strong>",
                     accept: function(file, done) {
                         if(selectedFilesService.selectedFiles.length >= 0){
                             $("#showSubmitButton2").hide();
                         }
                         selectedFilesService.selectedFiles.push(file.name);
-                        console.log("add :" + selectedFilesService.selectedFiles.length);
+                        
                         if (file.name == "a.jpg") {
                           done("Naha, you don't.");
                         }
@@ -453,7 +469,7 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
                     queuecomplete: function(file){
                         $("#showSubmitButton").fadeIn(100);
                         
-                    }
+                    },
                 };
   }
 });
@@ -602,37 +618,50 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
           var formBidElement = '<form name="offerForm" ng-submit="placeBid()" novalidate><div class = "input-group pull-left" style="width:150px;margin-right:10px"><span class = "input-group-addon">$</span><div class="form-group" ng-class="{ '+"'has-error'"+' : offerForm.biddingOffer.$invalid && !offerForm.biddingOffer.$pristine}"><input type = "number" min="1" class ="form-control" ng-model="biddingOffer" name="biddingOffer" style="height:54px;" required></div></div><div class="form-group" ng-class="{ '+"'has-error'"+' : offerForm.biddingDescription.$invalid && !offerForm.biddingDescription.$pristine}"><textarea class="form-control" placeholder="e.g. Problem can be solved in 10 mins with 1 file attached..." style="width:500px;resize:none" ng-model="biddingDescription" name="biddingDescription" required></textarea></div><button class="btn btn-primary" type="submit" style="float:left;border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid for this task</button></form>';
           
 
-
-          var offers = res.data.offers;
-          if (offers.length == 0) {
-            var el3 = angular.element(formBidElement);
-            $compile(el3)($scope);
-            elm3 = $element.find("#offerPlace"); 
-            console.log(elm3);
-            elm3.append(el3);
+         
+          var countDownDate = new Date(res.data.time_ends_at).getTime();
+          // Get todays date and time
+          var now = new Date().getTime();
+          // Find the distance between now an the count down date
+          var distance = countDownDate - now;
+          console.log(distance);
+          if(distance < 0){
+              var el = angular.element('<hr><h3><span style="padding:13px 0px;position:absolute">Time expired! Can\'t bid anymore</span></h3>');
+              $compile(el)($scope);
+              elm = $element.find("#offerPlace"); 
+              elm.append(el);
           }else{
-            angular.forEach(offers, function(value, key) {
-                if (lUser.id != value.person_from) {
-                  check = true;
-                }else{
-                  check02 = true;
-                }
-            });
-            if (check && !check02) {
+            var offers = res.data.offers;
+
+            if (offers.length == 0) {
               var el3 = angular.element(formBidElement);
               $compile(el3)($scope);
               elm3 = $element.find("#offerPlace"); 
               elm3.append(el3);
-            }else if(check02){
+            }else{
               angular.forEach(offers, function(value, key) {
-                if (lUser.id == value.person_from) {
-                  var el3 = angular.element('<hr><h3><span style="padding:13px 0px;position:absolute">Already bidded $'+value.price+'</span></h3>');
-                  $compile(el3)($scope);
-                  elm3 = $element.find("#offerPlace"); 
-                  elm3.append(el3);
-                }
+                  if (lUser.id != value.person_from) {
+                    check = true;
+                  }else{
+                    check02 = true;
+                  }
               });
-              
+              if (check && !check02) {
+                var el3 = angular.element(formBidElement);
+                $compile(el3)($scope);
+                elm3 = $element.find("#offerPlace"); 
+                elm3.append(el3);
+              }else if(check02){
+                angular.forEach(offers, function(value, key) {
+                  if (lUser.id == value.person_from) {
+                    var el3 = angular.element('<hr><h3><span style="padding:13px 0px;position:absolute">Already bidded $'+value.price+'</span></h3>');
+                    $compile(el3)($scope);
+                    elm3 = $element.find("#offerPlace"); 
+                    elm3.append(el3);
+                  }
+                });
+                
+              }
             }
           }
           $scope.placeBid = function(){

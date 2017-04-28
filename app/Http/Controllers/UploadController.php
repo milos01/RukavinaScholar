@@ -49,20 +49,10 @@ class UploadController extends Controller
     public function uploadProblem(Request $request){
         
         if($request->hasFile('file')){
-
-            $file = $request->file('file');
-            $path_parts = pathinfo($file->getClientOriginalName());
-            $fileName = $path_parts['filename'];
-            $fileExt = $path_parts['extension'];
-            $rightNow = Auth::id();
-
-            $hFileName = hash('md5', $fileName.'_'.$rightNow) . '.' . $fileExt;
-
-            $file->move(storage_path(). '/uploads', $hFileName);
-            $file2 = storage_path(). '/uploads/'. $hFileName;
+            $manipulatedFile = $this->fileManipulation('/uploads', $request);
 
             //Dispatch Upload file to Amazon S3 job  
-            $this->dispatch(new UploadFilesToS3($hFileName, $file2));
+            $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
 
         }
     }
@@ -70,21 +60,15 @@ class UploadController extends Controller
     public function uploadSolution(Request $request){
         if($request->hasFile('file')){
 
-            $file = $request->file('file');
-            $path_parts = pathinfo($file->getClientOriginalName());
-            $fileName = $path_parts['filename'];
-            $fileExt = $path_parts['extension'];
+            
+            
+            $manipulatedFile = $this->fileManipulation('/uploads/solutions');
+          
 
-            $hFileName = hash('md5', $fileName) . '.' . $fileExt;
-
-            $file->move(storage_path(). '/uploads', $hFileName);
-            $file2 = storage_path(). '/uploads/'. $hFileName;
-
-            //Dispatch Upload file to Amazon S3 job
-            $this->dispatch(new UploadFilesToS3($hFileName, $file2));
+            
 
             $file = new File();
-            $file->fileName = $hFileName;
+            $file->fileName = $manipulatedFile[0];
             $file->save();
 
             $problem = Problem::findorFail($request->prob_id);
@@ -96,6 +80,33 @@ class UploadController extends Controller
             $probSol->problem()->associate($problem);
             $probSol->save();
         }
+    }
+
+    private function fileManipulation($path, $request){
+        $input = $request->all();
+     
+        $rules = array(
+            'file' => 'max:15000|mimes:jpeg,jpg,png,zip',
+        );
+ 
+        $validation = Validator::make($input, $rules);
+
+        if ($validation->fails()) {
+            return back();
+        }
+
+        $file = $request->file('file');
+        $path_parts = pathinfo($file->getClientOriginalName());
+        $fileName = $path_parts['filename'];
+        $fileExt = $path_parts['extension'];
+        $rightNow = Auth::id();
+
+        $hFileName = hash('md5', $fileName.'_'.$rightNow) . '.' . $fileExt;
+        $file->move(storage_path(). $path, $hFileName);
+        $file2 = storage_path(). $path.'/'. $hFileName;
+
+        return [$hFileName, $file2];
+
     }
 
     public function removeUploadedFile(Request $request){

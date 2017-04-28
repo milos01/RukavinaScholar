@@ -11,6 +11,7 @@ use App\ProblemFiles;
 use App\Problem;
 use Auth,Zipper;
 use Crypt;
+use Carbon\Carbon;
 class ProblemController extends Controller
 {
 	public function __construct()
@@ -120,7 +121,7 @@ class ProblemController extends Controller
     }
 
     public function newproblemsubmit(Request $request){
-        
+        $now = Carbon::now();
         $user = Auth::user()->id;
         $problem = new Problem();
         $problem->subject = $request->probName;
@@ -130,6 +131,7 @@ class ProblemController extends Controller
         $problem->problem_description = $request->probDescription;
         $problem->took = 0;
         $problem->waiting = 1;
+        $problem->time_ends_at = $now->addMinutes(5);
         $problem->save();
 
 

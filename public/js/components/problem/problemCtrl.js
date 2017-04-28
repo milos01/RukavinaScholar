@@ -1,10 +1,10 @@
 
 (function (angular) {
-  angular.module('kbkApp').controller('showProblemController', function($scope, $http){
+  angular.module('kbkApp').controller('showProblemController', function($scope, $http, $interval){
     $scope.loading = true;
     $scope.limit = 20;
     $scope.colourIncludes = [];
-    $scope.noFound = 'No problem found!';
+    $scope.noFound = 'No problems found!';
     $http({
         method: 'GET',
         url: 'home/api/application/getuser',
@@ -62,7 +62,7 @@
         }).then(function(res){
  
           $scope.problems = res.data;
-
+          
           // for (i = res.data.length - 1; i >= 0; i--) {
           //   console.log(i);
           //   c = i;
@@ -83,8 +83,15 @@
           // }
 
           for (var i = res.data.length - 1; i >= 0; i--) {
+            
+            
+
+
+
+
+
             res.data[i].isCollapsed = true;
-            console.log(res.data[i].offers.length);
+            
             if(res.data[i].offers.length === 0){
               res.data[i].showDown = false;
               res.data[i].showUp = false;
@@ -92,7 +99,53 @@
               res.data[i].showDown = true;
             }
             
+            
           }
+          var x = $interval(function() {
+
+                var doneCounters = [];
+
+                for (var i = res.data.length - 1; i >= 0; i--) {
+
+                  var countDownDate = new Date(res.data[i].time_ends_at).getTime();
+                  
+                  
+                  
+                  // Get todays date and time
+                  var now = new Date().getTime();
+
+                  // Find the distance between now an the count down date
+                  var distance = countDownDate - now;
+                  doneCounters[i] = distance;
+                  console.log('ch');
+
+                  // Time calculations for days, hours, minutes and seconds
+                  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                  // Display the result in the element with id="demo"
+                  res.data[i].timer = minutes + "m " + seconds + "s ";
+                  
+                  if(distance < 0){
+                    res.data[i].timer = "Expired"
+                  }
+                  //If the count down is finished, write some text 
+                
+                }
+                
+                var checkClearInterval = false;
+                for (var i = doneCounters.length - 1; i >= 0; i--) {
+                  if (doneCounters[i] > 0) {
+                    checkClearInterval = true;
+                  }
+                }
+                if(!checkClearInterval){
+                  $interval.cancel(x);
+                }
+              }, 1000);
+
           $scope.includeColour = function(colour) {
               var i = $.inArray(colour, $scope.colourIncludes);
               if (i > -1) {
@@ -116,6 +169,8 @@
                 return problem;
               }
             }
+
+
           // console.log($scope.colourIncludes);
         });
 

@@ -206,13 +206,21 @@
                                                                 </div> 
                                                             </div> -->
                                                         </div>
+
+                                                        <div class="col-md-2 pull-right" style="">
+                                                            <div>
+                                                                <%problem.timer%>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="collapse container" uib-collapse="problem.isCollapsed" style="background: antiquewhite;width: 100%">
                                                         <!-- <a href="home/problem/<%offer.id%>"> -->
                                                         <div class="row" ng-repeat="offer in problem.offers" style="padding: 10px 5px">
 
-                                                            <div class="col-md-1" style="">
-                                                               
+                                                            <div class="col-md-1" my-offer offer="offer">
+                                                               <p ng-bind="offer.isMine">
+
+                                                                </p>
                                                             </div>
 
                                                             <div class="col-md-5" style="background: #fdf0e0;">

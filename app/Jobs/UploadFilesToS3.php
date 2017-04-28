@@ -34,6 +34,6 @@ class UploadFilesToS3 extends Job implements ShouldQueue
     {
         $s3 = Storage::disk('s3');
         $s3->put($this->fileName, fopen($this->filee,'r+'), 'public');
-        unlink($this->filee);           
+        // unlink($this->filee);           
     }
 }

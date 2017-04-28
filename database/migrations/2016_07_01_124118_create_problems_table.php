@@ -24,6 +24,7 @@ class CreateProblemsTable extends Migration
             $table->integer('took')->unsigned();
             $table->integer('waiting')->unsigned();
             $table->timestamps();
+            $table->timestamp('time_ends_at')->nullable();
             $table->softDeletes();
         });
     }
