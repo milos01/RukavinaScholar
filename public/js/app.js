@@ -495,7 +495,7 @@ app.controller('dropzoneSolutionController', function($scope, $element, $compile
       dictDefaultMessage: "<strong>Drop files or click here to upload. Sol</strong>",
       accept: function(file, done) {
         selectedFilesService.selectedFiles.push(file.name);
-        // var el = angular.element('<div class="container pull-left" style="margin-left:-15px;width:60px" ><i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i><p style="margin-left: 3px">test</p></div>');
+        // var el = angular.element('<div class="container" style="margin-left:-15px;width:60px" ><i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i><p style="margin-left: 3px">test</p></div>');
         // $compile(el)($scope);
         // elm = $element.find("#filesHolder"); 
         // console.log(elm);
@@ -552,12 +552,11 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
               elm3 = element.find("#statusHolder"); 
               elm3.append(el3);
             }else{
-              var el3 = angular.element('<span class="label label-default" title="bid counter on this project">'+ scope.problem.offers.length+'</span>');
+              var el3 = angular.element('<span class="label label-default">'+scope.problem.offers.length+'</span>');
               $compile(el3)(scope);
               elm3 = element.find("#statusHolder"); 
               elm3.append(el3);
               angular.forEach(scope.problem.offers, function(value, key) {
-                console.log(value.person_from);
                 if (value.person_from == scope.user) {
                   var el2 = angular.element('<span class="label label-default" style="margin-left:5px;">You bidded</span>');
                   $compile(el2)(scope);

@@ -3843,8 +3843,8 @@ table.table-mail tr td {
   float: left;
 }
 .ibox-title .label {
-  float: left;
-  margin-left: 4px;
+  /*float: left;*/
+  /*margin-left: 4px;*/
 }
 .ibox-tools {
   display: block;

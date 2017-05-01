@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
-use App\User;
-use App\Problem;
-use Auth;
 
 class HomeController extends Controller
 {
@@ -17,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -29,10 +26,4 @@ class HomeController extends Controller
     {
         return view('homeCenter');
     }
-
-    public function showAdminHome(){
-       
-        return view('homeCenter');
-    }
-
 }
