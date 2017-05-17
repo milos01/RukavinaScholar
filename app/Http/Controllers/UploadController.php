@@ -62,10 +62,11 @@ class UploadController extends Controller
 
             
             
-            $manipulatedFile = $this->fileManipulation('/uploads/solutions');
+            $manipulatedFile = $this->fileManipulation('/uploads/solutions', $request);
           
 
-            
+            $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
+
 
             $file = new File();
             $file->fileName = $manipulatedFile[0];

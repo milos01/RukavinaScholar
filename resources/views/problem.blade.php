@@ -34,9 +34,9 @@
                                             @if(count($problem->files) != 0 || count($problem->solutions) != 0)
                                                 @if(Auth::user()->is('regular'))
                                                     @if($problem->took == 2 && $problem->waiting == 0)
-                                                        @foreach($problem->solutions as $file)
-                                                            <p>Your files are ready...</p>
-                                                            <br/><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">{{$file->file->fileName}}</a>
+                                                        <p>Your files are ready...</p>
+                                                        @foreach($problem->solutions as $key=>$file)   
+                                                            <br/><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">Solution File {{$key+1}} </a>
                                                         @endforeach
                                                     @else
                                                         <p>You uploaded {{count($problem->files)}}

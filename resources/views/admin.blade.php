@@ -127,10 +127,10 @@
                     <li style="margin-top:-4px"><a href="/home/manage"><i class="fa fa-users"></i>
                         <span class="nav-label" id="mngu">Manage users</span></a></li>
 
-                    <li><a href="#"><i class="fa fa-area-chart"></i>
+                    <!-- <li><a href="#"><i class="fa fa-area-chart"></i>
                         <span class="nav-label">Statistics
                             <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:white; margin-right: 1px"></i></span>
-                        </span></a></li>
+                        </span></a></li> -->
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
                         <span class="nav-label">Assigned to me
                             @if($assigns != 0)

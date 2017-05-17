@@ -367,7 +367,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
         }).then(function successCallback(response) {
           $("#menuSearchItem"+userId+"plus"+problemId).hide();
         }, function errorCallback(response) {
-        alert('ne valja');
+          alert('ne valja');
         });
     }
   
@@ -378,15 +378,16 @@ app.controller('sendDirectMessageController', function($scope, $http){
   $scope.submitMessageForm = function(){
     var message2 = $scope.message;
     var id2 = $('#userID').val();
-    alert(message2 + ' ' + id2);
+    
     $http({
         method: 'POST',
         url: '/home/inbox/sendMessage',
         data: {message: message2, id: id2}
     }).then(function successCallback(response) {
-        alert('radi');
+        $('#sendMessageModal').modal('toggle');
+        $scope.message = "";
       }, function errorCallback(response) {
-        alert('ne valja');
+        
     });
   }
 });
@@ -483,16 +484,22 @@ app.filter('dateFilter', function($filter) {
 
 });
 
-app.controller('dropzoneSolutionController', function($scope, $element, $compile, selectedFilesService){
+app.controller('dropzoneSolutionController', function($scope, $element, $compile, selectedFilesService, removeFileS3Service){
   if($('.modUpdate').css('display') == 'none'){
     Dropzone.options.dropzoneForm2= {
       addRemoveLinks: true,
-      removedfile: function(file) {
-        alert(file.name);
+      acceptedFiles: ".png, .jpg, .jpeg, .zip",
+      removedfile: function(file){
+                      var _ref;
+                      var name = file.name; 
+                      selectedFilesService.selectedFiles.splice(file.name, 1);
+                      removeFileS3Service.remove(name).then(function (){});
+                      return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;        
+                      
       },
       paramName: "file", // The name that will be used to transfer the file
-      maxFilesize: 1024, // MB
-      dictDefaultMessage: "<strong>Drop files or click here to upload. Sol</strong>",
+      maxFilesize: 15, // MB
+      dictDefaultMessage: "<strong>Drop files or click here to upload. (max. 15MB)<br>Accepted files: .png, .jpg, .jpeg, .zip</strong>",
       accept: function(file, done) {
         selectedFilesService.selectedFiles.push(file.name);
         // var el = angular.element('<div class="container" style="margin-left:-15px;width:60px" ><i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i><p style="margin-left: 3px">test</p></div>');
@@ -517,12 +524,40 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
   },
     link: function (scope, element, attrs) {     
       if (loggedUser.role.name == 'regular') {
+        scope.showOffersManu = false;
+        var countDownDate = new Date(scope.problem.time_ends_at).getTime();
+          // Get todays date and time
+        var now = new Date().getTime();
+        // Find the distance between now an the count down date
+        var distance = countDownDate - now;
+        
         if (scope.problem.waiting == 0 && scope.problem.took == 0) {
-          var el1 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span>');
-          $compile(el1)(scope);
-          elm = element.find("#statusHolder"); 
-          elm.append(el1);
-     
+          if(distance < 0){
+            var min = 100000;
+            var minOffer;
+            if(scope.problem.offers.length > 0){
+              angular.forEach(scope.problem.offers, function(value, key) {
+                  if(value.price < min){
+                    min = value.price;
+                    minOffer = value;
+                  }
+              }); 
+            }
+            var el1 = angular.element('<span>Offer: $'+min+'</span>');
+            $compile(el1)(scope);
+            elm = element.find("#statusHolder"); 
+            elm.append(el1);
+
+            var el2 = angular.element('<a href="home/problem/'+scope.problem.id+'/payment/'+minOffer.id+'" style="position:absolute" class="btn btn-info btn-xs">Make payment</a>');
+            $compile(el2)(scope);
+            el = element.find("#paymentHolder"); 
+            el.append(el2);
+          }else{
+            var el1 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span>');
+            $compile(el1)(scope);
+            elm = element.find("#statusHolder"); 
+            elm.append(el1);
+          }
           }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
               var el1 = angular.element('<span><i class="fa fa-pencil" aria-hidden="true" style="color:black"></i> Under work...</span>');
               $compile(el1)(scope);
@@ -537,14 +572,15 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
               // var $dd = $('#dropDownMenu');
               // $dd.html('sadas');
               
-              var el3 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span>');
+              var el3 = angular.element('<span> No offers yet</span>');
               $compile(el3)(scope);
               elm3 = element.find("#statusHolder"); 
               elm3.append(el3);
               // $("#dropDownMenu").prop('disabled',true);
             }
           }else{
-            console.log(scope.problem.offers);
+            
+          
            
             if (scope.problem.offers.length == 0) {
               var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> No offers</button></span>');
@@ -731,15 +767,17 @@ app.controller('MyCtrldd', function($scope){
 
 app.controller('braintreeController', function($scope, $http){
 
-    $http({
-        method: 'GET',
-        url: '/home/api/application/generateToken',
-        data: {}
-    }).then(function successCallback(res) {
-        braintree.setup(res.data.token, 'dropin', {
-          container: 'dropin-container'
-        });
-    });
+    // $http({
+    //     method: 'GET',
+    //     url: '/home/api/application/generateToken',
+    //     data: {}
+    // }).then(function successCallback(res) {
+    //     braintree.setup(res.data.token, 'dropin', {
+    //       container: 'dropin-container'
+    //     });
+    // });
+
+
 });
 
 app.controller('reserPasswrdController', function($scope, $http){

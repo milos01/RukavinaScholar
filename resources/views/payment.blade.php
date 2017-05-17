@@ -13,7 +13,7 @@
     </li>                
 @stop
 @section('manageUsers')
-    {{$offer}}
+    <!-- {{$offer}} -->
     <div class="wrapper wrapper-content animated fadeInRight">
 
 
@@ -118,11 +118,13 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <form ng-controller="braintreeController">
-                                                        <div id="dropin-container"></div>
+                                                    <form method="POST" action="/home/api/application/makePayment" 
+                                                    ng-controller="braintreeController">
+                                                        <!-- <div id="dropin-container"></div> -->
                                                         <button class="btn btn-primary" type="submit" style="margin-top:50px">Make a payment!</button>
-                                                        <input type="hidden" id="slovlerId" value="{{$offer->personFrom->id}}">
-                                                        <input type="hidden" id="problemId" value="{{$offer->problem_id}}">
+                                                        <input type="hidden" name="sloId" value="{{$offer->personFrom->id}}">
+                                                        <input type="hidden" name="probId" value="{{$offer->problem_id}}">
+                                                        {{ csrf_field() }}
                                                     </form>
                                                 </div>
                                             </div>

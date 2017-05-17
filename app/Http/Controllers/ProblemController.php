@@ -131,7 +131,7 @@ class ProblemController extends Controller
         $problem->problem_description = $request->probDescription;
         $problem->took = 0;
         $problem->waiting = 1;
-        $problem->time_ends_at = $now->addMinutes(5);
+        $problem->time_ends_at = $now->addMinutes(env('PROBLEM_EXPIRE_MINUTES'));
         $problem->save();
 
 
@@ -177,7 +177,7 @@ class ProblemController extends Controller
     }
 
     public function getOneUserProblems(){
-        $userProblems = Problem::where('person_from', Auth::user()->id)->get();
+        $userProblems = Problem::with('offers')->where('person_from', Auth::user()->id)->get();
         // dd($userProblems);
         return $userProblems->toArray();
     }

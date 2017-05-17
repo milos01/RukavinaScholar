@@ -6,88 +6,7 @@
  <div class="wrapper wrapper-content animated fadeIn">
 
     <div class="p-w-md m-t-sm">
-                    <!-- <div class="row">
-
-                        <div class="col-sm-4">
-                            <h1 class="m-b-xs">
-                                26,900
-                            </h1>
-                            <small>
-                                Ex.
-                            </small>
-                            <div id="sparkline1" class="m-b-sm">
-
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <small class="stats-label">Pages / Visit</small>
-                                    <h4>236 321.80</h4>
-                                </div>
-
-                                <div class="col-xs-4">
-                                    <small class="stats-label">% New Visits </small>
-                                    <h4>46.11%</h4>
-                                </div>
-                                <div class="col-xs-4">
-                                    <small class="stats-label">Last week</small>
-                                    <h4>432.021</h4>
-                                </div>
-                            </div>
-
-                        </div>
-                         <div class="col-sm-4 pull-right">
-
-                            <div class="row m-t-xs">
-                                <div class="col-xs-6">
-                                    <h5 class="m-b-xs">Ex.</h5>
-                                    <h1 class="no-margins">160,000</h1>
-                                    <div class="font-bold text-navy">98% <i class="fa fa-bolt"></i></div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <h5 class="m-b-xs">Ex.</h5>
-                                    <h1 class="no-margins">42,120</h1>
-                                    <div class="font-bold text-navy">98% <i class="fa fa-bolt"></i></div>
-                                </div>
-                            </div>
-
-
-                            <table class="table small m-t-sm">
-                                <tbody>
-                                 <tr>
-                                    <td>
-                                        <strong>142</strong> Projects
-
-                                    </td>
-                                    <td>
-                                        <strong>22</strong> Messages
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>61</strong> Comments
-                                    </td>
-                                    <td>
-                                        <strong>54</strong> Articles
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>154</strong> Companies
-                                    </td>
-                                    <td>
-                                        <strong>32</strong> Clients
-                                    </td>
-                                </tr> 
-                                </tbody>
-                            </table>
-
-
-
-                        </div>
-
-                       
-                    </div> -->
+                   
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -115,27 +34,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <label class="control-label" for="price">Name</label>
-                                                <input type="text" id="price" name="price" value="" placeholder="Name" class="form-control">
-                                            </div>
-                                        </div> -->
-                                       <!--  <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <label class="control-label" for="quantity">Company</label>
-                                                <input type="text" id="quantity" name="quantity" value="" placeholder="Company" class="form-control">
-                                            </div>
-                                        </div> -->
-                                        <!-- <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label class="control-label" for="status">Status</label>
-                                                <select name="status" id="status" class="form-control">
-                                                    <option value="1" selected="">Completed</option>
-                                                    <option value="0">Pending</option>
-                                                </select>
-                                            </div>
-                                        </div> -->
+                                      
                                     </div>
 
                                     <div class="table-responsive" style="overflow-x: visible">
@@ -179,6 +78,7 @@
 
                                                             <div class="col-md-1 pull-right">
                                                                 <div class="ibox-tools">
+
                                                                     <a class="collapse-link" ng-click="collapseMotion(problem)">
                                                                         <span ng-show="problem.showUp" ng-cloak>
                                                                             <i class="fa fa-chevron-up"></i>
@@ -191,6 +91,7 @@
                                                                     </a>
 
                                                                 </div>
+                                                                <div id="paymentHolder" style="margin-top: -20px"></div>
                                                             </div>
 
                                                             <div class="col-md-2" style="">
@@ -199,12 +100,16 @@
                                                             </div>
 
                                                             <div class="col-md-2" style="">
-                                                                <div>
-                                                                    <%problem.timer%>
-                                                                </div>
+                                                                <span ng-bind="problem.timer"></span>
+                                                                
                                                             </div>
+                                                            <div class="col-md-2">
+                                                                
+                                                                
+                                                            </div>
+
                                                         </div>
-                                                        <div class="collapse container" uib-collapse="problem.isCollapsed" style="background: antiquewhite;width: 100%">
+                                                        <div class="collapse container" uib-collapse="problem.isCollapsed" style="background: antiquewhite;width: 100%" ng-show="showOffersManu" ng-cloak>
                                                             <!-- <a href="home/problem/<%offer.id%>"> -->
                                                             <div class="row" ng-repeat="offer in problem.offers" style="padding: 10px 5px">
 

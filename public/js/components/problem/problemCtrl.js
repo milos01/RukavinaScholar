@@ -15,6 +15,7 @@
     }).then(function(res){
         var loggedUser = res.data;
         if (res.data.role.name == "regular") {
+          $scope.showOffersManu = false;
           $http({
             method: 'GET',
             url: 'home/api/application/getOneUserProblems',
@@ -52,6 +53,7 @@
             
           });
         }else{
+        $scope.showOffersManu = true;
         $http({
             method: 'GET',
             url: 'home/api/application/getuserproblems',

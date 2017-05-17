@@ -1,12 +1,32 @@
 @extends('layouts.app')
-
+@section('homeLink')
+    <li class="hidden-sm hidden-xs pull-right" style="margin-left: 10px"><a href="{{ url('/') }}" class="link-light">Home</a></li>
+@endsection
 @section('content')
 <div class="container">
-    <div class="row">
+    <div class="row" style="padding: 30px">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
+            <hr/>
+            <div>
                 <div class="panel-body">
+                    <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">  
+                                <div>
+                                    <a href="#" type="button" class="btn btn-default" style="background: #4267b2; border-color:#4267b2; padding:10px 20px;width: 230px; width: 100%">Loging with Facebook</a>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-md-offset-4">
+                                <div>
+                                    <a href="#" type="button" class="btn btn-default" style="background: #1ab7ea; border-color:#1ab7ea; padding:10px 20px;width: 230px; width: 100%">Login with Twitter
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-md-offset-4">
+                                <div>
+                                    <a href="#" type="button" class="btn btn-default" style="background: #cf4332; border-color:#cf4332; padding:10px 20px;width: 230px; width: 100%">Login with Google</a>
+                                </div>
+                            </div>
+                        </div>
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {{ csrf_field() }}
 
@@ -54,7 +74,7 @@
                                     <i class="fa fa-btn fa-sign-in"></i> Login
                                 </button>
 
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
+                                <!-- <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a> -->
                             </div>
                         </div>
                     </form>
