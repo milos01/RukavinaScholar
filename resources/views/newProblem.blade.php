@@ -75,7 +75,7 @@
                             <div class="middle-box text-center animated fadeInDown" style="max-width: 600px;">
                                 <i class="fa fa-exchange fa-4x" aria-hidden="true"></i>
 
-                                <h4>Your problem is our concern now, all you need to do is sit, relax and wait for offers. After you receive offers you can choose one of them which suits you the best. </h4>
+                                <h4>Your problem is our concern now, all you need to do is sit, relax and wait for your best offer.</h4>
 
                                 <div class="error-desc" style="margin-bottom: 40px">
                                     <br/><a href="/home" class="btn btn-primary">Back home</a>

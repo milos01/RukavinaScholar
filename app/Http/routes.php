@@ -12,7 +12,10 @@
 */
     Route::get('/', ['middleware' => 'guest', function () {
     	return view('welcome');
+    	
 	}]);
+	Route::get('auth/{provider}', 'Auth\AuthController@redirectToProvider');
+	Route::get('auth/{provider}/callback', 'Auth\AuthController@handleProviderCallback');
     Route::get('docs', function(){
         return View::make('docs.home.index');
     });

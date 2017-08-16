@@ -12,7 +12,8 @@
         "fzaninotto/faker": "^1.6",
         "intervention/image": "^2.3",
         "netshell/paypal": "dev-master",
-        "braintree/braintree_php": "^3.18"
+        "braintree/braintree_php": "^3.18",
+        "laravel/socialite": "~2.0"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",

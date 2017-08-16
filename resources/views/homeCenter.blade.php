@@ -57,15 +57,17 @@
                                                                 <div style="" ng-bind="$index + 1"></div>
                                                             </div>
 
-                                                            <div class="col-md-1" style="overflow: hidden;">
+                                                            <div class="col-md-2" style="overflow: hidden;">
                                                                 <a href="home/problem/<%problem.id%>">
-                                                                    <div style="" ng-bind="problem.subject"></div>
+                                                                    <div>
+                                                                    <div ng-bind="problem.subject | limitTo: 6"></div>
+                                                                    </div>
                                                                 </a>
                                                             </div>
 
-                                                            <div class="col-md-1" style="overflow: hidden;">
-                                                                <div style="" ng-bind="problem.problem_description | limitTo:50"></div>
-                                                            </div>
+                                                           <!--  <div class="col-md-2" style="overflow: hidden;">
+                                                                <div style="" ng-bind="problem.problem_description | limitTo:5"><span>...</span>></div>
+                                                            </div> -->
 
                                                             <div class="col-md-1" style="overflow: hidden">
                                                                 <div style="" ng-bind="problem.problem_type"></div>
@@ -91,7 +93,7 @@
                                                                     </a>
 
                                                                 </div>
-                                                                <div id="paymentHolder" style="margin-top: -20px"></div>
+                                                                <div id="paymentHolder" style="margin-top: -20px;margin-left: -30px"></div>
                                                             </div>
 
                                                             <div class="col-md-2" style="">

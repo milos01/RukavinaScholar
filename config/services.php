@@ -39,4 +39,10 @@ return [
         'client_id' => 'AfhW_1MLgoxFF8FwLWjNK1b6YNXyjxJ8EfZqADiXI2ZqVbcmNXxn8_9ABlKnULiLhFpTxVoxdZ9W36TJ',
         'secret' => 'EN3pTXCZ3skEjR8FYG1JofMqWJRYQ_QER5iRS9peJbTuMSvNtTb6D07Mg-La5IDpr-nu7dsFzxah9xAz'
     ],
+    
+    'facebook' => [
+        'client_id'     => env('FACEBOOK_ID'),
+        'client_secret' => env('FACEBOOK_SECRET'),
+        'redirect'      => env('FACEBOOK_URL'),
+    ],
 ];

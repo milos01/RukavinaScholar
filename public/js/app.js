@@ -335,7 +335,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
             }else{
               for (var i = response.data.length - 1; i >= 0; i--) {
                   
-                  var divDiv = "<a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'><a href='/home/user/"+response.data[i].id+"'><img src='../../img/"+response.data[i].picture+"' width='30px' style='border-radius: 3px; margin-right:10px'></a>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
+                  var divDiv = "<a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'><img src='../../img/"+response.data[i].picture+"' width='30px' style='border-radius: 3px; margin-right:10px'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
     
                   angular.element(document.getElementById('responseDiv22')).append($compile(divDiv)($scope));
                   $scope.addMateFunction = function(userId, problemId){

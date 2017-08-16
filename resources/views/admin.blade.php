@@ -117,7 +117,7 @@
 						    </span>
                         </a>
                     </div>
-                    <div class="logo-element">KBK</div>
+                    <div class="logo-element">Rukhell</div>
                 </li>
                 <!-- Admin side menu -->
                 <li style="margin-top:-4px" ><a href="/home"><i class="fa fa-home"></i>
