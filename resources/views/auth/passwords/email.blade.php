@@ -15,6 +15,11 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    @if (session('warning'))
+                        <div class="alert alert-warning">
+                            {{ session('warning') }}
+                        </div>
+                    @endif
 
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
                         {{ csrf_field() }}

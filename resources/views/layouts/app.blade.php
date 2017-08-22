@@ -117,8 +117,9 @@
                                 <!-- header-top-first end -->
                                 
                             </div>
+                            
                             <div class="col-xs-10 col-sm-7">
-
+                                @section('topMenuItems')
                                 <!-- header-top-second start -->
                                 <!-- ================ -->
                                 <div id="header-top-second"  class="clearfix text-right">
@@ -131,8 +132,8 @@
                                            
                             
                                             @if (Auth::guest())
-                                                <li class="hidden-sm hidden-xs"><a href="{{ url('/login') }}" class="link-light">Login</a></li>
-                                                <li class="hidden-sm hidden-xs"><a href="{{ url('/register') }}" class="link-light">Register</a></li>
+                                                <li class="hidden-sm hidden-xs"><a href="{{ url('/login') }}" class="link-light">Log in</a></li>
+                                                <li class="hidden-sm hidden-xs"><a href="{{ url('/register') }}" class="link-light">Sign up</a></li>
                                             @else
                                                 <li class="dropdown">
                                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -148,7 +149,9 @@
                                     </nav>
                                 </div>
                                 <!-- header-top-second end -->
+                                @show
                             </div>
+
                         </div>
                     </div>
                 </div>

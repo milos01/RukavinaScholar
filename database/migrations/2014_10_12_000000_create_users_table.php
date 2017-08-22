@@ -15,7 +15,6 @@ class CreateUsersTable extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->timestamps();
         });
 
         Schema::create('users', function (Blueprint $table) {
@@ -29,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
+            $table->boolean('activated')->default(false);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
