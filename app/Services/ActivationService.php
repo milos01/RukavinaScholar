@@ -35,6 +35,7 @@ class ActivationService
         $link = route('user.activate', $token);
 
         $this->mailer->send('templates.mail.userActivationMail', ['link' => $link], function (Message $m) use ($user) {
+            $m->from('rukhell@example.com', 'Rukhell');
             $m->to($user->email)->subject("Activation mail for Rukhell");
         });
 

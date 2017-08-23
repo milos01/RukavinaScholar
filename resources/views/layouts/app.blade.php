@@ -40,8 +40,8 @@
         <link href="../css/css/animations.css" rel="stylesheet">
         <link href="../plugins/owlcarousel2/assets/owl.carousel.min.css" rel="stylesheet">
         <link href="../plugins/owlcarousel2/assets/owl.theme.default.min.css" rel="stylesheet">
-        <link href="../plugins/hover/hover-min.css" rel="stylesheet">      
-        
+        <link href="../plugins/hover/hover-min.css" rel="stylesheet">
+
         <!-- The Project's core CSS file -->
         <!-- Use css/rtl_style.css for RTL version -->
         <link href="../css/css/style.css" rel="stylesheet" >
@@ -52,9 +52,9 @@
         <link href="../css/css/typography-default.css" rel="stylesheet" >
         <!-- Color Scheme (In order to change the color scheme, replace the blue.css with the color scheme that you prefer)-->
         <link href="../css/css/skins/cool_green.css" rel="stylesheet">
-        
 
-        <!-- Custom css --> 
+
+        <!-- Custom css -->
         <link href="../css/css/custom.css" rel="stylesheet">
     </head>
 
@@ -69,14 +69,14 @@
         <!-- scrollToTop -->
         <!-- ================ -->
         <div class="scrollToTop circle"><i class="icon-up-open-big"></i></div>
-        
+
         <!-- page wrapper start -->
         <!-- ================ -->
         <div class="page-wrapper">
-        
+
             <!-- header-container start -->
             <div class="header-container">
-                
+
                 <!-- header-top start -->
                 <!-- classes:  -->
                 <!-- "dark": dark version of header top e.g. class="header-top dark" -->
@@ -93,10 +93,10 @@
                                         <li class="twitter"><a target="_blank" href="http://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
                                         <li class="googleplus"><a target="_blank" href="http://plus.google.com"><i class="fa fa-google-plus"></i></a></li>
                                         <li class="facebook"><a target="_blank" href="http://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
-                                        
+
                                     </ul> -->
                                     <ul class="list-inline" style="display: inline-flex;">
-                                        @yield('homeLink') 
+                                        @yield('homeLink')
                                     </ul>
                                     <div class="social-links hidden-lg hidden-md hidden-sm circle small">
                                         <div class="btn-group dropdown">
@@ -115,9 +115,9 @@
                                     </div>
                                 </div>
                                 <!-- header-top-first end -->
-                                
+
                             </div>
-                            
+
                             <div class="col-xs-10 col-sm-7">
                                 @section('topMenuItems')
                                 <!-- header-top-second start -->
@@ -129,8 +129,8 @@
                                             <li></li>
                                             <li></li>
                                             <li class="hidden-sm hidden-xs"></li>
-                                           
-                            
+
+
                                             @if (Auth::guest())
                                                 <li class="hidden-sm hidden-xs"><a href="{{ url('/login') }}" class="link-light">Log in</a></li>
                                                 <li class="hidden-sm hidden-xs"><a href="{{ url('/register') }}" class="link-light">Sign up</a></li>
@@ -156,9 +156,9 @@
                     </div>
                 </div>
                 <!-- header-top end -->
-                
-                
-        
+
+
+
             <!-- banner start -->
             <!-- ================ -->
             @yield('content')
@@ -284,7 +284,7 @@
 
             </footer>
             <!-- footer end -->
-            
+
         </div>
         <!-- page-wrapper end -->
 

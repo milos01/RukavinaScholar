@@ -11,20 +11,20 @@ use Auth,DB;
 class InboxController extends Controller
 {
     public function showInbox(){
-    	
+
     	$myMessages = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
         $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
         $count = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++; 
+               $count++;
             }
         }
     	return view('inbox')->with('myMessages', $myMessages)->with('myMessagesCount', $count);
     }
 
     public function showUsersMessages($id){
-        $toUser = User::findorFail($id);
+      $toUser = User::findorFail($id);
     	$user = Auth::user();
     	if ($id < $user->id) {
     		$min = $id;
@@ -33,12 +33,12 @@ class InboxController extends Controller
     	   $min = $user->id;
     	   $max = $id;
         }
-        
+
     	$myMessages = Auth::user()->fromMessages()->where('user_to', Auth::id())->orWhere('group_start',$min)->where('group_end', $max)->orderBy('pivot_id','ASC')->get();
         if ($myMessages == "[]") {
             abort(404);
         }
-        
+
         if(Auth::id() == $myMessages->last()->pivot->user_to){
     	   $myMessages->last()->pivot->read = 1;
     	   $myMessages->last()->pivot->save();
@@ -48,10 +48,10 @@ class InboxController extends Controller
 
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++; 
+               $count++;
             }
         }
-    	
+
     	return view('messages')->with('user', $toUser)->with('myMessages', $myMessages)->with('myMessagesCount', $count);
     }
 
@@ -66,7 +66,7 @@ class InboxController extends Controller
 	    	$min = $userId;
 	    	$max = Auth::id();
     	}
-        
+
     	$user = Auth::user();
         $changeLastMessage = $user->fromMessages()->where('group_start',$min)->where('group_end',$max)->where('last',1)->orWhere('user_to', Auth::id())->where('group_start',$min)->where('group_end',$max)->where('last',1)->get();
         if($changeLastMessage != '[]'){
@@ -74,8 +74,8 @@ class InboxController extends Controller
             $changeLastMessage->last()->pivot->save();
         }
     	$user->fromMessages()->attach($userId, array('message' => $message, 'read' => 0, 'group_start' => $min, 'group_end' => $max, 'last' => 1));
-    	
-    	 $variable = array( 'variable1' => $message, 
+
+    	 $variable = array( 'variable1' => $message,
                         'variable2' => $userId );
     	return json_encode($variable);
     }
