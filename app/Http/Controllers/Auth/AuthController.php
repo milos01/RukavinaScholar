@@ -56,12 +56,24 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
+        $messages = [
+          'password.regex' => 'The :attribute must contain at least one capitar letter and number',
+        ];
+
+        $rules = [
+          'name' => 'required|max:255',
+          'last_name' => 'required|max:255',
+          'username' => 'required|max:255',
+          'email' => 'required|email|max:255|unique:users',
+          'password' => [
+            'required',
+            'min:6',
+            'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z]).+$/',
+            'confirmed'],
+        ];
+        return Validator::make($data, $rules, $messages);
+
+
     }
 
     /**
@@ -76,6 +88,7 @@ class AuthController extends Controller
         return User::create([
             'name' => $data['name'],
             'lastName' => $data['last_name'],
+            'username' => $data['username'],
             'role_id' => 1,
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
@@ -95,7 +108,7 @@ class AuthController extends Controller
     /**
      * Obtain the user information from provider.  Check if the user already exists in our
      * database by looking up their provider_id in the database.
-     * If the user exists, log them in. Otherwise, create a new user then log them in. After that 
+     * If the user exists, log them in. Otherwise, create a new user then log them in. After that
      * redirect them to the authenticated users homepage.
      *
      * @return Response

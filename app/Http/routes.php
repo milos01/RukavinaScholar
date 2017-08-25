@@ -12,7 +12,7 @@
 */
     Route::get('/', ['middleware' => 'guest', function () {
     	return view('welcome');
-    	
+
 	}]);
 	Route::get('auth/{provider}', 'Auth\AuthController@redirectToProvider');
 	Route::get('auth/{provider}/callback', 'Auth\AuthController@handleProviderCallback');
@@ -63,7 +63,7 @@
 		Route::get('inbox', 'InboxController@showInbox');
 		Route::get('inbox/{id}', 'InboxController@showUsersMessages');
 		Route::post('inbox/sendMessage', 'InboxController@sendMessage');
-		
+
 		//Admin routes
 		Route::group(['middleware' => 'admin'], function(){
 
@@ -83,11 +83,18 @@
 
 		//Braintree routes
 		Route::get('api/application/generateToken', 'BraintreeController@generateToken');
-		
-		
+
+
 	});
 
 Route::auth();
 Route::get('user/activation/{token}', 'Auth\AuthController@activateUser')->name('user.activate');
+Route::get('privacy_policy', function(){
+  return view('privacyPolicy');
+})->name('privacyPolicy');
+
+Route::get('customer_agreement', function(){
+  return view('customerAgreement');
+})->name('customerAgreement');
 
 Route::get('/home', 'HomeController@index');

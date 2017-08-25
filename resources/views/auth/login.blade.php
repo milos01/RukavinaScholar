@@ -1,8 +1,11 @@
 @extends('layouts.app')
-@section('homeLink')
-    <li class="hidden-sm hidden-xs pull-right" style="margin-left: 10px"><a href="{{ url('/') }}" class="link-light">Home</a></li>
-@endsection
-@section('topMenuItems')
+@section('topMenu')
+@parent
+  @section('homeLink')
+      <li class="hidden-sm hidden-xs pull-right" style="margin-left: 10px"><a href="{{ url('/') }}" class="link-light">Home</a></li>
+  @endsection
+  @section('topMenuItems')
+  @endsection
 @endsection
 @section('content')
             <!-- ================ -->
@@ -28,9 +31,9 @@
                                     {{ csrf_field() }}
                                     <div class="form-group has-feedback">
                                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                            <label for="inputUserName" class="col-sm-3 control-label">User Name</label>
+                                            <label for="inputUserName" class="col-sm-3 control-label">Username</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="inputUserName" placeholder="Username" name="email" value="{{ old('email') }}">
+                                                <input type="text" class="form-control" id="inputUserName" placeholder="Username or email" name="email" value="{{ old('email') }}">
                                                 <i class="fa fa-user form-control-feedback"></i>
                                                 @if ($errors->has('email'))
                                                     <span class="help-block">
