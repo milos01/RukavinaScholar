@@ -1,0 +1,21 @@
+{
+  "name": "rukhell",
+  "homepage": "https://github.com/milos01/RukavinaScholar",
+  "authors": [
+    "milos01 <milosa942@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-summernote": "^0.8.1",
+    "summernote": "^0.8.7"
+  }
+}

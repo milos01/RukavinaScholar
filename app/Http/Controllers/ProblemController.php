@@ -14,9 +14,11 @@ use Crypt;
 use Carbon\Carbon;
 class ProblemController extends Controller
 {
+	protected $now;
 	public function __construct()
     {
         // $this->middleware('auth');
+				$this->now = Carbon::now();
     }
 
     public function showProblem($id){
@@ -25,7 +27,7 @@ class ProblemController extends Controller
         $count = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++; 
+               $count++;
             }
         }
     	return view('problem')->with('problem', $problem)->with('myMessagesCount', $count);
@@ -37,7 +39,7 @@ class ProblemController extends Controller
         $count = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++; 
+               $count++;
             }
         }
         return view('myProblem')->with('problem', $problem)->with('myMessagesCount', $count);
@@ -49,7 +51,7 @@ class ProblemController extends Controller
     	$problem->took = 1;
         $problem->main_slovler = $luser->id;
     	$problem->save();
-        
+
 
     	return redirect('/home');
     }
@@ -63,7 +65,7 @@ class ProblemController extends Controller
 
         return json_encode($allProblems);
     }
-   
+
 
     public function assigned(){
     	$authId = Auth::id();
@@ -73,7 +75,7 @@ class ProblemController extends Controller
         $count = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++; 
+               $count++;
             }
         }
 
@@ -94,7 +96,7 @@ class ProblemController extends Controller
         $userId = $request->input('userId');
         $problemId = $request->input('problemId');
         $user = User::findorFail($userId);
-    
+
         $user->problems()->attach($problemId);
         return $user;
     }
@@ -104,9 +106,9 @@ class ProblemController extends Controller
         $userId = $request->input('userId');
 
         $user = User::findorFail($userId);
-        
-        $user->problems()->detach($problemId);     
-        
+
+        $user->problems()->detach($problemId);
+
     }
 
     public function newProblem(){
@@ -114,14 +116,13 @@ class ProblemController extends Controller
         $count = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++; 
+               $count++;
             }
         }
         return view('newProblem')->with('myMessagesCount', $count);
     }
 
     public function newproblemsubmit(Request $request){
-        $now = Carbon::now();
         $user = Auth::user()->id;
         $problem = new Problem();
         $problem->subject = $request->probName;
@@ -131,7 +132,7 @@ class ProblemController extends Controller
         $problem->problem_description = $request->probDescription;
         $problem->took = 0;
         $problem->waiting = 1;
-        $problem->time_ends_at = $now->addMinutes(env('PROBLEM_EXPIRE_MINUTES'));
+        $problem->time_ends_at = $this->now->addMinutes(env('PROBLEM_EXPIRE_MINUTES'));
         $problem->save();
 
 
@@ -142,7 +143,7 @@ class ProblemController extends Controller
             $fileExt = substr($value, ++$fp, strlen($value));
             $fileName = substr($value, 0, $findExtension);
             $rightNow = Auth::id();
-         
+
 
             $file = new File();
             $file->fileName = hash('md5', $fileName.'_'.$rightNow) . '.' . $fileExt;
@@ -154,12 +155,20 @@ class ProblemController extends Controller
             $probFile->save();
         }
 
-        
+
         // $file->files()->associate($user);
 
-        dd($problem->files);
+        // dd($problem->files);
     }
 
+		public function updateProblemExpireTime($id){
+			$problem = Problem::findOrFail($id);
+			$problem->time_ends_at = $this->now->addMinutes(env('PROBLEM_EXPIRE_MINUTES'));
+			$problem->waiting = 1;
+			$problem->save();
+			return back();
+
+		}
     public function problemDownload($id){
         $s3 = Storage::disk('s3');
         // dd($s3->url('test.txt'));
@@ -187,4 +196,10 @@ class ProblemController extends Controller
 
         return $problem->toArray();
     }
+
+		public function resetWaiting($id){
+			$problem = Problem::findOrFail($id);
+			$problem->waiting = 0;
+			$problem->save();
+		}
 }

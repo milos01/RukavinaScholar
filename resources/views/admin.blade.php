@@ -12,9 +12,8 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
 
     <!-- Styles -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../../../css/bootstrap.min.css"
-          rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
     <link href="../../../../font-awesome/css/font-awesome.css"
           rel="stylesheet">
 
@@ -29,9 +28,11 @@
     <link href="../../../../css/plugins/dropzone/dropzone.css" rel="stylesheet">
     <!-- Toastr style -->
     <link href="../../../../css/plugins/toastr/toastr.min.css" rel="stylesheet">
-    <link href="../../../../css/tooltip.css" rel="stylesheet">
+    <!-- <link href="../../../../css/tooltip.css" rel="stylesheet"> -->
     <!-- Sweet Alert -->
     <link href="../../../../css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="../../../../bower_components/summernote/dist/summernote.css" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Lato';
@@ -62,8 +63,8 @@
           opacity:1;
         }
         .arrow-up {
-          width: 10px; 
-          height: 10px; 
+          width: 10px;
+          height: 10px;
           border-left: 10px solid transparent;
           border-right: 10px solid transparent;
           position: absolute;
@@ -73,8 +74,8 @@
         }
 
         .arrow-up2 {
-          width: 0; 
-          height: 0; 
+          width: 0;
+          height: 0;
           border-left: 9px solid transparent;
           border-right: 9px solid transparent;
           position: absolute;
@@ -102,11 +103,11 @@
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-						<span> 
-                        
+						<span>
+
                         <img alt="image" class="img-circle"
                                     src="../../../../img/{{Auth::user()->picture}}" width="53px" height="53px" />
-                                    
+
 						</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
                                     class="clear"> <span class="block m-t-xs"> <strong
                                             class="font-bold">
@@ -123,7 +124,7 @@
                 <li style="margin-top:-4px" ><a href="/home"><i class="fa fa-home"></i>
                         <span class="nav-label" id="mngu">Home</span></a></li>
                 @if(Auth::user()->is('admin'))
-                    
+
                     <li style="margin-top:-4px"><a href="/home/manage"><i class="fa fa-users"></i>
                         <span class="nav-label" id="mngu">Manage users</span></a></li>
 
@@ -135,24 +136,24 @@
                         <span class="nav-label">Assigned to me
                             @if($assigns != 0)
                                <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white">{{$assigns}}</span>
-                            @endif 
+                            @endif
                         </span>
                         </a>
                     </li>
 
                 @elseif(Auth::user()->is('moderator'))
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
-                        <span class="nav-label">Assigned to me 
+                        <span class="nav-label">Assigned to me
                             @if($assigns != 0)
                                <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white">{{$assigns}}</span>
-                            @endif 
+                            @endif
                         </span></a></li>
-                    
+
                 @elseif(Auth::user()->is('regular'))
                     <li style="margin-top:-4px"><a href="/home/newproblem"><i class="fa fa-plus"></i>
                         <span class="nav-label" id="mngu">Submit problem</span></a></li>
                 @endif
-                 
+
                     <li style="margin-top:-4px"><a href="/home/edit"><i class="fa fa-cog"></i>
                         <span class="nav-label">Edit profile</span></a></li>
 
@@ -162,9 +163,9 @@
 
                             @if($myMessagesCount != 0)
                                <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white">{{$myMessagesCount}}</span>
-                            @endif  
+                            @endif
                             </span>
-                            
+
                         </a>
                     </li>
             </ul>
@@ -184,7 +185,7 @@
                             <input type="text" placeholder="Search for people..." class="form-control" name="top-search" id="top-search" ng-model="keywords" ng-change="search2()">
                         </div>
                     </form>
-                    
+
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li><a href="/logout"> <i class="fa fa-power-off" aria-hidden="true"></i> Logout
@@ -193,19 +194,19 @@
 
             </nav>
             <div>
-           
+
                 <div class="" id="responseDiv2" style="width:250px;max-height:200px;border:1px solid gray;position: absolute;margin-top:-5px;display:none;margin-left:70px;z-index: 999;background-color: white;z-index:9999;border-radius:2px;box-shadow: 0px 1px 3px #888888;">
                      <div class='arrow-up'></div>
                      <div class='arrow-up2'></div>
                      <div id="responseDiv22">
-                         
+
                      </div>
-                      
+
                 </div>
             </div>
             <!-- <div class='arrow-example arrow-border-example'></div><div class='arrow-example'></div> -->
         </div>
-        
+
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
                 <h2><b>
@@ -218,13 +219,13 @@
                 </ol>
             </div>
         </div>
-        
+
         @yield('manageUsers')
     </div>
     <!-- Mainly scripts -->
-    
+
     <script src="../../../../js/jquery-2.1.1.js"></script>
-    <script src="../../../../js/bootstrap.min.js"></script>
+
     <script
             src="../../../../js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script
@@ -232,8 +233,7 @@
 
     <!-- Flot -->
     <script src="../../../../js/plugins/flot/jquery.flot.js"></script>
-    <script
-            src="../../../../js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <!-- <script src="../../../../js/plugins/flot/jquery.flot.tooltip.min.js"></script> -->
     <script
             src="../../../../js/plugins/flot/jquery.flot.spline.js"></script>
     <script
@@ -257,6 +257,7 @@
 
     <!-- jQuery UI -->
     <script src="../../../../js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../../../../js/bootstrap.min.js"></script>
 
     <!-- Jvectormap -->
     <script
@@ -279,8 +280,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
     <!-- Image cropper -->
     <script src="../../../../js/plugins/cropper/cropper.min.js"></script>
+    <!-- <script type="text/javascript" src="../../../../bower_components/angular-summernote/dist/angular-summernote.min.js"></script> -->
 
-   
     <script src="../../../../js/plugins/sweetalert/sweetalert.min.js"></script>
     <script src="../../../../js/plugins/dropzone/dropzone.js"></script>
     <!-- Socket.IO -->
@@ -291,9 +292,14 @@
     <!-- Sweet alert -->
     <script src="../../../../js/plugins/sweetalert/sweetalert.min.js"></script>
     <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="../../../../bower_components/summernote/dist/summernote.min.js">
+
+    </script>
+    <script type="text/javascript" src="../../../../bower_components/angular-summernote/dist/angular-summernote.js"></script>
     <script src="../../../../js/app.js"></script>
     <script src="../../../../js/components/user/userService.js"></script>
     <script src="../../../../js/components/problem/problemCtrl.js"></script>
+
     @section('jsSocket')
 
     @show
@@ -301,6 +307,8 @@
     <script src="../../../../js/plugins/iCheck/icheck.min.js"></script>
         <script>
             $(document).ready(function () {
+              $('[data-toggle="tooltip"]').tooltip();
+               $("[rel='tooltip']").tooltip();
                 $('.i-checks').iCheck({
                     checkboxClass: 'icheckbox_square-green',
                     radioClass: 'iradio_square-green',
@@ -310,11 +318,9 @@
         </script>
     <script>
 
-        $(document).ready(function() {
-
-
-
-$('[data-toggle="tooltip"]').tooltip(); 
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+        $("[rel='tooltip']").tooltip();
 
                     var $image = $(".image-crop > img")
             $($image).cropper({
@@ -324,7 +330,7 @@ $('[data-toggle="tooltip"]').tooltip();
                     // Output the result data for cropping image.
                 }
             });
-            
+
             var $inputImage = $("#inputImage");
             if (window.FileReader) {
                 $inputImage.change(function() {
@@ -562,7 +568,7 @@ $('[data-toggle="tooltip"]').tooltip();
                     });
                 });
     </script>
-   
+
 </body>
 </body>
 </html>

@@ -1,8 +1,10 @@
 @extends('layouts.app')
-@section('homeLink')
+@section('topMenu')
+  @section('homeLink')
 
-@endsection
-@section('topMenuItems')
+  @endsection
+  @section('topMenuItems')
+  @endsection
 @endsection
 @section('content')
   <div class="main-container parallax jumbotron border-clear light-translucent-bg text-center margin-clear" style="background-image:url('images/fullscreen-bg.jpg');">

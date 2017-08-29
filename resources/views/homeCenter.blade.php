@@ -6,7 +6,7 @@
  <div class="wrapper wrapper-content animated fadeIn">
 
     <div class="p-w-md m-t-sm">
-                   
+
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -34,7 +34,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                      
+
                                     </div>
 
                                     <div class="table-responsive" style="overflow-x: visible">
@@ -47,11 +47,11 @@
                                                 </div>
 
 
-                                                
+
 
                                                 <div ng-repeat="problem in problems | filter:tookFilter | filter: search | filter:colourFilter" problem-show-directive problem="problem" user="{{Auth::id()}}" ng-cloak>
 
-                                                    <div class="ibox" > 
+                                                    <div class="ibox" >
                                                         <div class="ibox-title" style="background: #f9f9f9">
                                                             <div class="col-md-1" style="">
                                                                 <div style="" ng-bind="$index + 1"></div>
@@ -93,7 +93,7 @@
                                                                     </a>
 
                                                                 </div>
-                                                                <div id="paymentHolder" style="margin-top: -20px;margin-left: -30px"></div>
+                                                                <div ng-show="showAcceptDecline<%problem.id%>" style="margin-top: -20px;margin-left: -30px" ng-cloak>Acc/Dec</div>
                                                             </div>
 
                                                             <div class="col-md-2" style="">
@@ -103,11 +103,11 @@
 
                                                             <div class="col-md-2" style="">
                                                                 <span ng-bind="problem.timer"></span>
-                                                                
+
                                                             </div>
                                                             <div class="col-md-2">
-                                                                
-                                                                
+
+
                                                             </div>
 
                                                         </div>
@@ -124,7 +124,7 @@
                                                              <div class="col-md-5" style="background: #fdf0e0;">
 
                                                                 Offer description: <%offer.description | limitTo:50%>
-                                                                
+
                                                             </div>
 
                                                             <div class="col-md-1 pull-right" style="">
@@ -133,7 +133,7 @@
                                                          <div class="col-md-2 pull-right" style="">
                                                              <div style="" ng-bind="offer.created_at | dateFilter: 'MM/dd/yyyy @ h:mma'"></div>
                                                          </div>
-                                                     </div> 
+                                                     </div>
                                                      <!-- </a> -->
                                                  </div>
                                              </div>

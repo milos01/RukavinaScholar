@@ -36,6 +36,8 @@
 		//Problem routes
 		Route::get('problem/{id}', 'ProblemController@showProblem');
 		Route::get('problem/{id}/download', 'ProblemController@problemDownload');
+    Route::get('problem/{id}/reset', 'ProblemController@updateProblemExpireTime');
+    Route::put('api/problem/{id}/resetWaiting', 'ProblemController@resetWaiting');
 		Route::get('myproblem/{id}', 'ProblemController@showMyProblem');
 		Route::get('takeProblem/{id}', 'ProblemController@takeProblem');
 		Route::get('assigned', 'ProblemController@assigned');

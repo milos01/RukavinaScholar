@@ -1,6 +1,6 @@
 
 (function (angular) {
-  angular.module('kbkApp').controller('showProblemController', function($scope, $http, $interval){
+  angular.module('kbkApp').controller('showProblemController', function($scope, $http, $interval, $parse){
     $scope.loading = true;
     $scope.limit = 20;
     $scope.colourIncludes = [];
@@ -24,9 +24,20 @@
             },
             data: {}
           }).then(function(res){
-          
+
           $scope.problems = res.data;
-         
+          //show accept and decline
+          for (var i = res.data.length - 1; i >= 0; i--) {
+            console.log(res.data[i].offers.length);
+            if(res.data[i].offers.length > 0 && res.data[i].waiting === 0 && res.data[i].took === 0){
+              var model = $parse("showAcceptDecline"+res.data[i].id);
+
+              // Assigns a value to it
+              model.assign($scope, true);
+              // $scope.showAcceptDecline+res.data[i].id = true;
+            }
+          }
+
           $scope.includeColour = function(colour) {
               var i = $.inArray(colour, $scope.colourIncludes);
               if (i > -1) {
@@ -37,12 +48,12 @@
            }
 
            $scope.colourFilter = function(fruit) {
-             
+
               if ($scope.colourIncludes.length > 0) {
                   if ($.inArray(fruit.problem_type, $scope.colourIncludes) < 0)
                       return;
               }
-              
+
               return fruit;
             }
 
@@ -50,7 +61,7 @@
               return problem;
             }
 
-            
+
           });
         }else{
         $scope.showOffersManu = true;
@@ -62,9 +73,9 @@
             },
             data: {}
         }).then(function(res){
- 
+
+
           $scope.problems = res.data;
-          
           // for (i = res.data.length - 1; i >= 0; i--) {
           //   console.log(i);
           //   c = i;
@@ -78,30 +89,23 @@
           //   }).then(function(offers){
           //     console.log(c);
           //     // for (var i = res.data.length - 1; i >= 0; i--) {
-                
+
           //      // res.data[i].offersList = offers.data;
           //     // }
-          //   });   
+          //   });
           // }
 
           for (var i = res.data.length - 1; i >= 0; i--) {
-            
-            
-
-
-
-
-
             res.data[i].isCollapsed = true;
-            
+
             if(res.data[i].offers.length === 0){
               res.data[i].showDown = false;
               res.data[i].showUp = false;
             }else{
               res.data[i].showDown = true;
             }
-            
-            
+
+
           }
           var x = $interval(function() {
 
@@ -110,16 +114,16 @@
                 for (var i = res.data.length - 1; i >= 0; i--) {
 
                   var countDownDate = new Date(res.data[i].time_ends_at).getTime();
-                  
-                  
-                  
+
+
+
                   // Get todays date and time
                   var now = new Date().getTime();
 
                   // Find the distance between now an the count down date
                   var distance = countDownDate - now;
                   doneCounters[i] = distance;
-                  console.log('ch');
+
 
                   // Time calculations for days, hours, minutes and seconds
                   var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -129,14 +133,27 @@
 
                   // Display the result in the element with id="demo"
                   res.data[i].timer = minutes + "m " + seconds + "s ";
-                  
+
                   if(distance < 0){
-                    res.data[i].timer = "Expired"
+                    res.data[i].timer = "Expired";
+                    if(res.data[i].waiting !== 0){
+
+                      // Set waiting on false(0)
+                      $http({
+                          method: 'PUT',
+                          url: 'home/api/problem/'+res.data[i].id+'/resetWaiting',
+                          headers: {
+                              "Content-Type": "application/json"
+                          },
+                          data: {}
+                      });
+                    }
                   }
-                  //If the count down is finished, write some text 
-                
+
+                  //If the count down is finished, write some text
+
                 }
-                
+
                 var checkClearInterval = false;
                 for (var i = doneCounters.length - 1; i >= 0; i--) {
                   if (doneCounters[i] > 0) {
@@ -146,6 +163,7 @@
                 if(!checkClearInterval){
                   $interval.cancel(x);
                 }
+
               }, 1000);
 
           $scope.includeColour = function(colour) {
@@ -158,12 +176,12 @@
            }
 
            $scope.colourFilter = function(fruit) {
-             
+
               if ($scope.colourIncludes.length > 0) {
                   if ($.inArray(fruit.problem_type, $scope.colourIncludes) < 0)
                       return;
               }
-              
+
               return fruit;
             }
             $scope.tookFilter = function(problem){
@@ -173,14 +191,16 @@
             }
 
 
+
+
           // console.log($scope.colourIncludes);
         });
 
-        
-      
-        
-    
-         
+
+
+
+
+
       }
     }).finally(function() {
       // called no matter success or failure
@@ -194,17 +214,17 @@
           problem.showDown = true;
           problem.showUp = false;
         }else{
-          
+
 
           problem.showDown = false;
           problem.showUp = true;
         }
-    
+
     }
-    
+
 
     // $scope.loadMore = function() {
-    //   // var increamented = 
+    //   // var increamented =
     //   alert("uso");
     //   $scope.limit += 10;
     //   // $scope.limit = increamented > $scope.problems.length ? $scope.problems.length : increamented;

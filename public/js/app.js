@@ -1,10 +1,10 @@
 
 (function (angular) {
-app = angular.module('kbkApp', ['ngAnimate', 'ui.bootstrap'], function($interpolateProvider) {
+app = angular.module('kbkApp', ['ngAnimate', 'ui.bootstrap', 'summernote'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
 
-        
+
  });
 
 app.factory('alertSerice', function() {
@@ -40,7 +40,7 @@ app.controller('mainController', function($scope, loggedUserService){
   loggedUserService.user().then(function(d) {
     loggedUser = d;
   });
-  
+
 });
 // socket = io('http://localhost:3000');
 if($(".chDiscussion").is(":visible")){
@@ -68,7 +68,7 @@ app.controller('sendMessageController', function($scope, $http,$compile, $elemen
         var elmhtml = '<div class="chat-message left" style="width:100%" id="leftUserMessage"><img class="message-avatar" src="../../../img/'+picture+'" alt="" style="border-radius: 50%"><div class="message"><a class="message-author" href="#">'+ fname +' '+ lname +'</a><span class="message-date">'+mm+'/'+dd+'/'+yyyy+'</span><span class="message-content" id="messageBox">'+response.data.variable1+'</span></div></div>';
         var el2 = angular.element(elmhtml);
         $compile(el2)($scope);
-        elm = $element.find("#showNewMessage"); 
+        elm = $element.find("#showNewMessage");
         // console.log(elm);
         // elm01 = elm.find("#messageBox")
         elm.append(el2);
@@ -86,7 +86,7 @@ app.controller('sendMessageController', function($scope, $http,$compile, $elemen
         $cont = $(".chDiscussion");
         $cont[0].scrollTop = $cont[0].scrollHeight;
         // socket.emit('messageNotify', {email: email});
-        
+
 
   		}, function errorCallback(response) {
     		alert('ne valja');
@@ -95,7 +95,7 @@ app.controller('sendMessageController', function($scope, $http,$compile, $elemen
 });
 
 app.controller('downloadController', function($scope){
-  
+
 });
 // socket.on('newMessageN', function (data) {
 //           console.log("radiiiiiii");
@@ -133,7 +133,7 @@ app.controller('dropzoneImageController', function($scope, selectedFilesService)
         console.log(selectedFilesService.selectedFiles.length)
         // var el = angular.element('<div class="container pull-left" style="margin-left:-15px;width:60px" ><i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i><p style="margin-left: 3px">test</p></div>');
         // $compile(el)($scope);
-        // elm = $element.find("#filesHolder"); 
+        // elm = $element.find("#filesHolder");
         // console.log(elm);
         // elm.append(el);
         if (file.name == "a.jpg") {
@@ -156,7 +156,7 @@ app.directive('capitalizeFirst', function($parse) {
            if(capitalized !== inputValue) {
               modelCtrl.$setViewValue(capitalized);
               modelCtrl.$render();
-            }         
+            }
             return capitalized;
          }
          modelCtrl.$parsers.push(capitalize);
@@ -195,7 +195,7 @@ app.directive('myOffer', function(loggedUserService) {
           scope.offer.isMine = 'Your offer:';
         }
       });
-      
+
     }
   };
 });
@@ -210,7 +210,7 @@ app.directive("passwordVerify", function() {
         link: function(scope, element, attrs, ctrl) {
             scope.$watch(function() {
                 var combined;
-                
+
                 if (scope.passwordVerify || ctrl.$viewValue) {
                     combined = scope.passwordVerify + '_' + ctrl.$viewValue;
                 }
@@ -251,13 +251,13 @@ $(document).mouseup(function (e)
     }
 });
 
-app.controller('userSearchController',function($scope, $compile, $http, searchService, searchService2){ 
+app.controller('userSearchController',function($scope, $compile, $http, searchService, searchService2){
     var problemId = $("#problemId").val();
-     
+
     $scope.search = function(){
 
         searchService.search($scope.keywords).then(function(response){
-          
+
           var check001 = false;
           if( !$("#searchInput").val() ){
               $("#resDiv").fadeOut(150);
@@ -269,23 +269,23 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
 
                 $("#resDiv").html("<div style='border:1px solid #a9a9a9;'><div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div></div>");
             }else{
-              
+
               for (var i = response.data.length - 1; i >= 0; i--) {
                 var check = false;
                 angular.forEach(response.data[i].problems, function(value, key) {
                   if(!check){
                     console.log(value.pivot);
                     if (problemId == value.pivot.problem_id) {
-                       
+
                         check = true;
                         check001 = true;
                     }
                   }
                 });
                 if (!check) {
-                  
+
                   var divDiv = "<div style='border:1px solid #a9a9a9;'><div style='padding:10px' class='searchResults' ng-click='addMateFunction("+response.data[i].id+","+problemId+")'><a href='/home/user/"+response.data[i].id+"'><img src='../../img/"+response.data[i].picture+"' width='30px' style='border-radius: 3px; margin-right:10px'></a>"+response.data[i].name+" "+response.data[i].lastName+"</div></div>";
-    
+
                   angular.element(document.getElementById('resDiv')).append($compile(divDiv)($scope));
                   $scope.addMateFunction = function(userId, problemId){
                       $("#resDiv").fadeOut(150);
@@ -304,24 +304,24 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                           alert('ne valja');
                       });
                   };
-                  
-            
+
+
                   }
-                  
+
               }
-            
-             
+
+
             };
 
             if (check001) {
-              // $("#responseDiv").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");    
+              // $("#responseDiv").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
             }
           }
         });
     };
 
     $scope.search2 = function(){
-            
+
         searchService2.search($scope.keywords).then(function(response){
             if( !$("#top-search").val() ){
               $("#responseDiv2").fadeOut(50);
@@ -334,9 +334,9 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                 $("#responseDiv22").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
             }else{
               for (var i = response.data.length - 1; i >= 0; i--) {
-                  
+
                   var divDiv = "<a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'><img src='../../img/"+response.data[i].picture+"' width='30px' style='border-radius: 3px; margin-right:10px'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
-    
+
                   angular.element(document.getElementById('responseDiv22')).append($compile(divDiv)($scope));
                   $scope.addMateFunction = function(userId, problemId){
                       $http({
@@ -348,10 +348,10 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
                           // var item = $("#menuSearchItem").text("aa");
                           $("#itemsHolder").append("<div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<i class='fa fa-times' aria-hidden='true' style='cursor:pointer;float:right' ng-click='deleteWorker("+problemId+","+userId+")'></i></div>");
                       }, function errorCallback(response) {
-                          
+
                       });
                   };
-                  
+
               }
             };
           }
@@ -370,7 +370,7 @@ app.controller('userSearchController',function($scope, $compile, $http, searchSe
           alert('ne valja');
         });
     }
-  
+
 
 });
 
@@ -378,7 +378,7 @@ app.controller('sendDirectMessageController', function($scope, $http){
   $scope.submitMessageForm = function(){
     var message2 = $scope.message;
     var id2 = $('#userID').val();
-    
+
     $http({
         method: 'POST',
         url: '/home/inbox/sendMessage',
@@ -387,7 +387,7 @@ app.controller('sendDirectMessageController', function($scope, $http){
         $('#sendMessageModal').modal('toggle');
         $scope.message = "";
       }, function errorCallback(response) {
-        
+
     });
   }
 });
@@ -397,7 +397,7 @@ app.service('searchService', function($http){
         search: function(keywords, problemId){
             console.log(keywords);
             console.log(problemId);
-            
+
             return $http.post('/home/api/application/getusers', { "username" : keywords, "problemId" : problemId});
         }
     }
@@ -408,7 +408,7 @@ app.service('searchService2', function($http){
         search: function(keywords, problemId){
             console.log(keywords);
             console.log(problemId);
-            
+
             return $http.post('/home/api/application/getusers2', { "username" : keywords, "problemId" : problemId});
         }
     }
@@ -417,10 +417,20 @@ app.service('searchService2', function($http){
 
 
 app.controller('newProblemController', function($scope, $http, alertSerice, selectedFilesService, removeFileS3Service){
+  $scope.summernoteOptions = {
+    height:300,
+    toolbar: [
+          ['style', ['bold', 'italic', 'underline', 'clear']],
+          ['fontsize', ['fontsize']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          // ['height', ['height']]
+        ]
+  }
   $scope.addProblemSubmit = function(){
-      
+
       // alert($scope.probName + " " + $scope.probDescription + " " +$scope.answer +" "+selectedFiles);
-   
+
     return $http({
         method: 'POST',
         url: '/home/api/application/newproblemsubmit',
@@ -433,7 +443,7 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
       $('#showNewProblemForm').hide();
       $('#showProblemConfirm').show();
 
-      
+
     }).finally(function() {
       // called no matter success or failure
     });
@@ -445,23 +455,23 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
                 Dropzone.options.dropzoneForm = {
                     addRemoveLinks: true,
                     maxFilesize: 15,
-                    acceptedFiles: ".png, .jpg, .jpeg, .zip",
+                    acceptedFiles: ".png, .jpg, .jpeg, .zip, .rar, .pdf, .tex, .docx, .xlsx, .tar, .gz , .bz2, .7z, .s7z",
                     removedfile: function(file){
                       var _ref;
-                      var name = file.name; 
+                      var name = file.name;
                       selectedFilesService.selectedFiles.splice(file.name, 1);
                       removeFileS3Service.remove(name).then(function (){});
-                      return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;        
-                      
+                      return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+
                     },
                     paramName: "file", // The name that will be used to transfer the file
-                    dictDefaultMessage: "<strong>Drop files or click here to upload. (max. 15MB)<br>Accepted files: .png, .jpg, .jpeg, .zip</strong>",
+                    dictDefaultMessage: "<strong>Drop files or click here to upload. (max. 15MB)<br>Accepted files: .png, .jpg, .jpeg, .zip, .rar, .pdf, .tex, .docx, .xlsx, .tar, .gz , .bz2, .7z, .s7z</strong>",
                     accept: function(file, done) {
                         if(selectedFilesService.selectedFiles.length >= 0){
                             $("#showSubmitButton2").hide();
                         }
                         selectedFilesService.selectedFiles.push(file.name);
-                        
+
                         if (file.name == "a.jpg") {
                           done("Naha, you don't.");
                         }
@@ -469,7 +479,7 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
                     },
                     queuecomplete: function(file){
                         $("#showSubmitButton").fadeIn(100);
-                        
+
                     },
                 };
   }
@@ -488,23 +498,23 @@ app.controller('dropzoneSolutionController', function($scope, $element, $compile
   if($('.modUpdate').css('display') == 'none'){
     Dropzone.options.dropzoneForm2= {
       addRemoveLinks: true,
-      acceptedFiles: ".png, .jpg, .jpeg, .zip",
+      acceptedFiles: ".png, .jpg, .jpeg, .zip, .rar, .pdf, .tex, .docx, .xlsx, .tar, .gz , .bz2, .7z, .s7z",
       removedfile: function(file){
                       var _ref;
-                      var name = file.name; 
+                      var name = file.name;
                       selectedFilesService.selectedFiles.splice(file.name, 1);
                       removeFileS3Service.remove(name).then(function (){});
-                      return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;        
-                      
+                      return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+
       },
       paramName: "file", // The name that will be used to transfer the file
       maxFilesize: 15, // MB
-      dictDefaultMessage: "<strong>Drop files or click here to upload. (max. 15MB)<br>Accepted files: .png, .jpg, .jpeg, .zip</strong>",
+      dictDefaultMessage: "<strong>Drop files or click here to upload. (max. 15MB)<br>Accepted files: .png, .jpg, .jpeg, .zip, .rar, .pdf, .tex, .docx, .xlsx, .tar, .gz , .bz2, .7z, .s7z</strong>",
       accept: function(file, done) {
         selectedFilesService.selectedFiles.push(file.name);
         // var el = angular.element('<div class="container" style="margin-left:-15px;width:60px" ><i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i><p style="margin-left: 3px">test</p></div>');
         // $compile(el)($scope);
-        // elm = $element.find("#filesHolder"); 
+        // elm = $element.find("#filesHolder");
         // console.log(elm);
         // elm.append(el);
         if (file.name == "a.jpg") {
@@ -522,7 +532,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
     problem: '=',
     user: '='
   },
-    link: function (scope, element, attrs) {     
+    link: function (scope, element, attrs) {
       if (loggedUser.role.name == 'regular') {
         scope.showOffersManu = false;
         var countDownDate = new Date(scope.problem.time_ends_at).getTime();
@@ -530,93 +540,128 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
         var now = new Date().getTime();
         // Find the distance between now an the count down date
         var distance = countDownDate - now;
-        
+        if(distance < 0){
+          if(scope.problem.waiting !== 0){
+
+            // Set waiting on false(0)
+            $http({
+                method: 'PUT',
+                url: 'home/api/problem/'+scope.problem.id+'/resetWaiting',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: {}
+            }).then(function(){
+              elm3 = element.find("#statusHolder");
+              elm3.empty();
+
+              var el3 = angular.element('<span>No offers.&nbsp; <a href="home/problem/'+scope.problem.id+'/reset" style="position:absolute">Request again</a></sapn>');
+              $compile(el3)(scope);
+              elm3.append(el3);
+            });
+          }
+        }
         if (scope.problem.waiting == 0 && scope.problem.took == 0) {
           if(distance < 0){
+
             var min = 100000;
             var minOffer;
+            console.log(scope.problem);
             if(scope.problem.offers.length > 0){
               angular.forEach(scope.problem.offers, function(value, key) {
-                  if(value.price < min){
-                    min = value.price;
-                    minOffer = value;
-                  }
-              }); 
-            }
-            var el1 = angular.element('<span>Offer: $'+min+'</span>');
-            $compile(el1)(scope);
-            elm = element.find("#statusHolder"); 
-            elm.append(el1);
+                if(value.price < min){
+                  min = value.price;
+                  minOffer = value;
+                }
+              })
+              console.log('1');
+              var el1 = angular.element('<span>Offer: $'+min+'</span>');
+              $compile(el1)(scope);
+              elm = element.find("#statusHolder");
+              elm.append(el1);
 
-            var el2 = angular.element('<a href="home/problem/'+scope.problem.id+'/payment/'+minOffer.id+'" style="position:absolute" class="btn btn-info btn-xs">Make payment</a>');
-            $compile(el2)(scope);
-            el = element.find("#paymentHolder"); 
-            el.append(el2);
+              // var el2 = angular.element('<a href="home/problem/'+scope.problem.id+'/payment/'+minOffer.id+'" style="position:absolute" class="btn btn-info btn-xs">Make payment</a>');
+              var el2 = angular.element("<div ng-clccick='acceptOffer()'>Accept</div>");
+              $compile(el2)(scope);
+              el = element.find("#paymentHolder");
+              el.append(el2);
+
+            }else{
+              console.log('2');
+              var el3 = angular.element('<span>No offers.&nbsp; <a href="home/problem/'+scope.problem.id+'/reset" style="position:absolute">Request again</a></sapn>');
+              $compile(el3)(scope);
+              elm3 = element.find("#statusHolder");
+              elm3.append(el3);
+            }
+
           }else{
+            console.log(problem);
             var el1 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span>');
             $compile(el1)(scope);
-            elm = element.find("#statusHolder"); 
+            elm = element.find("#statusHolder");
             elm.append(el1);
           }
-          }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
-              var el1 = angular.element('<span><i class="fa fa-pencil" aria-hidden="true" style="color:black"></i> Under work...</span>');
-              $compile(el1)(scope);
-              elm = element.find("#statusHolder"); 
-              elm.append(el1);
-          }else if(scope.problem.waiting == 0 && scope.problem.took == 2){
-              var el1 = angular.element('<span><i class="fa fa-check" aria-hidden="true" style="color:green"></i> Finished</span>');
-              $compile(el1)(scope);
-              elm = element.find("#statusHolder"); 
-              elm.append(el1);
-          }else{
-              // var $dd = $('#dropDownMenu');
-              // $dd.html('sadas');
-              
-              var el3 = angular.element('<span> No offers yet</span>');
-              $compile(el3)(scope);
-              elm3 = element.find("#statusHolder"); 
-              elm3.append(el3);
-              // $("#dropDownMenu").prop('disabled',true);
-            }
-          }else{
-            
-          
-           
-            if (scope.problem.offers.length == 0) {
-              var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> No offers</button></span>');
-              $compile(el3)(scope);
-              elm3 = element.find("#statusHolder"); 
-              elm3.append(el3);
-            }else{
-              var el3 = angular.element('<span class="label label-default">'+scope.problem.offers.length+'</span>');
-              $compile(el3)(scope);
-              elm3 = element.find("#statusHolder"); 
-              elm3.append(el3);
-              angular.forEach(scope.problem.offers, function(value, key) {
-                if (value.person_from == scope.user) {
-                  var el2 = angular.element('<span class="label label-default" style="margin-left:5px;">You bidded</span>');
-                  $compile(el2)(scope);
-                  elm = element.find("#statusHolder"); 
-                  elm.append(el2);
-                }
-              });        
-            }
-          
-          }
-          scope.hoverItem = function(key){
-            var string = "hoverEdit"+key;
-            var newModel = $parse(string);
-            newModel.assign(scope, true);
-          }
-            
-          scope.hoverOut = function(key){
-              var string = "hoverEdit"+key;
-              var model = $parse(string);
-               // Assigns a value to it
-              model.assign(scope, false);
-               
-          };
+        }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
+            var el1 = angular.element('<span><i class="fa fa-pencil" aria-hidden="true" style="color:black"></i> Under work...</span>');
+            $compile(el1)(scope);
+            elm = element.find("#statusHolder");
+            elm.append(el1);
+        }else if(scope.problem.waiting == 0 && scope.problem.took == 2){
+            var el1 = angular.element('<span><i class="fa fa-check" aria-hidden="true" style="color:green"></i> Finished</span>');
+            $compile(el1)(scope);
+            elm = element.find("#statusHolder");
+            elm.append(el1);
+        }else{
+            // var $dd = $('#dropDownMenu');
+            // $dd.html('sadas');
 
+            var el3 = angular.element('<span>Waiting for offers</sapn>');
+            $compile(el3)(scope);
+            elm3 = element.find("#statusHolder");
+            elm3.append(el3);
+            // $("#dropDownMenu").prop('disabled',true);
+        }
+      }else{
+
+
+
+        if (scope.problem.offers.length == 0) {
+          var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> No offers</button></span>');
+          $compile(el3)(scope);
+          elm3 = element.find("#statusHolder");
+          elm3.append(el3);
+        }else{
+          var el3 = angular.element('<span class="label label-default">'+scope.problem.offers.length+'</span>');
+          $compile(el3)(scope);
+          elm3 = element.find("#statusHolder");
+          elm3.append(el3);
+          angular.forEach(scope.problem.offers, function(value, key) {
+            if (value.person_from == scope.user) {
+              var el2 = angular.element('<span class="label label-default" style="margin-left:5px;">You bidded</span>');
+              $compile(el2)(scope);
+              elm = element.find("#statusHolder");
+              elm.append(el2);
+            }
+          });
+        }
+
+      }
+      scope.hoverItem = function(key){
+        var string = "hoverEdit"+key;
+        var newModel = $parse(string);
+        newModel.assign(scope, true);
+      }
+
+      scope.hoverOut = function(key){
+          var string = "hoverEdit"+key;
+          var model = $parse(string);
+           // Assigns a value to it
+          model.assign(scope, false);
+
+      };
+      scope.acceptOffer = function(){
+        alert('dd');
+      }
         // scope.deletePatient = function(pacId, e){
         //    e.preventDefault();
         //    $http({
@@ -635,7 +680,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
 });
 
 app.controller('bidingController', function($scope, $http, $compile, $element, loggedUserService, alertSerice){
-  
+
   $scope.init = function(id){
     loggedUserService.user().then(function(d) {
     var lUser = d;
@@ -651,19 +696,19 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
             data: {probId: id}
         }).then(function(res){
           var formBidElement = '<form name="offerForm" ng-submit="placeBid()" novalidate><div class = "input-group pull-left" style="width:150px;margin-right:10px"><span class = "input-group-addon">$</span><div class="form-group" ng-class="{ '+"'has-error'"+' : offerForm.biddingOffer.$invalid && !offerForm.biddingOffer.$pristine}"><input type = "number" min="1" class ="form-control" ng-model="biddingOffer" name="biddingOffer" style="height:54px;" required></div></div><div class="form-group" ng-class="{ '+"'has-error'"+' : offerForm.biddingDescription.$invalid && !offerForm.biddingDescription.$pristine}"><textarea class="form-control" placeholder="e.g. Problem can be solved in 10 mins with 1 file attached..." style="width:500px;resize:none" ng-model="biddingDescription" name="biddingDescription" required></textarea></div><button class="btn btn-primary" type="submit" style="float:left;border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid for this task</button></form>';
-          
 
-         
+
+
           var countDownDate = new Date(res.data.time_ends_at).getTime();
           // Get todays date and time
           var now = new Date().getTime();
           // Find the distance between now an the count down date
           var distance = countDownDate - now;
-          console.log(distance);
+          // console.log(distance);
           if(distance < 0){
               var el = angular.element('<hr><h3><span style="padding:13px 0px;position:absolute">Time expired! Can\'t bid anymore</span></h3>');
               $compile(el)($scope);
-              elm = $element.find("#offerPlace"); 
+              elm = $element.find("#offerPlace");
               elm.append(el);
           }else{
             var offers = res.data.offers;
@@ -671,7 +716,7 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
             if (offers.length == 0) {
               var el3 = angular.element(formBidElement);
               $compile(el3)($scope);
-              elm3 = $element.find("#offerPlace"); 
+              elm3 = $element.find("#offerPlace");
               elm3.append(el3);
             }else{
               angular.forEach(offers, function(value, key) {
@@ -684,18 +729,18 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
               if (check && !check02) {
                 var el3 = angular.element(formBidElement);
                 $compile(el3)($scope);
-                elm3 = $element.find("#offerPlace"); 
+                elm3 = $element.find("#offerPlace");
                 elm3.append(el3);
               }else if(check02){
                 angular.forEach(offers, function(value, key) {
                   if (lUser.id == value.person_from) {
                     var el3 = angular.element('<hr><h3><span style="padding:13px 0px;position:absolute">Already bidded $'+value.price+'</span></h3>');
                     $compile(el3)($scope);
-                    elm3 = $element.find("#offerPlace"); 
+                    elm3 = $element.find("#offerPlace");
                     elm3.append(el3);
                   }
                 });
-                
+
               }
             }
           }
@@ -710,7 +755,7 @@ app.controller('bidingController', function($scope, $http, $compile, $element, l
                   },
                   data: {probId: id, price: offer, description: desc}
               }).then(function(res){
-                
+
                 alertSerice.successSweet('Success', 'success', 'Successfully bidded $'+offer+' on this task');
                 $("#offerPlace").html('<span style="padding:13px 0px;position:absolute">Already bidded $'+offer+'</span>');
               });
@@ -814,51 +859,3 @@ app.controller('reserPasswrdController', function($scope, $http){
 });
 
 })(angular);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
