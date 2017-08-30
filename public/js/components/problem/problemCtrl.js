@@ -58,7 +58,9 @@
             }
 
             $scope.tookFilter = function(problem){
-              return problem;
+              if(problem.inactive == 0){
+                return problem;
+              }
             }
 
 
@@ -206,6 +208,31 @@
       // called no matter success or failure
       $scope.loading = false;
     });
+
+    $scope.acceptOffer = function(){
+      alert('a');
+    }
+
+    $scope.declineOffer = function(problemId){
+      // Set inactive on true(1)
+      $http({
+          method: 'PUT',
+          url: 'home/api/problem/'+problemId+'/inactive',
+          headers: {
+              "Content-Type": "application/json"
+          },
+          data: {}
+      }).then(function(res){
+        console.log(res);
+        angular.forEach($scope.problems, function(value, key) {
+          if(res.data.id == value.id && res.data.inactive === 1){
+            $scope.problems.splice(key, 1);
+          }
+        });
+      });
+
+
+    }
 
     $scope.collapseMotion = function(problem){
 

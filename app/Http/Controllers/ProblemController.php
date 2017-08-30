@@ -110,6 +110,12 @@ class ProblemController extends Controller
         $user->problems()->detach($problemId);
 
     }
+		public function inactiveProblem($id){
+			$problem = Problem::findOrFail($id);
+			$problem->inactive = 1;
+			$problem->save();
+			return response()->json($problem);
+		}
 
     public function newProblem(){
         $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
@@ -201,5 +207,6 @@ class ProblemController extends Controller
 			$problem = Problem::findOrFail($id);
 			$problem->waiting = 0;
 			$problem->save();
+			return response()->json('Ok');
 		}
 }

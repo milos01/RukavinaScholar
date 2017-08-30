@@ -23,6 +23,7 @@ class CreateProblemsTable extends Migration
             $table->string('problem_description');
             $table->integer('took')->unsigned();
             $table->integer('waiting')->unsigned();
+            $table->boolean('inactive');
             $table->timestamps();
             $table->timestamp('time_ends_at')->nullable();
             $table->softDeletes();

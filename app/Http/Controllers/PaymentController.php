@@ -19,7 +19,7 @@ class PaymentController extends Controller
         $count = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++; 
+               $count++;
             }
         }
     	return view('payment')->with('problem', $problem)->with('myMessagesCount', $count)->with('offer', $offer);
@@ -51,7 +51,7 @@ class PaymentController extends Controller
     	$probId = $request->probId;
     	$problem = Problem::findorFail($probId);
     	$problem->took = 1;
-        $problem->main_slovler = $request->sloId; 
+      $problem->main_slovler = $request->sloId; 
     	$luser = User::findorFail($request->sloId);
     	$luser->problems()->attach($probId, ['read' => 0]);
     	if ($problem->save()) {
@@ -59,6 +59,6 @@ class PaymentController extends Controller
     	}else{
     		return response()->json('Server error');
     	}
-    	
+
     }
 }
