@@ -26,7 +26,7 @@ class PaymentController extends Controller
     }
 
     public function placeOffer(Request $request){
-        $problemId = $request->probId;
+      $problemId = $request->probId;
     	$problemDesc = $request->description;
     	$problem = Problem::findorFail($problemId);
     	$problem->waiting = 0;
@@ -47,18 +47,4 @@ class PaymentController extends Controller
 
     }
 
-    public function makePayment(Request $request){
-    	$probId = $request->probId;
-    	$problem = Problem::findorFail($probId);
-    	$problem->took = 1;
-      $problem->main_slovler = $request->sloId; 
-    	$luser = User::findorFail($request->sloId);
-    	$luser->problems()->attach($probId, ['read' => 0]);
-    	if ($problem->save()) {
-    		return response()->json('Ok');
-    	}else{
-    		return response()->json('Server error');
-    	}
-
-    }
 }

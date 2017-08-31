@@ -209,4 +209,19 @@ class ProblemController extends Controller
 			$problem->save();
 			return response()->json('Ok');
 		}
+
+		public function takeProblemToSolve(Request $request){
+    	$probId = $request->probId;
+    	$problem = Problem::findorFail($probId);
+    	$problem->took = 1;
+      $problem->main_slovler = $request->sloId;
+    	$luser = User::findorFail($request->sloId);
+    	$luser->problems()->attach($probId, ['read' => 0]);
+    	if ($problem->save()) {
+    		return response()->json('Ok');
+    	}else{
+    		return response()->json('Server error');
+    	}
+
+    }
 }

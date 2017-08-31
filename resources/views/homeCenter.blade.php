@@ -93,10 +93,13 @@
                                                                     </a>
 
                                                                 </div>
-                                                                <div ng-show="showAcceptDecline<%problem.id%>" style="margin-top: -20px;margin-left: -30px" ng-cloak>
-                                                                  <a ng-click="acceptOffer(problem.id)">Accept</a>
-                                                                  /
-                                                                  <a ng-click="declineOffer(problem.id)">Decline</a>
+                                                                <div id="paymentHolder" style="margin-top:-20px;margin-left:-30px" ng-cloak>
+                                                                  <a ng-show="showMakePayment<%problem.id%>" href="home/problem/'+scope.problem.id+'/payment/'+minOffer.id+'" class="btn btn-info btn-xs" ng-cloak>Make payment</a>
+                                                                  <div ng-show="showAcceptDecline<%problem.id%>" style="margin-top: -20px;margin-left: -30px" ng-cloak>
+                                                                    <a ng-click="acceptOffer(problem)">Accept </a>
+                                                                    /
+                                                                    <a ng-click="declineOffer(problem.id)">Decline</a>
+                                                                  </div>
                                                                 </div>
                                                             </div>
 

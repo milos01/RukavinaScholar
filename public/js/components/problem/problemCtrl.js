@@ -28,12 +28,22 @@
           $scope.problems = res.data;
           //show accept and decline
           for (var i = res.data.length - 1; i >= 0; i--) {
-            console.log(res.data[i].offers.length);
-            if(res.data[i].offers.length > 0 && res.data[i].waiting === 0 && res.data[i].took === 0){
-              var model = $parse("showAcceptDecline"+res.data[i].id);
+            var min = 100000;
+            var minOffer;
 
+            if(res.data[i].offers.length > 0 && res.data[i].waiting === 0 && res.data[i].took === 0){
+              angular.forEach(res.data[i].offers, function(value, key) {
+                if(value.price < min){
+                  min = value.price;
+                  minOffer = value;
+                }
+              })
+              $scope.mOffer = minOffer;
+              model0 = $parse("showAcceptDecline"+res.data[i].id);
+              var model2 = $parse('mOffer'+res.data[i].id);
               // Assigns a value to it
-              model.assign($scope, true);
+              model0.assign($scope, true);
+              model2.assign($scope, minOffer);
               // $scope.showAcceptDecline+res.data[i].id = true;
             }
           }
@@ -209,8 +219,34 @@
       $scope.loading = false;
     });
 
-    $scope.acceptOffer = function(){
-      alert('a');
+    $scope.acceptOffer = function(problem){
+      var min = 100000;
+      var minOffer;
+
+      angular.forEach(problem.offers, function(value, key) {
+        if(value.price < min){
+          min = value.price;
+          minOffer = value;
+        }
+      })
+
+      console.log(minOffer);
+      $http({
+          method: 'PUT',
+          url: 'home/api/application/makePayment',
+          headers: {
+              "Content-Type": "application/json"
+          },
+          data: {probId: problem.id,
+                sloId: minOffer.person_from,
+          }
+      }).then(function(){
+        var model = $parse('showMakePayment'+problem.id);
+        var model2 = $parse('showAcceptDecline'+problem.id);
+        // Assigns a value to it
+        model.assign($scope, true);
+        model2.assign($scope, false);
+      });
     }
 
     $scope.declineOffer = function(problemId){

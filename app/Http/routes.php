@@ -50,6 +50,7 @@
 		Route::post('api/application/getuserproblemoffer', 'ProblemController@getproblemoffers');
 		Route::get('api/application/getOneUserProblems', 'ProblemController@getOneUserProblems');
 		Route::post('api/application/getProblem', 'ProblemController@getProblem');
+    Route::put('api/application/makePayment', 'ProblemController@takeProblemToSolve');
 
 		//Uplaod routes
 		Route::post('api/application/saveImage', 'UploadController@saveImage');
@@ -60,7 +61,7 @@
 		//Payment routes
 		Route::get('problem/{id}/payment/{pyid}', 'PaymentController@problemPaymentShow');
 		Route::post('api/application/placeOffer', 'PaymentController@placeOffer');
-		Route::post('api/application/makePayment', 'PaymentController@makePayment');
+
 
 		//Inbox/Messages routes
 		Route::get('inbox', 'InboxController@showInbox');

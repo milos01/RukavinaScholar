@@ -566,7 +566,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
 
             var min = 100000;
             var minOffer;
-            console.log(scope.problem);
+
             if(scope.problem.offers.length > 0){
               angular.forEach(scope.problem.offers, function(value, key) {
                 if(value.price < min){
@@ -581,10 +581,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
               elm.append(el1);
 
               // var el2 = angular.element('<a href="home/problem/'+scope.problem.id+'/payment/'+minOffer.id+'" style="position:absolute" class="btn btn-info btn-xs">Make payment</a>');
-              var el2 = angular.element("<div ng-clccick='acceptOffer()'>Accept</div>");
-              $compile(el2)(scope);
-              el = element.find("#paymentHolder");
-              el.append(el2);
+              
 
             }else{
               console.log('2');
@@ -606,6 +603,12 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
             $compile(el1)(scope);
             elm = element.find("#statusHolder");
             elm.append(el1);
+
+            var el2 = angular.element('<a href="" style="position:absolute"  class="btn btn-info btn-xs">Make payment</a>');
+
+            $compile(el2)(scope);
+            el = element.find("#paymentHolder");
+            el.append(el2);
         }else if(scope.problem.waiting == 0 && scope.problem.took == 2){
             var el1 = angular.element('<span><i class="fa fa-check" aria-hidden="true" style="color:green"></i> Finished</span>');
             $compile(el1)(scope);
