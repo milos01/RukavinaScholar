@@ -507,6 +507,16 @@ app.filter('dateFilter', function($filter) {
 
 app.controller('dropzoneSolutionController', function($scope, $element, $compile, selectedFilesService, removeFileS3Service){
   if($('.modUpdate').css('display') == 'none'){
+    $scope.summernotePostSolutionOptions = {
+      height:300,
+      toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            // ['height', ['height']]
+          ]
+    }
     Dropzone.options.dropzoneForm2= {
       addRemoveLinks: true,
       acceptedFiles: ".png, .jpg, .jpeg, .zip, .rar, .pdf, .tex, .docx, .xlsx, .tar, .gz , .bz2, .7z, .s7z",

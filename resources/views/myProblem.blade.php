@@ -140,24 +140,25 @@
                                             <!-- <button class="btn btn-white btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true"></i><a href="{{url('home/takeProblem',$problem->id)}}" style="color:#676A6C"> Take it</a></button> -->
                                             <a href="{{url('/home/assigned')}}" class="btn btn-danger btn-sm" type="button"><i class="fa fa-angle-left" aria-hidden="true" ></i> Back to problems </a>
                                             @if($problem->main_slovler == Auth::id())
-                                                <a href=""  ng-controller="MyCtrldd" class="btn btn-success btn-sm" type="button" ng-click="showDetails()" disabled=""><i class="fa fa-check" aria-hidden="true" ></i> Post solution </a>
+
+																									@if($problem->paid == 0)
+																										<a href="" class="btn btn-success btn-sm" type="button" disabled="true">Not paid yet, send remider</a>
+																									@else
+																										<a href=""  ng-controller="MyCtrldd" class="btn btn-success btn-sm" type="button" ng-click="showDetails()"><i class="fa fa-check" aria-hidden="true" disabled=true></i> Post solution</a>
+																									@endif
+																								</a>
                                             @endif
                                         </div>
                                     </div>
                                     <div class="container" style="margin-left: -15px;margin-top: 15px;" >
                                         @foreach($problem->solutions as $solution)
-                                            @if(substr($solution->file->fileName, -3) == "mp3")
+
                                                 <div class="container pull-left" style="margin-left:-15px;width:60px">
-                                                    <i class="fa fa-file-audio-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i>
-                                                    <p style="margin-left: 3px">{{substr($solution->file->fileName, -3)}}</p>
-                                                </div>
-                                            @elseif(substr($solution->file->fileName, -3) == "pdf")
-                                            @else
-                                                <div class="container pull-left" style="margin-left:-15px;width:60px" >
                                                     <i class="fa fa-file-o fa-3x" aria-hidden="true" style="color:#c5c5c5"></i>
-                                                    <p style="margin-left: 3px">{{substr($solution->file->fileName, -3)}}</p>
+                                                    <!-- <p style="margin-left: 3px">{{$solution->file->fileName}}</p> -->
                                                 </div>
-                                            @endif
+
+
                                         @endforeach
                                     </div>
 
@@ -176,9 +177,18 @@
                         <div class="ibox-content">
 
                             <div class="row" ng-controller="dropzoneSolutionController">
+															<div class="form-group"><label class="col-sm-2 control-label">Explanation</label>
+																	<div class="col-sm-12">
+																		<!-- <textarea class="form-control" style="resize:none;height:200px;width: 80%" ng-model="probDescription" required></textarea> -->
+																		<div style="width:80%;margin:auto auto;">
+																			<summernote config="summernotePostSolutionOptions" ng-model="solutionDescription" required></summernote>
+																		</div>
+																	</div>
+
+															</div>
                                 <div class="form-group" id="uploadHolder2">
                                  <p style="margin-left: 10px;font-weight: bold">Upload solution</p>
-                                    <form action="/home/api/application/uploadSolution" class="dropzone" id="dropzoneForm2" style="border: 1px dashed gray;width:99%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
+                                    <form action="/home/api/application/uploadSolution" class="dropzone" id="dropzoneForm2" style="border: 1px dashed gray;width:80%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
                                         <div class="fallback">
                                            <input name="file" type="file" id="fileSelected" ng-mdoel="aa" multiple />
                                         </div>

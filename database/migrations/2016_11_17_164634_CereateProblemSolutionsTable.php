@@ -18,7 +18,7 @@ class CereateProblemSolutionsTable extends Migration
             $table->foreign('problem_id')->references('id')->on('problems');
             $table->integer('file_id')->unsigned();
             $table->foreign('file_id')->references('id')->on('files');
-            
+            $table->longText('solution_description');
             $table->timestamps();
         });
     }

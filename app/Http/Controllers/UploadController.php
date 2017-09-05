@@ -14,21 +14,21 @@ use Validator, Image;
 
 class UploadController extends Controller
 {
-	
+
     public function saveImage(Request $request){
         if($request->hasFile('file')){
             $input = $request->all();
-     
+
             $rules = array(
                 'file' => 'image|max:3000|mimes:jpeg,jpg,png',
             );
-     
+
             $validation = Validator::make($input, $rules);
-     
+
             if ($validation->fails()) {
                 return back();
             }
-     
+
             $destinationPath = 'uploads'; // upload path
             $extension = $request->file('file')->getClientOriginalExtension(); // getting file extension
             $fileName = time() . '.' . $extension;
@@ -47,11 +47,11 @@ class UploadController extends Controller
     /**
     */
     public function uploadProblem(Request $request){
-        
+
         if($request->hasFile('file')){
             $manipulatedFile = $this->fileManipulation('/uploads', $request);
 
-            //Dispatch Upload file to Amazon S3 job  
+            //Dispatch Upload file to Amazon S3 job
             $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
 
         }
@@ -60,42 +60,44 @@ class UploadController extends Controller
     public function uploadSolution(Request $request){
         if($request->hasFile('file')){
 
-            
-            
+
+
             $manipulatedFile = $this->fileManipulation('/uploads/solutions', $request);
-          
-
-            $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
 
 
-            $file = new File();
-            $file->fileName = $manipulatedFile[0];
-            $file->save();
+							$file = new File();
+	            $file->fileName = $manipulatedFile[0];
+	            $file->save();
 
-            $problem = Problem::findorFail($request->prob_id);
-            $problem->took = 2;
-            $problem->save();
+	            $problem = Problem::findorFail($request->prob_id);
+	            $problem->took = 2;
+	            $problem->save();
 
-            $probSol = new ProblemSolutions();
-            $probSol->file()->associate($file);
-            $probSol->problem()->associate($problem);
-            $probSol->save();
+	            $probSol = new ProblemSolutions();
+	            $probSol->file()->associate($file);
+	            $probSol->problem()->associate($problem);
+	            $probSol->save();
+
+            // $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
+
+
+
         }
     }
 
     private function fileManipulation($path, $request){
         $input = $request->all();
-     
+
         $rules = array(
-            'file' => 'max:15000|mimes:jpeg,jpg,png,zip',
+            'file' => 'max:15000|mimes:png,jpg,jpeg,zip,rar,pdf,tex,docx,xlsx,tar,bz2,7z',
         );
- 
+
         $validation = Validator::make($input, $rules);
 
         if ($validation->fails()) {
-            return back();
+					dd('sadas');
+            return "Unsuported format";
         }
-
         $file = $request->file('file');
         $path_parts = pathinfo($file->getClientOriginalName());
         $fileName = $path_parts['filename'];
@@ -106,7 +108,10 @@ class UploadController extends Controller
         $file->move(storage_path(). $path, $hFileName);
         $file2 = storage_path(). $path.'/'. $hFileName;
 
-        return [$hFileName, $file2];
+        return [
+					$hFileName,
+					$file2
+				];
 
     }
 
@@ -114,11 +119,11 @@ class UploadController extends Controller
         $file = $request->fileName;
         $pos = strpos($file, ".");
         $rightNow = Auth::id();
-        
+
         $fileName = substr($file, 0, $pos);
         $fileExt = substr($file, $pos, strlen($file));
 
-        
+
         $hFileName = hash('md5', $fileName.'_'.$rightNow) . $fileExt;
         $this->dispatch(new RemoveFileFromS3($hFileName));
     }
