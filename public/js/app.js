@@ -1,6 +1,6 @@
 
 (function (angular) {
-app = angular.module('kbkApp', ['ngAnimate', 'ui.bootstrap', 'summernote'], function($interpolateProvider) {
+app = angular.module('kbkApp', ['ngAnimate', 'ui.bootstrap', 'summernote', 'ngSanitize'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
 
@@ -183,18 +183,29 @@ app.directive('passwordLength', function($timeout, $q, $http){
   }
 });
 
-app.directive('myOffer', function(loggedUserService) {
+app.directive('myOffer', function($http, loggedUserService) {
   return {
     restrict: 'A',
     scope: {
       offer: '=',
     },
     link: function(scope) {
-      loggedUserService.user().then(function(user) {
-        if(user.id === scope.offer.person_from){
-          scope.offer.isMine = 'Your offer:';
-        }
+      $http({
+          method: 'GET',
+          url: '/home/api/application/finduserbid',
+          headers: {
+              "Content-Type": "application/json"
+          },
+          params: {userId: scope.offer.person_from}
+      }).then(function(res){
+        scope.offer.persFrom = res.data;
+        loggedUserService.user().then(function(user) {
+          if(user.id === scope.offer.person_from){
+            scope.offer.isMine = '(you)';
+          }
+        });
       });
+
 
     }
   };
@@ -581,7 +592,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
               elm.append(el1);
 
               // var el2 = angular.element('<a href="home/problem/'+scope.problem.id+'/payment/'+minOffer.id+'" style="position:absolute" class="btn btn-info btn-xs">Make payment</a>');
-              
+
 
             }else{
               console.log('2');
@@ -604,7 +615,7 @@ app.directive('problemShowDirective', function ($compile, $http, $parse, loggedU
             elm = element.find("#statusHolder");
             elm.append(el1);
 
-            var el2 = angular.element('<a href="" style="position:absolute"  class="btn btn-info btn-xs">Make payment</a>');
+            var el2 = angular.element('<a href=""  class="btn btn-info btn-xs">Make paymentb</a>');
 
             $compile(el2)(scope);
             el = element.find("#paymentHolder");

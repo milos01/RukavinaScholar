@@ -13,7 +13,7 @@
      </li>
     <li class="active">
         <strong>{{$problem->subject}}</strong>
-    </li>                
+    </li>
 @stop
 @section('manageUsers')
  <div class="wrapper wrapper-content animated fadeInRight">
@@ -71,7 +71,7 @@
                                     <dl class="m-t-md">
                                         <dt>From</dt>
                                         <dd>{{$problem->user_from->name}} {{$problem->user_from->lastName}}</dd>
-                                       
+
                                     </dl>
                                     <hr>
                                         @if($problem->main_slovler == Auth::id())
@@ -88,26 +88,26 @@
                                             @foreach($problem->users as $user)
                                                 @if($user->id != Auth::user()->id)
                                                 <div class="" id="menuSearchItem{{$user->id}}plus{{$problem->id}}" style="border-bottom:2px solid red;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px ">
-                                                    {{$user->name}} {{$user->lastName}} 
+                                                    {{$user->name}} {{$user->lastName}}
                                                 <i class="fa fa-times" aria-hidden="true" style="cursor:pointer" ng-click="deleteWorker({{$problem->id}},{{$user->id}})"></i></div>
                                                 @endif
                                             @endforeach
                                             </div>
                                         </div>
-                                    
-                                    
-                                        
+
+
+
                                         <div id="resDiv" style="width:254px;max-height:200px;position: absolute;margin-top:-17px;z-index: 999;background-color: white;">
-                                            
-                                                
-                                            
-                                            
+
+
+
+
                                         </div>
                                         @else
                                         <dl class="m-t-md">
                                             <dt>Main solver</dt>
                                             <dd>{{$problem->main_solver->name}} {{$problem->main_solver->lastName}}</dd>
-                                       
+
                                         </dl>
                                         <dl class="m-t-md">
                                             <dt>Other people on this problem</dt>
@@ -128,11 +128,11 @@
                                                             <strong><i>{{$user->name}} {{$user->lastName}},</i></strong> &nbsp;
                                                         @endif
                                                     @endif
-                                                   
+
                                                 @endif
                                             @endforeach
                                             </dd>
-                                       
+
                                         </dl>
                                         @endif
                                     <div>
@@ -140,7 +140,7 @@
                                             <!-- <button class="btn btn-white btn-sm"><i class="fa fa-lightbulb-o" aria-hidden="true"></i><a href="{{url('home/takeProblem',$problem->id)}}" style="color:#676A6C"> Take it</a></button> -->
                                             <a href="{{url('/home/assigned')}}" class="btn btn-danger btn-sm" type="button"><i class="fa fa-angle-left" aria-hidden="true" ></i> Back to problems </a>
                                             @if($problem->main_slovler == Auth::id())
-                                                <a href=""  ng-controller="MyCtrldd" class="btn btn-success btn-sm" type="button" ng-click="showDetails()"><i class="fa fa-check" aria-hidden="true" ></i> Post solution </a>
+                                                <a href=""  ng-controller="MyCtrldd" class="btn btn-success btn-sm" type="button" ng-click="showDetails()" disabled=""><i class="fa fa-check" aria-hidden="true" ></i> Post solution </a>
                                             @endif
                                         </div>
                                     </div>
@@ -160,14 +160,14 @@
                                             @endif
                                         @endforeach
                                     </div>
-                                    
+
 
 
                                 </div>
                             </div>
 
                         </div>
-                     
+
                     </div>
 
                 </div>
@@ -182,8 +182,8 @@
                                         <div class="fallback">
                                            <input name="file" type="file" id="fileSelected" ng-mdoel="aa" multiple />
                                         </div>
-                                         <input type="hidden" name="prob_id" value="{{$problem->id}}"/> 
-                                        <input type="hidden" name="_token" value="{{csrf_token()}}"/> 
+                                         <input type="hidden" name="prob_id" value="{{$problem->id}}"/>
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}"/>
                                     </form>
                                 </div>
                             </div>

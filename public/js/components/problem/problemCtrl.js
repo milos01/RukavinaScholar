@@ -1,10 +1,17 @@
 
 (function (angular) {
+  angular.module('kbkApp').directive('fooRepeatDone', function() {
+    return function($scope, element) {
+        if ($scope.$last) { // all are rendered
+            $('.table').trigger('footable_redraw');
+        }
+    }
+})
   angular.module('kbkApp').controller('showProblemController', function($scope, $http, $interval, $parse){
     $scope.loading = true;
     $scope.limit = 20;
     $scope.colourIncludes = [];
-    $scope.noFound = 'No problems found!';
+    $scope.noFound = 'No tasks found!';
     $http({
         method: 'GET',
         url: 'home/api/application/getuser',
@@ -86,7 +93,7 @@
             data: {}
         }).then(function(res){
 
-
+          
           $scope.problems = res.data;
           // for (i = res.data.length - 1; i >= 0; i--) {
           //   console.log(i);

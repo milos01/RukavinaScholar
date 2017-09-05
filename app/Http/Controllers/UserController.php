@@ -25,7 +25,7 @@ class UserController extends Controller
         $count = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++; 
+               $count++;
             }
         }
         return view('userProfile')->with('user',$user)->with('myMessagesCount', $count);
@@ -77,7 +77,7 @@ class UserController extends Controller
         $count = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++; 
+               $count++;
             }
         }
         return view('editUser')->with('myMessagesCount', $count);
@@ -92,7 +92,7 @@ class UserController extends Controller
         }
     }
 
-    
+
     public function showManage(){
         $users = User::all();
         $deletedUsers = User::onlyTrashed()->get();
@@ -100,7 +100,7 @@ class UserController extends Controller
             $count = 0;
             foreach ($myMessagess as $key => $message) {
                 if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-                    $count++; 
+                    $count++;
                 }
             }
             return view('/manageUsers')->with('users', $users)->with('myMessagesCount', $count)->with('deletedUsers', $deletedUsers);
@@ -138,6 +138,12 @@ class UserController extends Controller
 
     public function getApiUser(){
         $user = User::with('role')->findorFail(Auth::id());
+        return $user->toArray();
+    }
+
+    public function findUserById(Request $request){
+        $user = User::with('role')->findorFail($request->userId);
+        
         return $user->toArray();
     }
 

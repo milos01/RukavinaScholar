@@ -30,6 +30,7 @@
 		Route::get('user/{id}', 'UserController@showUserProfile');
 		Route::post('updatePassword', 'UserController@updatePassword');
 		Route::get('api/application/getuser', 'UserController@getApiUser');
+		Route::get('api/application/finduserbid', 'UserController@findUserById');
 		Route::post('api/application/getusers','UserController@getApiUsers');
 		Route::post('api/application/getusers2','UserController@getApiUsers2');
 

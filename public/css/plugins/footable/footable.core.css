@@ -28,6 +28,7 @@
 }
 .footable.breakpoint > tbody > tr:hover:not(.footable-row-detail) {
   cursor: pointer;
+
 }
 .footable.breakpoint > tbody > tr > td.footable-cell-detail {
   background: #eee;
@@ -152,8 +153,13 @@
 .footable.no-paging .hide-if-no-paging {
   display: none;
 }
+.footable-row-detail{
+  background: antiquewhite;
+}
 .footable-row-detail-inner {
   display: table;
+  width:100%;
+
 }
 .footable-row-detail-row {
   display: table-row;
@@ -168,7 +174,7 @@
 .footable-row-detail-name {
   display: table-cell;
   font-weight: bold;
-  padding-right: 0.5em;
+  /*padding-right: 0.5em;*/
 }
 .footable-row-detail-value {
   display: table-cell;
