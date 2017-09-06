@@ -64,12 +64,14 @@ class UploadController extends Controller
 
             $manipulatedFile = $this->fileManipulation('/uploads/solutions', $request);
 
-
 							$file = new File();
 	            $file->fileName = $manipulatedFile[0];
 	            $file->save();
 
 	            $problem = Problem::findorFail($request->prob_id);
+							if ($request->solutionDesc) {
+								$problem->solution_description = $request->solutionDesc;
+							}
 	            $problem->took = 2;
 	            $problem->save();
 

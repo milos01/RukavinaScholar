@@ -506,6 +506,9 @@ app.filter('dateFilter', function($filter) {
 });
 
 app.controller('dropzoneSolutionController', function($scope, $element, $compile, selectedFilesService, removeFileS3Service){
+  $scope.init = function (solutionDescription) {
+    $scope.solutionDescription = solutionDescription;
+  };
   if($('.modUpdate').css('display') == 'none'){
     $scope.summernotePostSolutionOptions = {
       height:300,

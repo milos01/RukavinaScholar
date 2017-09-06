@@ -176,26 +176,29 @@
                     <div class="ibox product-detail">
                         <div class="ibox-content">
 
-                            <div class="row" ng-controller="dropzoneSolutionController">
+                            <div class="row" ng-controller="dropzoneSolutionController" ng-init="init('{{$problem->solution_description}}')">
+															<form action="/home/api/application/uploadSolution" class="dropzone" id="dropzoneForm2" style="border: 1px dashed gray;width:80%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
 															<div class="form-group"><label class="col-sm-2 control-label">Explanation</label>
 																	<div class="col-sm-12">
 																		<!-- <textarea class="form-control" style="resize:none;height:200px;width: 80%" ng-model="probDescription" required></textarea> -->
 																		<div style="width:80%;margin:auto auto;">
-																			<summernote config="summernotePostSolutionOptions" ng-model="solutionDescription" required></summernote>
+																			<summernote config="summernotePostSolutionOptions" ng-model="solutionDescription"></summernote>
 																		</div>
 																	</div>
 
 															</div>
                                 <div class="form-group" id="uploadHolder2">
                                  <p style="margin-left: 10px;font-weight: bold">Upload solution</p>
-                                    <form action="/home/api/application/uploadSolution" class="dropzone" id="dropzoneForm2" style="border: 1px dashed gray;width:80%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
+
                                         <div class="fallback">
                                            <input name="file" type="file" id="fileSelected" ng-mdoel="aa" multiple />
                                         </div>
                                          <input type="hidden" name="prob_id" value="{{$problem->id}}"/>
                                         <input type="hidden" name="_token" value="{{csrf_token()}}"/>
-                                    </form>
+                                        <input type="hidden" name="solutionDesc" value="<% solutionDescription %>"/>
+
                                 </div>
+															</form>
                             </div>
                         </div>
                     </div>

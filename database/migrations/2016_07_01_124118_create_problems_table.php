@@ -21,6 +21,7 @@ class CreateProblemsTable extends Migration
             $table->foreign('main_slovler')->references('id')->on('users');
             $table->string('problem_type');
             $table->longText('problem_description');
+            $table->longText('solution_description');
             $table->integer('took')->unsigned();
             $table->integer('waiting')->unsigned();
             $table->boolean('inactive');

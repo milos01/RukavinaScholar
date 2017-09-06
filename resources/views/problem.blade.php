@@ -10,7 +10,7 @@
      </li>
     <li class="active">
         <strong>{{$problem->subject}}</strong>
-    </li>                
+    </li>
 @stop
 @section('manageUsers')
  <div class="wrapper wrapper-content animated fadeInRight">
@@ -35,7 +35,7 @@
                                                 @if(Auth::user()->is('regular'))
                                                     @if($problem->took == 2 && $problem->waiting == 0)
                                                         <p>Your files are ready...</p>
-                                                        @foreach($problem->solutions as $key=>$file)   
+                                                        @foreach($problem->solutions as $key=>$file)
                                                             <br/><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">Solution File {{$key+1}} </a>
                                                         @endforeach
                                                     @else
@@ -64,24 +64,24 @@
                                     <h2 class="font-bold m-b-xs">
                                         {{$problem->subject}}
                                     </h2>
-                                    
-                                    
+
+
                                        <div class="pull-right">
-                                            
+
                                                 <a href="{{url('/home')}}"  style="color: white"><button class="btn btn-danger btn-sm" style="margin-top: -60px"><i class="fa fa-angle-left" aria-hidden="true"></i> Back to home </button></a>
-                                           
+
                                         </div>
                                     <hr/>
 
                                     <h4>Task description</h4>
 
                                     <div class="">
-                                        {{$problem->problem_description}}
+                                        {!! $problem->problem_description !!}
 
                                         <br/>
                                         <br/>
-                                        
-                                       
+
+
                                     </div>
                                     <div class="m-t-md">
                                     <dt>Posted</dt>
@@ -108,7 +108,7 @@
                                     @endif
                                     </div>
                                     <dl class="m-t-md">
-                                        
+
 
                                         @if(!Auth::user()->is('regular'))
                                             <dt>From</dt>
@@ -119,7 +119,7 @@
                                                 </div>
                                             </dd>
                                         @endif
-                                       
+
                                     </dl>
                                     <div class="m-t-md">
                                         <dt>Status</dt>
@@ -129,20 +129,30 @@
                                             <dd><span><i class="fa fa-check" aria-hidden="true" style="color:green"></i> Finised</span></dd>
                                         @elseif($problem->took == 0 && $problem->waiting == 1 || $problem->took == 0 && $problem->waiting == 0)
                                             <dd><span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span></dd>
-                                     
+
                                         @endif
-                                        
+
+                                    </div>
+																		<div class="m-t-md">
+                                        @if($problem->took == 2 && $problem->solution_description)
+																				  <dt>Solution description</dt>
+																					<div class="col-md-9" style="background:#f3f3f4; padding:10px 20px">
+																							{!! $problem->solution_description !!}
+																					</div>
+
+                                        @endif
+
                                     </div>
                                     <div  class="m-t-md" style="border-top: 1px solid #fff; border-bottom: 1px solid #fff; height: 46px" ng-controller="bidingController" ng-init="init('{{$problem->id}}')" >
                                         <div id="offerPlace">
-                                  
+
                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
-                     
+
                     </div>
 
                 </div>
