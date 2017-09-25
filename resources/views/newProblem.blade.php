@@ -50,12 +50,9 @@
 
 
                                                 <label style="margin-left: 15px"> <input type="radio" name="chType" ng-model="answer" value="Programming" ng-required="!answer"> <i></i> Programming </label> -->
-																								<select name="multipleSelect" id="multipleSelect" ng-model="answer" ng-required="!answer">
+																								<select name="multipleSelect" ng-model="answer" ng-required="!answer">
 																									<option value="">Please select category</option>
-																						      <option value="Math">Math</option>
-																						      <option value="Physics">Physics</option>
-																						      <option value="Programming">Programming</option>
-																						      <option value="Other">Other</option>
+																						      <option ng-repeat="category in categories" value="<% category.id %>"><% category.name %></option>
 																						    </select>
 
                                   </div>

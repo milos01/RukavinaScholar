@@ -12,14 +12,21 @@ class CreateProblemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('problems', function(Blueprint $table){
+      Schema::create('problem_categories', function (Blueprint $table) {
+          $table->increments('id');
+          $table->string('name');
+          $table->timestamps();
+          $table->softDeletes();
+      });
+      Schema::create('problems', function(Blueprint $table){
             $table->increments('id');
             $table->string('subject');
             $table->integer('person_from')->unsigned();
             $table->foreign('person_from')->references('id')->on('users');
             $table->integer('main_slovler')->unsigned();
             $table->foreign('main_slovler')->references('id')->on('users');
-            $table->string('problem_type');
+            $table->integer('problem_type')->unsigned();
+            $table->foreign('problem_type')->references('id')->on('problem_categories');
             $table->longText('problem_description');
             $table->longText('solution_description');
             $table->integer('took')->unsigned();
@@ -39,6 +46,7 @@ class CreateProblemsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('problems');
+      Schema::drop('problem_categories');
+      Schema::drop('problems');
     }
 }

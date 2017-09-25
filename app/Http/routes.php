@@ -63,6 +63,12 @@
 		Route::get('problem/{id}/payment/{pyid}', 'PaymentController@problemPaymentShow');
 		Route::post('api/application/placeOffer', 'PaymentController@placeOffer');
 
+    //Settings routes
+    Route::get('settings', 'SettingsController@showSettingsPage')->name('showSettingsPage');
+    Route::post('settings/category', 'SettingsController@addNewCategory')->name('addNewCategory');
+    Route::delete('settings/category', 'SettingsController@deleteCategory')->name('deleteCategory');
+    Route::put('settings/category', 'SettingsController@activateCategory')->name('activateCategory');
+    Route::get('api/application/categories', 'SettingsController@getAllCategories');
 
 		//Inbox/Messages routes
 		Route::get('inbox', 'InboxController@showInbox');

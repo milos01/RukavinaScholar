@@ -42,6 +42,8 @@ app.controller('mainController', function($scope, loggedUserService){
   });
 
 });
+
+
 // socket = io('http://localhost:3000');
 if($(".chDiscussion").is(":visible")){
   $cont = $(".chDiscussion");
@@ -428,6 +430,16 @@ app.service('searchService2', function($http){
 
 
 app.controller('newProblemController', function($scope, $http, alertSerice, selectedFilesService, removeFileS3Service){
+  $http({
+      method: 'GET',
+      url: '/home/api/application/categories',
+      headers: {
+          "Content-Type": "application/json"
+      },
+      data: {}
+  }).then(function(res){
+    $scope.categories = res.data;
+  });
   $scope.summernoteOptions = {
     height:300,
     toolbar: [

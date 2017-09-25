@@ -143,6 +143,8 @@
                         </span>
                         </a>
                     </li>
+                    <li style="margin-top:-4px"><a href="{!! route('showSettingsPage') !!}"><i class="fa fa-cog"></i>
+                        <span class="nav-label" id="mngu">Settings</span></a></li>
 
                 @elseif(Auth::user()->is('moderator'))
                     <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
@@ -154,10 +156,10 @@
 
                 @elseif(Auth::user()->is('regular'))
                     <li style="margin-top:-4px"><a href="/home/newproblem"><i class="fa fa-plus"></i>
-                        <span class="nav-label" id="mngu">Submit problem</span></a></li>
+                        <span class="nav-label" id="mngu">Submit task</span></a></li>
                 @endif
 
-                    <li style="margin-top:-4px"><a href="/home/edit"><i class="fa fa-cog"></i>
+                    <li style="margin-top:-4px"><a href="/home/edit"><i class="fa fa-user"></i>
                         <span class="nav-label">Edit profile</span></a></li>
 
                         <li>
