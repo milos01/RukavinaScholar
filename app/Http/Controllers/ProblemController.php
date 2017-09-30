@@ -24,25 +24,25 @@ class ProblemController extends Controller
     public function showProblem($id){
     	$problem = Problem::findorFail($id);
     	$myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-        $count = 0;
+        $countn = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++;
+               $countn++;
             }
         }
-    	return view('problem')->with('problem', $problem)->with('myMessagesCount', $count);
+    	return view('problem')->with('problem', $problem)->with('myMessagesCount', $countn);
     }
 
     public function showMyProblem($id){
         $problem = Problem::findorFail($id);
         $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-        $count = 0;
+        $countn = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++;
+               $countn++;
             }
         }
-        return view('myProblem')->with('problem', $problem)->with('myMessagesCount', $count);
+        return view('myProblem')->with('problem', $problem)->with('myMessagesCount', $countn);
     }
 
     public function takeProblem($id){
@@ -57,7 +57,7 @@ class ProblemController extends Controller
     }
 
     public function getAllProblems(){
-        $allProblems = Problem::with('offers')->get();
+        $allProblems = Problem::with('offers')->with('user_from')->get();
         // dd($allProblems->main_solver->name);
 
         // dd(Offer::with('personFrom')->find(1)->personFrom->name);
@@ -72,15 +72,15 @@ class ProblemController extends Controller
     	$myProblems = Auth::user()->problems;
         $this->readAssigns($myProblems);
         $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-        $count = 0;
+        $countn = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++;
+               $countn++;
             }
         }
 
         $myAssigns = Auth::user()->problems()->where('read', 0)->get();
-    	return view('myProblems')->with('myProblems', $myProblems)->with('myMessagesCount', $count)->with('myAssigns', count($myAssigns));
+    	return view('myProblems')->with('myProblems', $myProblems)->with('myMessagesCount', $countn)->with('myAssigns', count($myAssigns));
     }
 
     private function readAssigns($problems){
@@ -119,13 +119,13 @@ class ProblemController extends Controller
 
     public function newProblem(){
         $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-        $count = 0;
+        $countn = 0;
         foreach ($myMessagess as $key => $message) {
             if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++;
+               $countn++;
             }
         }
-        return view('newProblem')->with('myMessagesCount', $count);
+        return view('newProblem')->with('myMessagesCount', $countn);
     }
 
     public function newproblemsubmit(Request $request){
@@ -198,7 +198,7 @@ class ProblemController extends Controller
     }
 
     public function getProblem(Request $request){
-        $problem = Problem::with('offers')->findorFail($request->probId);
+        $problem = Problem::with('offers')->with('user_from')->findorFail($request->probId);
 
         return $problem->toArray();
     }

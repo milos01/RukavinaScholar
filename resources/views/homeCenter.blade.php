@@ -121,6 +121,7 @@
                               </div>
                               <div class="ibox-content">
                                 <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
+                                
                                 <thead>
                                 <tr>
                                     <th data-sort-ignore="true">#</th>
@@ -130,7 +131,9 @@
                                     <th data-sort-ignore="true">Created At</th>
                                     <th data-sort-ignore="true">Info</th>
                                     <th data-sort-ignore="true"></th>
-                                    <th data-hide="all"></th>
+                                    @if(!Auth::user()->is('regular'))
+                                      <th data-hide="all"></th>
+                                    @endif
 
                                 </tr>
                                 </thead>
@@ -142,7 +145,10 @@
                                     <td><% problem.problem_type %></td>
                                     <td><% problem.created_at | dateFilter: 'MM/dd/yyyy' %></td>
                                     <td>
-                                      <span id="statusHolder"></span>
+                                      <span id="statusHolder">
+
+                                      </span>
+                                      <div ng-click="requestAgain()"><a>click to reset</a></div>
                                     </td>
                                     <td>
                                       <span ng-bind="problem.timer"></span>
@@ -155,7 +161,7 @@
                                       </span>
                                     </div>
                                     </td>
-                                    <td>
+                                    <td ng-show="showOffersManu">
                                       <div ng-repeat="offer in problem.offers">
                                         <div class="row" style="width:100%">
 
@@ -437,5 +443,5 @@
      </div>
      @stop
      @section('jsSocket')
-     <script src="../../../js/HomeJS.js"></script>
+     
      @stop

@@ -21,7 +21,7 @@
     });
 	Route::auth();
 	Route::get('/api/application/getuserbyemail','UserController@getApiUsersEmail');
-	Route::group(['prefix'=>'home', 'middleware' => 'auth'], function () {
+	Route::group(['middleware' => 'auth'], function () {
 		Route::get('/', 'HomeController@index');
 
 		//User routes
@@ -29,17 +29,19 @@
 		Route::post('updateUser', 'UserController@updateUser');
 		Route::get('user/{id}', 'UserController@showUserProfile');
 		Route::post('updatePassword', 'UserController@updatePassword');
-		Route::get('api/application/getuser', 'UserController@getApiUser');
-		Route::get('api/application/finduserbid', 'UserController@findUserById');
+
+		//User api routes
+		Route::get('api/application/user', 'UserController@getLoggedUser'); // getuser
+		Route::get('api/application/user/{id}', 'UserController@findUserById'); // finduserbid
 		Route::post('api/application/getusers','UserController@getApiUsers');
 		Route::post('api/application/getusers2','UserController@getApiUsers2');
 
 		//Problem routes
 		Route::get('problem/{id}', 'ProblemController@showProblem');
 		Route::get('problem/{id}/download', 'ProblemController@problemDownload');
-    Route::get('problem/{id}/reset', 'ProblemController@updateProblemExpireTime');
-    Route::put('api/problem/{id}/resetWaiting', 'ProblemController@resetWaiting');
-    Route::put('api/problem/{id}/inactive', 'ProblemController@inactiveProblem');
+    	Route::get('problem/{id}/reset', 'ProblemController@updateProblemExpireTime');
+    	Route::put('api/problem/{id}/resetWaiting', 'ProblemController@resetWaiting');
+    	Route::put('api/problem/{id}/inactive', 'ProblemController@inactiveProblem');
 		Route::get('myproblem/{id}', 'ProblemController@showMyProblem');
 		Route::get('takeProblem/{id}', 'ProblemController@takeProblem');
 		Route::get('assigned', 'ProblemController@assigned');
@@ -51,7 +53,7 @@
 		Route::post('api/application/getuserproblemoffer', 'ProblemController@getproblemoffers');
 		Route::get('api/application/getOneUserProblems', 'ProblemController@getOneUserProblems');
 		Route::post('api/application/getProblem', 'ProblemController@getProblem');
-    Route::put('api/application/makePayment', 'ProblemController@takeProblemToSolve');
+    	Route::put('api/application/makePayment', 'ProblemController@takeProblemToSolve');
 
 		//Uplaod routes
 		Route::post('api/application/saveImage', 'UploadController@saveImage');

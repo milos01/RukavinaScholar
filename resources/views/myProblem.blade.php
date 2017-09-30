@@ -144,7 +144,7 @@
 																									@if($problem->paid == 0)
 																										<a href="" class="btn btn-success btn-sm" type="button" disabled="true">Not paid yet, send remider</a>
 																									@else
-																										<a href=""  ng-controller="MyCtrldd" class="btn btn-success btn-sm" type="button" ng-click="showDetails()"><i class="fa fa-check" aria-hidden="true" disabled=true></i> Post solution</a>
+																										<a href=""  ng-controller="toggleController" class="btn btn-success btn-sm" type="button" ng-click="showDetails()"><i class="fa fa-check" aria-hidden="true" disabled=true></i> Post solution</a>
 																									@endif
 																								</a>
                                             @endif

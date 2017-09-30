@@ -54,6 +54,12 @@ return [
             'visibility' => 'public',
         ],
 
+        'avatar_uploads' => [
+            'driver' => 'local',
+            'root' => storage_path('uploads/avatars'),
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => 'AKIAIHHKKFUDDAUDVY5A',

@@ -1,0 +1,137 @@
+(function(){
+
+$(document).mouseup(function (e)
+{
+    var container = $("#responseDiv");
+    var container2 = $("#responseDiv2");
+
+    if (!container.is(e.target) // if the target of the click isn't the container...
+        && container.has(e.target).length === 0 || !container2.is(e.target) // if the target of the click isn't the container...
+        && container2.has(e.target).length === 0) // ... nor a descendant of the container
+    {
+        $("#responseDiv").hide();
+        $("#responseDiv2").hide();
+    }
+});
+
+app.factory('selectedFilesService', function() {
+    return {
+        selectedFiles : []
+    };
+});
+
+app.directive('capitalizeFirst', function($parse) {
+   	return {
+    	require: 'ngModel',
+    	link: function(scope, element, attrs, modelCtrl) {
+        var capitalize = function(inputValue) {
+           if (inputValue === undefined) { inputValue = ''; }
+           var capitalized = inputValue.charAt(0).toUpperCase() +
+                             inputValue.substring(1);
+           if(capitalized !== inputValue) {
+              modelCtrl.$setViewValue(capitalized);
+              modelCtrl.$render();
+            }
+            return capitalized;
+         }
+         modelCtrl.$parsers.push(capitalize);
+         capitalize($parse(attrs.ngModel)(scope)); // capitalize initial value
+     }
+   };
+});
+
+app.directive('passwordLength', function($timeout, $q, $http){
+    return {
+        require: 'ngModel',
+    	link: function(scope, elm, attr, model) {
+            model.$asyncValidators.passwordLen = function() {
+                console.log();
+                if(model.$viewValue.length >= 4 && model.$viewValue.length <= 10){
+                  model.$setValidity('passlen', true);
+                  return $q.resolve();
+                }else{
+                  model.$setValidity('passlen', false);
+                  return $q.reject();
+                }
+            };
+        }
+ 	}
+});
+
+app.directive('myOffer', function($http, loggedUserService) {
+	return {
+    	restrict: 'A',
+    	scope: {
+     	offer: '=',
+    },
+    link: function(scope) {
+		$http({
+			method: 'GET',
+			url: '/home/api/application/finduserbid',
+			headers: {
+			  "Content-Type": "application/json"
+			},
+			params: {userId: scope.offer.person_from}
+		}).then(function(res){
+        	scope.offer.persFrom = res.data;
+        	loggedUserService.user().then(function(user) {
+			if(user.id === scope.offer.person_from){
+				scope.offer.isMine = '(you)';
+			}
+        	});
+      	});
+    }
+  	};
+});
+
+app.directive("passwordVerify", function() {
+    return {
+        require: "ngModel",
+        scope: {
+            passwordVerify: '='
+        },
+        link: function(scope, element, attrs, ctrl) {
+            scope.$watch(function() {
+                var combined;
+
+                if (scope.passwordVerify || ctrl.$viewValue) {
+                    combined = scope.passwordVerify + '_' + ctrl.$viewValue;
+                }
+                return combined;
+            }, function(value) {
+              if(scope.passwordVerify){
+                if (value) {
+                    console.log("s");
+                    ctrl.$parsers.unshift(function(viewValue) {
+                        var origin = scope.passwordVerify;
+
+                        if (origin !== viewValue) {
+                            ctrl.$setValidity("passwordVerify", false);
+                            return undefined;
+                        } else {
+                            ctrl.$setValidity("passwordVerify", true);
+                            return viewValue;
+                        }
+                    });
+                }
+              }
+            });
+        }
+    };
+});
+
+app.service('removeFileS3Service', function($http){
+    return {
+        remove: function(fileName){
+            return $http.post('/home/api/application/removeUploadedFile', { "fileName" : fileName});
+        }
+    }
+});
+
+app.controller('toggleController', function($scope){
+  $scope.showDetails = function(){
+    $('.modUpdate').toggle();
+  }
+});
+
+})(angular);

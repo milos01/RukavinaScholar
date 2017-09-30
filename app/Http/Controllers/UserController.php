@@ -136,7 +136,8 @@ class UserController extends Controller
         return $allUsers->toArray();
     }
 
-    public function getApiUser(){
+    
+    public function getLoggedUser(){
         $user = User::with('role')->findorFail(Auth::id());
         return $user->toArray();
     }

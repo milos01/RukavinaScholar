@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\saveNewFileEvent' => [
-            'App\Listeners\saveNewFileHandler',
+        'App\Events\makeProfilePictureEvent' => [
+            'App\Listeners\makeProfilePictureHandler',
         ],
     ];
 

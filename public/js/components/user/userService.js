@@ -5,7 +5,7 @@
             user: function() {
             var promise =  $http({
                   method: 'GET',
-                  url: '/home/api/application/getuser',
+                  url: '/home/api/application/user',
                   headers: {
                       "Content-Type": "application/json"
                   },

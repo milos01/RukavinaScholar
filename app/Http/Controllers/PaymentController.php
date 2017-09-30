@@ -29,7 +29,6 @@ class PaymentController extends Controller
       $problemId = $request->probId;
     	$problemDesc = $request->description;
     	$problem = Problem::findorFail($problemId);
-    	$problem->waiting = 0;
     	$price = $request->price;
 
     	$offer = new Offer();

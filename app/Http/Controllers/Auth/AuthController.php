@@ -9,6 +9,7 @@ use Socialite;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use App\Events\makeProfilePictureEvent;
 
 use Illuminate\Http\Request;
 use App\Services\ActivationService;
@@ -157,7 +158,9 @@ class AuthController extends Controller
 
         $user = $this->create($request->all());
 
-        $this->activationService->sendActivationMail($user);
+        event(new makeProfilePictureEvent($request->email, $request->name, $request->last_name));
+
+        // $this->activationService->sendActivationMail($user);
 
         return redirect('/login')->with('status', 'We sent you an activation code. Check your email.');
     }

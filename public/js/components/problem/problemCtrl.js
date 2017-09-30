@@ -10,11 +10,12 @@
   angular.module('kbkApp').controller('showProblemController', function($scope, $http, $interval, $parse){
     $scope.loading = true;
     $scope.limit = 20;
+
     $scope.colourIncludes = [];
     $scope.noFound = 'No tasks found!';
     $http({
         method: 'GET',
-        url: 'home/api/application/getuser',
+        url: 'home/api/application/user',
         headers: {
             "Content-Type": "application/json"
         },
@@ -22,6 +23,7 @@
     }).then(function(res){
         var loggedUser = res.data;
         if (res.data.role.name == "regular") {
+          console.log('regular');
           $scope.showOffersManu = false;
           $http({
             method: 'GET',
@@ -33,6 +35,52 @@
           }).then(function(res){
 
           $scope.problems = res.data;
+          socket.on('updateTaskOffersEmit',function(data){
+            angular.forEach(res.data, function(problem) {
+              if(problem.id == data.offer.problem_id){
+                var newOffer = {
+                  created_at: data.offer.created_at,
+                  description:data.offer.description,
+                  price:data.offer.price,
+                  persFrom:{
+                    name: data.offer.user_from.name,
+                    lastName: data.offer.user_from.lastName
+                  }
+                }
+                problem.offers.push(newOffer);
+
+              }
+            });
+            $scope.$apply(function () {
+              $scope.problems = res.data;
+            });
+          });
+
+          socket.on('updateProblemStatusEmit', function(data){
+            var retVal = {};
+            var newProblems =  $http({
+            method: 'GET',
+            url: 'home/api/application/getOneUserProblems',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: {}
+          }).then(function(ress){
+            
+            
+              $scope.problems = ress.data;
+            
+          });
+          // $scope.$apply(function () {
+            
+          // }          
+            // angular.forEach(res.data, function(problem) {
+            //   if(problem.id == data.problem_id){
+
+            //   }
+            // });
+          });
+          // console.log($scope.problems);
           //show accept and decline
           for (var i = res.data.length - 1; i >= 0; i--) {
             var min = 100000;
@@ -80,9 +128,13 @@
               }
             }
 
+            $scope.requestAgain = function(){
+              socket.emit('updateAdminTime', {emailTo: "milosa942@gmail.com"});
+            }
 
           });
         }else{
+        console.log('admin/moderator');
         $scope.showOffersManu = true;
         $http({
             method: 'GET',
@@ -113,6 +165,93 @@
           //     // }
           //   });
           // }
+          
+          socket.on('updateAdminTimeEmit', function(){
+            $http({
+              method: 'GET',
+              url: 'home/api/application/getuserproblems',
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              data: {}
+            }).then(function(ress){
+              $http({
+              method: 'GET',
+              url: 'home/problem/1/reset',
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              data: {}
+            }).then(function(resss){
+                 var x = $interval(function() {
+console.log("vrti");
+                var doneCounters = [];
+
+                for (var i = resss.data.length - 1; i >= 0; i--) {
+
+                  var countDownDate = new Date(resss.data[i].time_ends_at).getTime();
+
+
+
+                  // Get todays date and time
+                  var now = new Date().getTime();
+
+                  // Find the distance between now an the count down date
+                  var distance = countDownDate - now;
+                  doneCounters[i] = distance;
+
+                  // Time calculations for days, hours, minutes and seconds
+                  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                  // Display the result in the element with id="demo"
+                  resss.data[i].timer = minutes + "m " + seconds + "s ";
+
+                  if(distance < 0){
+                    console.log("oma usoopo");
+                    resss.data[i].timer = "Expired";
+                    problem = resss.data[i];
+                    if(resss.data[i].waiting !== 0){
+                      // Set waiting on false(0)
+                      $http({
+                          method: 'PUT',
+                          url: 'home/api/problem/'+resss.data[i].id+'/resetWaiting',
+                          headers: {
+                              "Content-Type": "application/json"
+                          },
+                          data: {}
+                      }).then(function(ress1){
+                         console.log(problem);
+                        //socket emit event for changing task status
+                        socket.emit('updateProblemStatus', {emailTo: problem.user_from.email, problem_id: problem.id});
+                      });
+                    }
+                  }
+
+                  //If the count down is finished, write some text
+
+                }
+
+                var checkClearInterval = false;
+                for (var i = doneCounters.length - 1; i >= 0; i--) {
+                  if (doneCounters[i] > 0) {
+                    checkClearInterval = true;
+                  }
+                }
+                if(!checkClearInterval){
+                  $interval.cancel(x);
+                }
+
+              }, 1000);
+
+            });
+              // console.log(ress.data);
+             
+            
+            });
+          });
 
           for (var i = res.data.length - 1; i >= 0; i--) {
             res.data[i].isCollapsed = true;
@@ -143,7 +282,6 @@
                   var distance = countDownDate - now;
                   doneCounters[i] = distance;
 
-
                   // Time calculations for days, hours, minutes and seconds
                   var days = Math.floor(distance / (1000 * 60 * 60 * 24));
                   var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -155,8 +293,8 @@
 
                   if(distance < 0){
                     res.data[i].timer = "Expired";
+                    problem = res.data[i];
                     if(res.data[i].waiting !== 0){
-
                       // Set waiting on false(0)
                       $http({
                           method: 'PUT',
@@ -165,6 +303,10 @@
                               "Content-Type": "application/json"
                           },
                           data: {}
+                      }).then(function(ress){
+                         console.log(problem);
+                        //socket emit event for changing task status
+                        socket.emit('updateProblemStatus', {emailTo: problem.user_from.email, problem_id: problem.id});
                       });
                     }
                   }

@@ -18,48 +18,40 @@ function handler (req, res) {
   });
 }
 
+function emailExists(email){
+  return (email in users) ? true : false;
+}
+
 io.on('connection', function (socket) {
-  console.log("pocetak "+socket.id);
   socket.on('homeLoad', function(data){
-      
-      users[data.email] = socket.id;
-      console.log(users[data.email]);
-  });
-  socket.on('my other event', function (data, callback) {
-    console.log(socket.id);
-  console.log('<------>');
-    if (data.email in users) {
-      // callback(false);
-    }else{
       socket.nick = data.email;
       users[socket.nick] = socket.id;
-      // callback(true);
-    }
-    var size = 0;
-    for (key in users) {
-        size++;
-    }
-    console.log(users[socket.nick]);
+      console.log(users);
   });
 
-  socket.on('messageNotify', function (data) {
-    if(data.email in users){
-      socket.broadcast.to(users[data.email]).emit('newMessageN', {d:'fuck.'});
-      // io.sockets.connected[ff].emit('newMessageN', {d:'ff'});
+  socket.on('updateTaskOffers', function (data) {
+    if(emailExists(data.emailTo)){
+      socket.broadcast.to(users[data.emailTo]).emit('updateTaskOffersEmit', {offer: data.offer});
     }
-    // socket.emit('newMessage');
+  });  
+
+  socket.on('updateProblemStatus', function (data) {
+    if(emailExists(data.emailTo)){
+      socket.broadcast.to(users[data.emailTo]).emit('updateProblemStatusEmit', {problem_id: data.problem_id});
+    }
   });
+
+  socket.on('updateAdminTime', function (data) {
+    if(emailExists(data.emailTo)){
+      socket.broadcast.to(users[data.emailTo]).emit('updateAdminTimeEmit');
+    }
+  });
+
   socket.on('disconnect', function(){
     if(!socket.nick){
       return;
     }else{
-      // delete users[socket.nick];
+      delete users[socket.nick];
     }
-    var size = 0;
-    for (key in users) {
-        size++;
-    }
-    console.log(size);
-
   });
 });

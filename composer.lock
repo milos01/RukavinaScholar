@@ -4,9 +4,50 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fdbe3e5e27c251d8602dec34d16ebd0b",
-    "content-hash": "14bca732fe4cf73523583454c7562ae0",
+    "hash": "45a6ef99ed68c92d16e853aca1930854",
+    "content-hash": "3f72b29b4d123b002ae45724e0a9b40c",
     "packages": [
+        {
+            "name": "a6digital/laravel-default-profile-image",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/a6digital/laravel-default-profile-image.git",
+                "reference": "29eb45f733f2a5518bdd6b1f4985efe474dd4330"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/a6digital/laravel-default-profile-image/zipball/29eb45f733f2a5518bdd6b1f4985efe474dd4330",
+                "reference": "29eb45f733f2a5518bdd6b1f4985efe474dd4330",
+                "shasum": ""
+            },
+            "require": {
+                "intervention/image": "2.*",
+                "php": ">=5.4.0"
+            },
+            "type": "laravel-library",
+            "autoload": {
+                "psr-0": {
+                    "A6digital\\Image": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hasan Toprakkaya",
+                    "email": "hasan@a6digital.com"
+                }
+            ],
+            "description": "Laravel package to create default profile image using name of user.",
+            "homepage": "https://github.com/a6digital/laravel-default-profile-image",
+            "keywords": [
+                "laravel default profile image"
+            ],
+            "time": "2017-01-27 06:06:12"
+        },
         {
             "name": "aws/aws-sdk-php",
             "version": "3.33.0",

@@ -160,6 +160,7 @@ return [
         Chumper\Zipper\ZipperServiceProvider::class,
         Netshell\Paypal\PaypalServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        A6digital\Image\DefaultProfileImageServiceProvider::class,
 
     ],
 
