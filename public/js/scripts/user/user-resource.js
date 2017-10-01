@@ -10,6 +10,8 @@
 				return response;
 			});
 		}
+
+
 		
 		// /user/:uid
 		retVal.getUserById =  function(uid){
@@ -18,8 +20,8 @@
 			});
 		}
 
-		retVal.logoutUser =  function(){
-			return Restangular.one('logout').get().then(function(response){
+		retVal.getLoggedUserTasks =  function(){
+			return Restangular.one('getOneUserProblems').get().then(function(response){
 				return response;
 			});
 		}

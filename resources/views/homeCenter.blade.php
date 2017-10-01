@@ -93,7 +93,7 @@
     <div class="p-w-md m-t-sm">
 
 
-                    <div class="row"  ng-controller="showProblemController">
+                    <div class="row"  ng-controller="showProblemController" ng-init="init({{Auth::user()}})">
                         <div class="col-lg-12">
                           <div class="ibox float-e-margins">
                               <div class="ibox-title">

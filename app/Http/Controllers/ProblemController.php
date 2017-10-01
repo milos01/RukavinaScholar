@@ -58,12 +58,7 @@ class ProblemController extends Controller
 
     public function getAllProblems(){
         $allProblems = Problem::with('offers')->with('user_from')->get();
-        // dd($allProblems->main_solver->name);
-
-        // dd(Offer::with('personFrom')->find(1)->personFrom->name);
-        // $allProblems::->get();
-
-        return json_encode($allProblems);
+        return $allProblems;
     }
 
 
@@ -114,7 +109,7 @@ class ProblemController extends Controller
 			$problem = Problem::findOrFail($id);
 			$problem->inactive = 1;
 			$problem->save();
-			return response()->json($problem);
+			return $problem;
 		}
 
     public function newProblem(){
@@ -193,7 +188,6 @@ class ProblemController extends Controller
 
     public function getOneUserProblems(){
         $userProblems = Problem::with('offers')->where('person_from', Auth::user()->id)->get();
-        // dd($userProblems);
         return $userProblems->toArray();
     }
 
