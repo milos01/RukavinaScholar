@@ -16,11 +16,10 @@ app.factory('UtilService', function($http){
         },
         STATUS: {
         	MIN_OFFER : {message: "Offer:"},
-        	NO_OFFERS : {message: "No offers. Request again"},
+        	NO_OFFERS : {message: "No offers"},
         	UNDER_WORK : {message: "Under work..."},
         	FINISHED : {message: "Finished"},
         	WAITING_OFFERS : {message: "Waiting for offers"},
-        	OFFER_NUM : {message: "offer_num"},
         	MY_OFFER : {message: "(You bidded)"}
 
         } 

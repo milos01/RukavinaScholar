@@ -187,8 +187,8 @@ class ProblemController extends Controller
     }
 
     public function getOneUserProblems(){
-        $userProblems = Problem::with('offers')->where('person_from', Auth::user()->id)->get();
-        return $userProblems->toArray();
+        $userProblems = Problem::with('offers')->with('problem_type')->where('person_from', Auth::user()->id)->get();
+        return $userProblems;
     }
 
     public function getProblem(Request $request){

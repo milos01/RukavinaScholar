@@ -143,7 +143,7 @@
                   <td><% problem.created_at | dateFilter: 'MM/dd/yyyy' %></td>
                   <!-- info -->
                   <td>
-                    <span problem-show-directive problem="problem" user="{{Auth::id()}}"></span>
+                    <span problem-show-directive problem="problem" user="{{Auth::user()}}"></span>
                     <!-- <div ng-click="requestAgain()"><a>click to reset</a></div> -->
                   </td>
                   <!-- <td>asdasdasdasdasdasas</td> -->
@@ -158,6 +158,7 @@
                                       </span>
                                     </div>
                                   </td> -->
+                                  @if(!Auth::user()->is('regular'))
                                   <td>
                                     <div ng-repeat="offer in problem.offers">
                                       <div class="row" style="width:100%">
@@ -173,6 +174,7 @@
                                     </div>
                                     <p ng-show="problem.offers.length == 0" style="text-align:center;margin-top:10px;position: relative;">No offers for this task</p>
                                   </td>
+                                  @endif
                                   <hr/>
                                   </tr>
 

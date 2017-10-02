@@ -142,7 +142,7 @@
             }
           })
           $scope.mOffer = minOffer;
-          model0 = $parse("showAcceptDecline"+res[i].id);
+          var model0 = $parse("showAcceptDecline"+res[i].id);
           var model2 = $parse('mOffer'+res[i].id);
           // Assigns a value to it
           model0.assign($scope, true);
@@ -297,7 +297,7 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
 
 app.directive('problemShowDirective', function (UtilService, $compile, $http, $parse) {
   return {
-    template: '<a role="button" class="btn btn-default btn-xs">{{problem.status.count}} {{problem.status.message}} {{problem.status.price}}</button>',
+    templateUrl: 'js/templates/taskInfoTemplate.html',
     restrict: 'A',
     scope: { 
       problem: '=',
@@ -309,14 +309,12 @@ app.directive('problemShowDirective', function (UtilService, $compile, $http, $p
         if (scope.problem.waiting == 0 && scope.problem.took == 0) {
             if(scope.problem.offers.length > 0){
               var minOffer = UtilService.findMin(scope.problem);
-              UtilService.STATUS.MIN_OFFER.price = minOffer.price;
+              UtilService.STATUS.MIN_OFFER.price = '$'+minOffer.price;
               scope.problem.status = UtilService.STATUS.MIN_OFFER;
             }else{
+              UtilService.STATUS.NO_OFFERS.link = 'home/problem/'+scope.problem.id+'/reset';
+              scope.problem.showLink = true;
               scope.problem.status = UtilService.STATUS.NO_OFFERS;
-              // var el3 = angular.element('<span>No offers.&nbsp; <span  ng-click="requestAgain()"><a href="home/problem/'+scope.problem.id+'/reset" style="position:absolute">Request again</a></span></sapn>');
-              // $compile(el3)(scope);
-              // elm3 = element.find("#statusHolder");
-              // elm3.append(el3);
             }
 
         }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
@@ -348,6 +346,7 @@ app.directive('problemShowDirective', function (UtilService, $compile, $http, $p
         }
 
       }
+
     }
   }
 });
