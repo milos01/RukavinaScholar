@@ -57,7 +57,7 @@ class ProblemController extends Controller
     }
 
     public function getAllProblems(){
-        $allProblems = Problem::with('offers')->with('user_from')->get();
+        $allProblems = Problem::with('offers')->with('user_from')->with('problem_type')->get();
         return $allProblems;
     }
 

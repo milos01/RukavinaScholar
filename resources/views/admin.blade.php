@@ -27,7 +27,7 @@ rel="stylesheet">
 <link href="../../../../css/plugins/dropzone/basic.css" rel="stylesheet">
 <link href="../../../../css/plugins/dropzone/dropzone.css" rel="stylesheet">
 <!-- FooTable -->
-<link href="../../../../css/plugins/footable/footable.core.css" rel="stylesheet">
+<link href="{{asset('css/plugins/footable/footable.core.css')}}" rel="stylesheet">
 <!-- Toastr style -->
 <link href="../../../../css/plugins/toastr/toastr.min.css" rel="stylesheet">
 <!-- <link href="../../../../css/tooltip.css" rel="stylesheet"> -->
@@ -39,6 +39,10 @@ rel="stylesheet">
 <style>
 body {
     font-family: 'Lato';
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }
 
 .fa-btn {
@@ -256,7 +260,7 @@ body {
             <script src="../../../../js/demo/peity-demo.js"></script>
 
             <!-- FooTable -->
-            <script src="../../../../js/plugins/footable/footable.all.min.js"></script>
+            
 
             <!-- Custom and plugin javascript -->
             <script src="../../../../js/inspinia.js"></script>
@@ -288,7 +292,7 @@ body {
             <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
             <!-- Toastr script -->
             <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
-            <!-- <script src="../../../../bower_components/angular-sanitize/angular-sanitize.min.js"></script> -->
+           
             <script src="../../../../js/plugins/toastr/toastr.min.js"></script>
             <!-- ChartJS-->
             <script src="../../../../js/plugins/chartJs/Chart.min.js"></script>
@@ -299,6 +303,9 @@ body {
 
             <!-- Sweet alert -->
             <script src="../../../../js/plugins/sweetalert/sweetalert.min.js"></script>
+            <script type="text/javascript" src="{{asset('js/plugins/footable/footable.all.min.js')}}"></script>
+            <script type="text/javascript" src="{{asset('bower_components/angular-footable/dist/angular-footable.min.js')}}"></script>
+            <script type="text/javascript" src="{{asset('bower_components/angular-sanitize/angular-sanitize.min.js')}}"></script>
             <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.js"></script>
             <script type="text/javascript" src="{{asset('bower_components/summernote/dist/summernote.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/lodash/dist/lodash.min.js')}}"></script>
@@ -309,28 +316,20 @@ body {
             <!-- App js services  -->
             <script src="{{asset('js/scripts/services/alert-service.js')}}"></script>
             <script src="{{asset('js/scripts/user/user-service.js')}}"></script>
-
+            <script src="{{asset('js/scripts/utils/util-service.js')}}"></script>
+            <!-- App js filters -->
+            <script src="{{asset('js/scripts/utils/filters/filters.js')}}"></script>
             <!-- App js resources -->
             <script src="{{asset('js/scripts/user/user-resource.js')}}"></script>
+            <script src="{{asset('js/scripts/problem/problem-resource.js')}}"></script>
             <!-- App js controllers -->
             <script src="{{asset('js/scripts/utils/util-controller.js')}}"></script>
             <script src="{{asset('js/scripts/user/user-controller.js')}}"></script>
             <script src="{{asset('js/scripts/problem/problem-controller.js')}}"></script>
-            <script src="{{asset('js/scripts/problem/dropzone-controller.js')}}"></script>
-            <script src="{{asset('js/scripts/problem/payment/payment-controller.js')}}"></script>
+            <!-- <script src="{{asset('js/scripts/problem/dropzone-controller.js')}}"></script> -->
+            <!-- <script src="{{asset('js/scripts/problem/payment/payment-controller.js')}}"></script> -->
 
-                        <script>
-                $(document).ready(function () {
-                  $('.footable').footable();
-                  $('[data-toggle="tooltip"]').tooltip();
-                  $("[rel='tooltip']").tooltip();
-                  $('.i-checks').iCheck({
-                    checkboxClass: 'icheckbox_square-green',
-                    radioClass: 'iradio_square-green',
-                });
-
-              });
-          </script>
+                    
           <script>
 
             $(document).ready(function() {

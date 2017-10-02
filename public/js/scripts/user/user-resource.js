@@ -13,9 +13,9 @@
 
 
 		
-		// /user/:uid
-		retVal.getUserById =  function(uid){
-			return Restangular.one('user',uid).get().then(function(response){
+		// /user/:id
+		retVal.getUser =  function(id){
+			return Restangular.one('user',id).get().then(function(response){
 				return response;
 			});
 		}

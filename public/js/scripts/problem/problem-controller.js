@@ -3,7 +3,6 @@
 	app.controller('showProblemController', function(UserResource, ProblemResource, $scope, $interval, $parse, $http){
     $scope.init = function(loggedUser){
       $scope.loading = true;
-      $scope.limit = 20;
       $scope.taskTypeIncludes = [];
       $scope.noFound = 'No tasks found!';
 
@@ -27,9 +26,6 @@
           $scope.problems = loggedUserTasks;
           //shows accept decline buttons (need to refector in directive)
           showAcceptDecline(loggedUserTasks);
-
-          
-
           $scope.requestAgain = function(){
             socket.emit('updateAdminTime', {emailTo: "milosa942@gmail.com"});
           }
@@ -39,23 +35,19 @@
           $scope.loading = false;
         });
       }else{
-        $scope.showOffersManu = true;
-        for (var i = res.data.length - 1; i >= 0; i--) {
-          res.data[i].isCollapsed = true;
-
-          if(res.data[i].offers.length === 0){
-            res.data[i].showDown = false;
-            res.data[i].showUp = false;
-          }else{
-            res.data[i].showDown = true;
-          }
-
-
-        }
-
         ProblemResource.getAllTasks().then(function(allTasks){
           $scope.problems = allTasks;
           taskCountdown(allTasks);
+          for (var i = allTasks.length - 1; i >= 0; i--) {
+            allTasks[i].isCollapsed = true;
+
+            if(allTasks[i].offers.length === 0){
+              allTasks[i].showDown = false;
+              allTasks[i].showUp = false;
+            }else{
+              allTasks[i].showDown = true;
+            }
+          }
 
         }).finally(function() {
           // called no matter success or failure
@@ -117,112 +109,112 @@
         }
       }
     }
-  });
 
-  function showAcceptDecline(res){
-    for (var i = res.length - 1; i >= 0; i--) {
-      var min = 100000;
-      var minOffer;
-
-      if(res[i].offers.length > 0 && res[i].waiting === 0 && res[i].took === 0){
-        angular.forEach(res[i].offers, function(value, key) {
-          if(value.price < min){
-            min = value.price;
-            minOffer = value;
-          }
-        })
-        $scope.mOffer = minOffer;
-        model0 = $parse("showAcceptDecline"+res[i].id);
-        var model2 = $parse('mOffer'+res[i].id);
-        // Assigns a value to it
-        model0.assign($scope, true);
-        model2.assign($scope, minOffer);
-      }
-    }
-  }
-
-  function taskTypeFilter(){
-    $scope.includeTaskType = function(taskType) {
-      var i = $.inArray(taskType, $scope.taskTypeIncludes);
-      if (i > -1) {
-        $scope.taskTypeIncludes.splice(i, 1);
-      } else {
-        $scope.taskTypeIncludes.push(colour);
-      }
-    }
-
-    $scope.taskTypeFilter = function(task) {
-      if ($scope.taskTypeIncludes.length > 0) {
-          if ($.inArray(task.problem_type, $scope.colourIncludes) < 0)
-              return;
-      }
-      return task;
-    }
-  }
-
-  function taskCountdown(tasks){
-    var x = $interval(function() {
-
-      var doneCounters = [];
-
-      for (var i = tasks.length - 1; i >= 0; i--) {
-
-        var countDownDate = new Date(tasks[i].time_ends_at).getTime();
-
-
-
-        // Get todays date and time
-        var now = new Date().getTime();
-
-        // Find the distance between now an the count down date
-        var distance = countDownDate - now;
-        doneCounters[i] = distance;
-
-        // Time calculations for days, hours, minutes and seconds
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        // Display the result in the element with id="demo"
-        tasks.timer = minutes + "m " + seconds + "s ";
-
-        if(distance < 0){
-          tasks[i].timer = "Expired";
-          problem = tasks[i];
-          if(tasks[i].waiting !== 0){
-            // Set waiting on false(0)
-            $http({
-                method: 'PUT',
-                url: 'home/api/problem/'+tasks[i].id+'/resetWaiting',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: {}
-            }).then(function(ress){
-               console.log(problem);
-              //socket emit event for changing task status
-              socket.emit('updateProblemStatus', {emailTo: problem.user_from.email, problem_id: problem.id});
-            });
-          }
-        }
-
-        //If the count down is finished, write some text
-
-      }
-
-      var checkClearInterval = false;
-      for (var i = doneCounters.length - 1; i >= 0; i--) {
-        if (doneCounters[i] > 0) {
-          checkClearInterval = true;
+    function taskTypeFilter(){
+      $scope.includeTaskType = function(taskType) {
+        var i = $.inArray(taskType, $scope.taskTypeIncludes);
+        if (i > -1) {
+          $scope.taskTypeIncludes.splice(i, 1);
+        } else {
+          $scope.taskTypeIncludes.push(taskType);
         }
       }
-      if(!checkClearInterval){
-        $interval.cancel(x);
-      }
 
-    }, 1000);
-  }
+      $scope.taskTypeFilter = function(task) {
+        if ($scope.taskTypeIncludes.length > 0) {
+            if ($.inArray(task.problem_type.name, $scope.taskTypeIncludes) < 0)
+                return;
+        }
+        return task;
+      }
+    }
+
+    function showAcceptDecline(res){
+      for (var i = res.length - 1; i >= 0; i--) {
+        var min = 100000;
+        var minOffer;
+
+        if(res[i].offers.length > 0 && res[i].waiting === 0 && res[i].took === 0){
+          angular.forEach(res[i].offers, function(value, key) {
+            if(value.price < min){
+              min = value.price;
+              minOffer = value;
+            }
+          })
+          $scope.mOffer = minOffer;
+          model0 = $parse("showAcceptDecline"+res[i].id);
+          var model2 = $parse('mOffer'+res[i].id);
+          // Assigns a value to it
+          model0.assign($scope, true);
+          model2.assign($scope, minOffer);
+        }
+      }
+    }
+
+    function taskCountdown(tasks){
+      var x = $interval(function() {
+
+        var doneCounters = [];
+
+        for (var i = tasks.length - 1; i >= 0; i--) {
+
+          var countDownDate = new Date(tasks[i].time_ends_at).getTime();
+
+
+
+          // Get todays date and time
+          var now = new Date().getTime();
+
+          // Find the distance between now an the count down date
+          var distance = countDownDate - now;
+          doneCounters[i] = distance;
+
+          // Time calculations for days, hours, minutes and seconds
+          var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          // Display the result in the element with id="demo"
+          tasks.timer = minutes + "m " + seconds + "s ";
+
+          if(distance < 0){
+            tasks[i].timer = "Expired";
+            var problem = tasks[i];
+            if(tasks[i].waiting !== 0){
+              // Set waiting on false(0)
+              $http({
+                  method: 'PUT',
+                  url: 'home/api/problem/'+tasks[i].id+'/resetWaiting',
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  data: {}
+              }).then(function(ress){
+                 console.log(problem);
+                //socket emit event for changing task status
+                socket.emit('updateProblemStatus', {emailTo: problem.user_from.email, problem_id: problem.id});
+              });
+            }
+          }
+
+          //If the count down is finished, write some text
+
+        }
+
+        var checkClearInterval = false;
+        for (var i = doneCounters.length - 1; i >= 0; i--) {
+          if (doneCounters[i] > 0) {
+            checkClearInterval = true;
+          }
+        }
+        if(!checkClearInterval){
+          $interval.cancel(x);
+        }
+
+      }, 1000);
+    }
+    });
 
 app.controller('newProblemController', function($scope, $http, alertSerice, selectedFilesService, removeFileS3Service){
   $http({
@@ -303,170 +295,69 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
   }
 });
 
-app.directive('problemShowDirective', function ($compile, $http, $parse) {
+app.directive('problemShowDirective', function (UtilService, $compile, $http, $parse) {
   return {
-    scope: {
-    problem: '=',
-    user: '='
-  },
+    template: '<a role="button" class="btn btn-default btn-xs">{{problem.status.count}} {{problem.status.message}} {{problem.status.price}}</button>',
+    restrict: 'A',
+    scope: { 
+      problem: '=',
+      user: '='
+    },
     link: function (scope, element, attrs) {
-      if (loggedUser.role.name == 'regular') {
-        scope.showOffersManu = false;
-        var countDownDate = new Date(scope.problem.time_ends_at).getTime();
-          // Get todays date and time
-        var now = new Date().getTime();
-        // Find the distance between now an the count down date
-        var distance = countDownDate - now;
-        if(distance < 0){
-          if(scope.problem.waiting !== 0){
-
-            // Set waiting on false(0)
-            $http({
-                method: 'PUT',
-                url: 'home/api/problem/'+scope.problem.id+'/resetWaiting',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: {}
-            }).then(function(){
-              elm3 = element.find("#statusHolder");
-              elm3.empty();
-
-              var el3 = angular.element('<span>No offers.&nbsp; <span  ng-click="requestAgain()"><a href="home/problem/'+scope.problem.id+'/reset" style="position:absolute">Request again</a></span></sapn>');
-              $compile(el3)(scope);
-              elm3.append(el3);
-            });
-
-          }
-        }
+      //if user has 'regular' role
+      if (scope.user.role_id == 1) {
         if (scope.problem.waiting == 0 && scope.problem.took == 0) {
-          if(distance < 0){
-
-            var min = 100000;
-            var minOffer;
-
             if(scope.problem.offers.length > 0){
-              angular.forEach(scope.problem.offers, function(value, key) {
-                if(value.price < min){
-                  min = value.price;
-                  minOffer = value;
-                }
-              })
-              console.log('1');
-              var el1 = angular.element('<span>Offer: $'+min+'</span>');
-              $compile(el1)(scope);
-              elm = element.find("#statusHolder");
-              elm.append(el1);
-
-              // var el2 = angular.element('<a href="home/problem/'+scope.problem.id+'/payment/'+minOffer.id+'" style="position:absolute" class="btn btn-info btn-xs">Make payment</a>');
-
-
+              var minOffer = UtilService.findMin(scope.problem);
+              UtilService.STATUS.MIN_OFFER.price = minOffer.price;
+              scope.problem.status = UtilService.STATUS.MIN_OFFER;
             }else{
-              var el3 = angular.element('<span>No offers.&nbsp; <span  ng-click="requestAgain()"><a href="home/problem/'+scope.problem.id+'/reset" style="position:absolute">Request again</a></span></sapn>');
-              $compile(el3)(scope);
-              elm3 = element.find("#statusHolder");
-              elm3.append(el3);
+              scope.problem.status = UtilService.STATUS.NO_OFFERS;
+              // var el3 = angular.element('<span>No offers.&nbsp; <span  ng-click="requestAgain()"><a href="home/problem/'+scope.problem.id+'/reset" style="position:absolute">Request again</a></span></sapn>');
+              // $compile(el3)(scope);
+              // elm3 = element.find("#statusHolder");
+              // elm3.append(el3);
             }
 
-          }else{
-            console.log(problem);
-            var el1 = angular.element('<span><i class="fa fa-clock-o" aria-hidden="true" style="color:black"></i> Pending...</span>');
-            $compile(el1)(scope);
-            elm = element.find("#statusHolder");
-            elm.append(el1);
-          }
         }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
-            var el1 = angular.element('<span><i class="fa fa-pencil" aria-hidden="true" style="color:black"></i> Under work...</span>');
-            $compile(el1)(scope);
-            elm = element.find("#statusHolder");
-            elm.append(el1);
-
-            var el2 = angular.element('<a href=""  class="btn btn-info btn-xs">Make paymentb</a>');
-
-            $compile(el2)(scope);
-            el = element.find("#paymentHolder");
-            el.append(el2);
+            scope.problem.status = UtilService.STATUS.UNDER_WORK;
+            //separete in other directive
+            // |
+            // V
+            // var el2 = angular.element('<a href=""  class="btn btn-info btn-xs">Make payment</a>');
+            // $compile(el2)(scope);
+            // el = element.find("#paymentHolder");
+            // el.append(el2);
         }else if(scope.problem.waiting == 0 && scope.problem.took == 2){
-            var el1 = angular.element('<span><i class="fa fa-check" aria-hidden="true" style="color:green"></i> Finished</span>');
-            $compile(el1)(scope);
-            elm = element.find("#statusHolder");
-            elm.append(el1);
-        }else{
-            // var $dd = $('#dropDownMenu');
-            // $dd.html('sadas');
-
-            var el3 = angular.element('<span>Waiting for offers</sapn>');
-            $compile(el3)(scope);
-            elm3 = element.find("#statusHolder");
-            elm3.append(el3);
-            // $("#dropDownMenu").prop('disabled',true);
+            scope.problem.status = UtilService.STATUS.FINISHED;
+        }else if(scope.problem.waiting == 1){
+            scope.problem.status = UtilService.STATUS.WAITING_OFFERS;
         }
       }else{
-
-
-
         if (scope.problem.offers.length == 0) {
-          var el3 = angular.element('<span><a href="/home/problem/'+scope.problem.id+'" role="button" class="btn btn-danger btn-xs"><i class="fa fa-clock-o" aria-hidden="true"></i> No offers</button></span>');
-          $compile(el3)(scope);
-          elm3 = element.find("#statusHolder");
-          elm3.append(el3);
+          scope.problem.status = UtilService.STATUS.NO_OFFERS;
         }else{
-          var el3 = angular.element('<span class="label label-default">'+scope.problem.offers.length+'</span>');
-          $compile(el3)(scope);
-          elm3 = element.find("#statusHolder");
-          elm3.append(el3);
+          UtilService.STATUS.MY_OFFER.count = scope.problem.offers.length + ' total';
           angular.forEach(scope.problem.offers, function(value, key) {
             if (value.person_from == scope.user) {
-              var el2 = angular.element('<span class="label label-default" style="margin-left:5px;">You bidded</span>');
-              $compile(el2)(scope);
-              elm = element.find("#statusHolder");
-              elm.append(el2);
+
+              scope.problem.status = UtilService.STATUS.MY_OFFER;
             }
           });
+          scope.problem.status = UtilService.STATUS.MY_OFFER;
         }
 
       }
-      scope.hoverItem = function(key){
-        var string = "hoverEdit"+key;
-        var newModel = $parse(string);
-        newModel.assign(scope, true);
-      }
-
-      scope.hoverOut = function(key){
-          var string = "hoverEdit"+key;
-          var model = $parse(string);
-           // Assigns a value to it
-          model.assign(scope, false);
-
-      };
-      scope.acceptOffer = function(){
-        alert('dd');
-      }
-
-    
-
-      
-        // scope.deletePatient = function(pacId, e){
-        //    e.preventDefault();
-        //    $http({
-        //         method: 'POST',
-        //         url: '/home/deletepatient',
-        //         headers: {
-        //             "Content-Type": "application/json"
-        //         },
-        //         data: {id: pacId}
-        //     }).then(function(res){
-        //       alert(res.data);
-        //     });https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.messenger.com%2Ft%2Fnikola.vorinski&h=ATN22LZwM5cR05F23qLX8JgsFYUadrAQyuliz5RiVJthT73PBT6Ph4yNTbWrqWkUCdZZU4hO222eLlmmZXaTGD8bD_wp_RtUhnCBOgPmPhML1cGTcwKHDpOEVLxcjf3rPaQw9Dmhtk6p2A
-        // }
     }
   }
 });
 
-app.controller('bidingController', function($scope, $http, $compile, $element, loggedUserService, alertSerice){
+
+
+app.controller('bidingController', function(UserResource, alertSerice, $scope, $http, $compile, $element){
 
   $scope.init = function(id){
-    loggedUserService.user().then(function(d) {
+    UserResource.user().then(function(d) {
   
     var lUser = d;
     if (lUser.role.name != 'regular') {

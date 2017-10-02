@@ -143,7 +143,7 @@ class UserController extends Controller
     }
 
     public function findUserById(Request $request){
-        $user = User::with('role')->findorFail($request->userId);
+        $user = User::with('role')->findorFail($request->id);
         
         return $user->toArray();
     }

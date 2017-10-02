@@ -1,7 +1,7 @@
 
 (function (angular) {
 // socket = io('http://localhost:3000');
-app = angular.module('kbkApp', ['restangular'], function($interpolateProvider) {
+app = angular.module('kbkApp', ['restangular', 'ngSanitize', 'ui.footable'], function($interpolateProvider) {
   $interpolateProvider.startSymbol('<%');
   $interpolateProvider.endSymbol('%>');
 });
@@ -17,17 +17,6 @@ app.config(function(RestangularProvider) {
   });
 });
 
-// DELETE?
-// |
-// V
-// //Custom Date filter
-// app.filter('dateFilter', function($filter) {
-//   // In the return function, we must pass in a single parameter which will be the data we will work on.
-//   // We have the ability to support multiple other parameters that can be passed into the filter optionally
-//   return function(input, format) {
-//        return $filter('date')(new Date(input), format);
-// }
-// });
 
 
 

@@ -58,32 +58,32 @@ app.directive('passwordLength', function($timeout, $q, $http){
  	}
 });
 
-app.directive('myOffer', function($http, loggedUserService) {
+app.directive('myOffer', function(UserResource) {
 	return {
-    	restrict: 'A',
-    	scope: {
-     	offer: '=',
+    template: 'From: {{offer.personFrom.name}} {{offer.personFrom.lastName}}<b ng-show=\"offer.isMine\">(You)</b>',
+  	restrict: 'A',
+  	scope: {
+   	  offer: '=',
+      user: '='
     },
     link: function(scope) {
-		$http({
-			method: 'GET',
-			url: '/home/api/application/finduserbid',
-			headers: {
-			  "Content-Type": "application/json"
-			},
-			params: {userId: scope.offer.person_from}
-		}).then(function(res){
-        	scope.offer.persFrom = res.data;
-        	loggedUserService.user().then(function(user) {
-			if(user.id === scope.offer.person_from){
-				scope.offer.isMine = '(you)';
-			}
-        	});
-      	});
-    }
-  	};
+      UserResource.getUser(scope.offer.person_from).then(function(personFrom){
+        scope.offer.personFrom = personFrom;
+        if(scope.user.id === scope.offer.personFrom.id){
+          scope.offer.isMine = true;
+        }
+      });
+  	}
+  }
 });
 
+app.directive('fooRepeatDone', function() {
+    return function($scope, element) {
+        if ($scope.$last) { // all are rendered
+            $('.table').trigger('footable_redraw');
+        }
+    }
+});
 app.directive("passwordVerify", function() {
     return {
         require: "ngModel",

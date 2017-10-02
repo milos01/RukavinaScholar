@@ -30,6 +30,10 @@ class Problem extends Model
     	return $this->belongsTo('App\User','person_from');
     }
 
+    public function problem_type(){
+        return $this->belongsTo('App\ProblemCategory','problem_type');
+    }
+
     public function users()
     {
         return $this->belongsToMany('App\User','user_problem');
