@@ -1,221 +1,151 @@
 (function(angular){
 	"use strict";
-	app.controller('showProblemController', function(UserResource, ProblemResource, $scope, $interval, $parse, $http){
+  // Home page frontend
+  // |
+  // V
+	app.controller('showProblemController', function(UserResource, UtilService, ProblemResource, $scope, $interval, $parse, $http){
     $scope.init = function(loggedUser){
       $scope.loading = true;
       $scope.taskTypeIncludes = [];
-      $scope.noFound = 'No tasks found!';
-
-      //filters for tasks
-      taskTypeFilter();
-      
-      $scope.tookFilter = function(task){
-        if(task.inactive == 0){
-          return task;
-        }
-      }
-
-      $scope.tookFilter = function(task){
-        if(task.took == 0){
-          return task;
-        }
-      }
       //if user has 'regular' role
       if (loggedUser.role_id == 1) {
         UserResource.getLoggedUserTasks().then(function(loggedUserTasks){
           $scope.problems = loggedUserTasks;
-          //shows accept decline buttons (need to refector in directive)
-          showAcceptDecline(loggedUserTasks);
           $scope.requestAgain = function(){
             socket.emit('updateAdminTime', {emailTo: "milosa942@gmail.com"});
           }
-
         }).finally(function() {
-          // called no matter success or failure
           $scope.loading = false;
         });
       }else{
         ProblemResource.getAllTasks().then(function(allTasks){
           $scope.problems = allTasks;
-          taskCountdown(allTasks);
-          for (var i = allTasks.length - 1; i >= 0; i--) {
-            allTasks[i].isCollapsed = true;
-
-            if(allTasks[i].offers.length === 0){
-              allTasks[i].showDown = false;
-              allTasks[i].showUp = false;
-            }else{
-              allTasks[i].showDown = true;
-            }
-          }
-
         }).finally(function() {
-          // called no matter success or failure
           $scope.loading = false;
         });
       }
+    }
+    //fill filter list of task types
+    $scope.includeTaskType = function(taskType) {
+      var i = $.inArray(taskType, $scope.taskTypeIncludes);
+      if (i > -1) {
+        $scope.taskTypeIncludes.splice(i, 1);
+      } else {
+        $scope.taskTypeIncludes.push(taskType);
+      }
+    }
+});
 
-      $scope.acceptOffer = function(problem){
-        var min = 100000;
-        var minOffer;
-
-        angular.forEach(problem.offers, function(value, key) {
-          if(value.price < min){
-            min = value.price;
-            minOffer = value;
+app.directive('problemShowDirective', function (UtilService) {
+  return {
+    templateUrl: 'js/templates/taskInfoTemplate.html',
+    restrict: 'A',
+    scope: { 
+      problem: '=',
+      user: '='
+    },
+    link: function (scope, element, attrs) {
+      //if user has 'regular' role
+      if (scope.user.role_id == 1) {
+        if (scope.problem.waiting == 0 && scope.problem.took == 0) {
+          if(scope.problem.offers.length > 0){
+            var minOffer = UtilService.findMin(scope.problem);
+            UtilService.STATUS.MIN_OFFER.price = '$'+minOffer.price;
+            scope.problem.status = UtilService.STATUS.MIN_OFFER;
+          }else{
+            scope.problem.showLink = true;
+            scope.problem.status = UtilService.STATUS.NO_OFFERS;
           }
-        });
+        }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
+          scope.problem.status = UtilService.STATUS.UNDER_WORK;
+        }else if(scope.problem.waiting == 0 && scope.problem.took == 2){
+            scope.problem.status = UtilService.STATUS.FINISHED;
+        }else if(scope.problem.waiting == 1){
+            scope.problem.status = UtilService.STATUS.WAITING_OFFERS;
+        }
+      }else{
+        if (scope.problem.offers.length == 0) {
+          scope.problem.status = UtilService.STATUS.NO_OFFERS;
+        }else{
+          UtilService.STATUS.MY_OFFER.count = scope.problem.offers.length + ' total';
+          angular.forEach(scope.problem.offers, function(value, key) {
+            if (value.person_from == scope.user) {
 
-        $http({
-            method: 'PUT',
-            url: 'home/api/application/makePayment',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {probId: problem.id,
-                  sloId: minOffer.person_from,
-            }
-        }).then(function(){
-          var model = $parse('showMakePayment'+problem.id);
-          var model2 = $parse('showAcceptDecline'+problem.id);
-          // Assigns a value to it
-          model.assign($scope, true);
-          model2.assign($scope, false);
-        });
-      };
-
-      $scope.declineOffer = function(problemId){
-        // Set task as inactive
-        ProblemResource.putTaskInactive(problemId).then(function(updatedTask){
-        angular.forEach($scope.problems, function(value, key) {
-            if(updatedTask.id == value.id && updatedTask.inactive === 1){
-              $scope.problems.splice(key, 1);
+              scope.problem.status = UtilService.STATUS.MY_OFFER;
             }
           });
+          scope.problem.status = UtilService.STATUS.MY_OFFER;
+        }
+      }
+    }
+  }
+});
+
+app.directive('confirmationDirective', function (ProblemResource, UtilService) {
+  return {
+    templateUrl: 'js/templates/confirmationTemplate.html',
+    restrict: 'A',
+    scope: { 
+      problem: '=',
+      problems: '=',
+      index: '@'
+    },
+    link: function (scope) {
+      if(scope.problem.offers.length > 0 && scope.problem.waiting === 0 && scope.problem.took === 0){
+        scope.problem.showConfirmation = true;
+      }else if(scope.problem.offers.length > 0 && scope.problem.waiting === 0 && scope.problem.took === 1){
+        scope.problem.showMakePayment = true;
+      }
+      //Decline offer
+      scope.declineOffer = function(problem){
+        ProblemResource.putTaskInactive(problem.id).then(function(updatedTask){
+          scope.problems.splice(scope.index, 1);
         });
       }
-
-      $scope.collapseMotion = function(problem){
-
-        problem.isCollapsed = !problem.isCollapsed;
-        if(problem.isCollapsed == true){
-          problem.showDown = true;
-          problem.showUp = false;
-        }else{
-
-
-          problem.showDown = false;
-          problem.showUp = true;
-        }
+      //Accept offer
+      scope.acceptOffer = function(problem){
+        var minOffer = UtilService.findMin(problem);
+        ProblemResource.postAcceptOffer(problem.id, minOffer.person_from).then(function(){
+          scope.problem.showConfirmation = false;
+          scope.problem.showMakePayment = true;
+        });
       }
     }
+  }
+});
 
-    function taskTypeFilter(){
-      $scope.includeTaskType = function(taskType) {
-        var i = $.inArray(taskType, $scope.taskTypeIncludes);
-        if (i > -1) {
-          $scope.taskTypeIncludes.splice(i, 1);
-        } else {
-          $scope.taskTypeIncludes.push(taskType);
-        }
-      }
-
-      $scope.taskTypeFilter = function(task) {
-        if ($scope.taskTypeIncludes.length > 0) {
-            if ($.inArray(task.problem_type.name, $scope.taskTypeIncludes) < 0)
-                return;
-        }
-        return task;
-      }
-    }
-
-    function showAcceptDecline(res){
-      for (var i = res.length - 1; i >= 0; i--) {
-        var min = 100000;
-        var minOffer;
-
-        if(res[i].offers.length > 0 && res[i].waiting === 0 && res[i].took === 0){
-          angular.forEach(res[i].offers, function(value, key) {
-            if(value.price < min){
-              min = value.price;
-              minOffer = value;
-            }
-          })
-          $scope.mOffer = minOffer;
-          var model0 = $parse("showAcceptDecline"+res[i].id);
-          var model2 = $parse('mOffer'+res[i].id);
-          // Assigns a value to it
-          model0.assign($scope, true);
-          model2.assign($scope, minOffer);
-        }
-      }
-    }
-
-    function taskCountdown(tasks){
+app.directive('timerDirective', function(ProblemResource, UtilService, $interval){
+  return {
+    template: '<sapn class="badge"><i ng-show=\"problem.showLoading\" class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>{{problem.timer}}</span>',
+    restrict: 'A',
+    scope: { 
+      problem: '=',
+    },
+    link: function (scope) {
+      scope.problem.showLoading = true;
       var x = $interval(function() {
+        var timeVals = UtilService.timeDifference(scope.problem);
+        scope.problem.showLoading = false;
+        // Display the result in the element with id="demo"
+        scope.problem.timer = timeVals['minutes'] + "m " + timeVals['seconds'] + "s ";
 
-        var doneCounters = [];
-
-        for (var i = tasks.length - 1; i >= 0; i--) {
-
-          var countDownDate = new Date(tasks[i].time_ends_at).getTime();
-
-
-
-          // Get todays date and time
-          var now = new Date().getTime();
-
-          // Find the distance between now an the count down date
-          var distance = countDownDate - now;
-          doneCounters[i] = distance;
-
-          // Time calculations for days, hours, minutes and seconds
-          var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-          // Display the result in the element with id="demo"
-          tasks.timer = minutes + "m " + seconds + "s ";
-
-          if(distance < 0){
-            tasks[i].timer = "Expired";
-            var problem = tasks[i];
-            if(tasks[i].waiting !== 0){
-              // Set waiting on false(0)
-              $http({
-                  method: 'PUT',
-                  url: 'home/api/problem/'+tasks[i].id+'/resetWaiting',
-                  headers: {
-                      "Content-Type": "application/json"
-                  },
-                  data: {}
-              }).then(function(ress){
-                 console.log(problem);
-                //socket emit event for changing task status
-                socket.emit('updateProblemStatus', {emailTo: problem.user_from.email, problem_id: problem.id});
-              });
-            }
+        if(timeVals['difference'] < 0){
+          scope.problem.timer = "Expired";
+          if(scope.problem.waiting !== 0){
+            // Set waiting on false(0)
+            ProblemResource.putResetTaskWaiting(scope.problem.id).then(function(updatedTask){
+              // socket.emit('updateProblemStatus', {emailTo: problem.user_from.email, problem_id: problem.id});
+            });
           }
-
-          //If the count down is finished, write some text
-
-        }
-
-        var checkClearInterval = false;
-        for (var i = doneCounters.length - 1; i >= 0; i--) {
-          if (doneCounters[i] > 0) {
-            checkClearInterval = true;
-          }
-        }
-        if(!checkClearInterval){
           $interval.cancel(x);
         }
-
       }, 1000);
     }
-    });
-
+  }
+});
+//New problem page
+// |
+// V
 app.controller('newProblemController', function($scope, $http, alertSerice, selectedFilesService, removeFileS3Service){
   $http({
       method: 'GET',
@@ -238,9 +168,6 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
         ]
   }
   $scope.addProblemSubmit = function(){
-
-      // alert($scope.probName + " " + $scope.probDescription + " " +$scope.answer +" "+selectedFiles);
-
     return $http({
         method: 'POST',
         url: '/home/api/application/newproblemsubmit',
@@ -259,7 +186,6 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
     });
 
   }
-
   if($('#uploadHolderr').is(':visible')){
                 $("#showSubmitButton2").show();
                 Dropzone.options.dropzoneForm = {
@@ -294,65 +220,6 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
                 };
   }
 });
-
-app.directive('problemShowDirective', function (UtilService, $compile, $http, $parse) {
-  return {
-    templateUrl: 'js/templates/taskInfoTemplate.html',
-    restrict: 'A',
-    scope: { 
-      problem: '=',
-      user: '='
-    },
-    link: function (scope, element, attrs) {
-      //if user has 'regular' role
-      if (scope.user.role_id == 1) {
-        if (scope.problem.waiting == 0 && scope.problem.took == 0) {
-            if(scope.problem.offers.length > 0){
-              var minOffer = UtilService.findMin(scope.problem);
-              UtilService.STATUS.MIN_OFFER.price = '$'+minOffer.price;
-              scope.problem.status = UtilService.STATUS.MIN_OFFER;
-            }else{
-              UtilService.STATUS.NO_OFFERS.link = 'home/problem/'+scope.problem.id+'/reset';
-              scope.problem.showLink = true;
-              scope.problem.status = UtilService.STATUS.NO_OFFERS;
-            }
-
-        }else if(scope.problem.waiting == 0 && scope.problem.took == 1){
-            scope.problem.status = UtilService.STATUS.UNDER_WORK;
-            //separete in other directive
-            // |
-            // V
-            // var el2 = angular.element('<a href=""  class="btn btn-info btn-xs">Make payment</a>');
-            // $compile(el2)(scope);
-            // el = element.find("#paymentHolder");
-            // el.append(el2);
-        }else if(scope.problem.waiting == 0 && scope.problem.took == 2){
-            scope.problem.status = UtilService.STATUS.FINISHED;
-        }else if(scope.problem.waiting == 1){
-            scope.problem.status = UtilService.STATUS.WAITING_OFFERS;
-        }
-      }else{
-        if (scope.problem.offers.length == 0) {
-          scope.problem.status = UtilService.STATUS.NO_OFFERS;
-        }else{
-          UtilService.STATUS.MY_OFFER.count = scope.problem.offers.length + ' total';
-          angular.forEach(scope.problem.offers, function(value, key) {
-            if (value.person_from == scope.user) {
-
-              scope.problem.status = UtilService.STATUS.MY_OFFER;
-            }
-          });
-          scope.problem.status = UtilService.STATUS.MY_OFFER;
-        }
-
-      }
-
-    }
-  }
-});
-
-
-
 app.controller('bidingController', function(UserResource, alertSerice, $scope, $http, $compile, $element){
 
   $scope.init = function(id){

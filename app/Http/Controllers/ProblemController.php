@@ -201,21 +201,22 @@ class ProblemController extends Controller
 			$problem = Problem::findOrFail($id);
 			$problem->waiting = 0;
 			$problem->save();
-			return response()->json('Ok');
+			return $problem;
 		}
 
-		public function takeProblemToSolve(Request $request){
-    	$probId = $request->probId;
-    	$problem = Problem::findorFail($probId);
-    	$problem->took = 1;
-      $problem->main_slovler = $request->sloId;
-    	$luser = User::findorFail($request->sloId);
-    	$luser->problems()->attach($probId, ['read' => 0]);
-    	if ($problem->save()) {
-    		return response()->json('Ok');
-    	}else{
-    		return response()->json('Server error');
-    	}
+		public function acceptProblem(Request $request){
+    	    $probId = $request->probId;
+    	    $problem = Problem::findorFail($probId);
+    	    $problem->took = 1;
+            $problem->main_slovler = $request->sloId;
+
+    	    $luser = User::findorFail($request->sloId);
+    	    $luser->problems()->attach($probId, ['read' => 0]);
+        	if ($problem->save()) {
+        		return response()->json('Ok');
+        	}else{
+        		return response()->json('Server error');
+        	}
 
     }
 }

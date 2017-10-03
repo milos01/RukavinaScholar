@@ -40,8 +40,8 @@
 		Route::get('problem/{id}', 'ProblemController@showProblem');
 		Route::get('problem/{id}/download', 'ProblemController@problemDownload');
     	Route::get('problem/{id}/reset', 'ProblemController@updateProblemExpireTime');
-    	Route::put('api/problem/{id}/resetWaiting', 'ProblemController@resetWaiting');
-    	Route::put('api/problem/{id}/inactive', 'ProblemController@inactiveProblem');
+    	Route::put('api/application/problem/{id}/resetWaiting', 'ProblemController@resetWaiting');
+    	Route::put('api/application/problem/{id}/inactive', 'ProblemController@inactiveProblem');
 		Route::get('myproblem/{id}', 'ProblemController@showMyProblem');
 		Route::get('takeProblem/{id}', 'ProblemController@takeProblem');
 		Route::get('assigned', 'ProblemController@assigned');
@@ -53,7 +53,7 @@
 		Route::post('api/application/getuserproblemoffer', 'ProblemController@getproblemoffers');
 		Route::get('api/application/getOneUserProblems', 'ProblemController@getOneUserProblems');
 		Route::post('api/application/getProblem', 'ProblemController@getProblem');
-    	Route::put('api/application/makePayment', 'ProblemController@takeProblemToSolve');
+    	Route::post('api/application/acceptProblem', 'ProblemController@acceptProblem');
 
 		//Uplaod routes
 		Route::post('api/application/saveImage', 'UploadController@saveImage');

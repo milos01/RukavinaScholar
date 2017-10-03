@@ -115,7 +115,7 @@
             </div>
           </div>
           <div class="ibox-content">
-            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="7">
+            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
               <thead>
                 <tr>
                   <th data-sort-ignore="true">#</th>
@@ -124,13 +124,16 @@
                   <th data-sort-ignore="true">Task Type</th>
                   <th data-sort-ignore="true">Created At</th>
                   <th data-sort-ignore="true">Info</th>
+                  
+                  <th data-sort-ignore="true"></th>
+                  
                   @if(!Auth::user()->is('regular'))
-                  <th data-hide="all"></th>
+                    <th data-hide="all"></th>
                   @endif
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="problem in problems | filter:tookFilter | filter: search | filter:taskTypeFilter" ng-cloak foo-repeat-done>
+                <tr ng-repeat="problem in problems | filter: search | taskTypeFilter:taskTypeIncludes" ng-cloak foo-repeat-done>
                   <!-- index -->
                   <td><% $index+1 %></td>
                   <!-- subject -->
@@ -146,6 +149,15 @@
                     <span problem-show-directive problem="problem" user="{{Auth::user()}}"></span>
                     <!-- <div ng-click="requestAgain()"><a>click to reset</a></div> -->
                   </td>
+                  @if(Auth::user()->is('regular'))
+                  <td>
+                    <span confirmation-directive problem="problem" problems="problems" index="<% $index %>"></span>
+                  </td>
+                  @else
+                  <td>
+                    <span timer-directive problem="problem">timer here</span>
+                  </td>
+                  @endif
                   <!-- <td>asdasdasdasdasdasas</td> -->
                                     <!-- <td>
                                       <span ng-bind="problem.timer"></span>
@@ -265,7 +277,7 @@
 
                                     </table> -->
 
-                                    <p ng-show="(problems | filter: tookFilter | filter: search | filter:colourFilter).length == 0" style="text-align:center;margin-top:40px;position: relative;" ng-cloak>No tasks found!</p>
+                                    <!-- <p ng-show="(problems | filter: tookFilter | filter: search | filter:colourFilter.length == 0" style="text-align:center;margin-top:40px;position: relative;" ng-cloak>No tasks found!</p> -->
                                   </div>
 
                                 </div>
