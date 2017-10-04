@@ -31,6 +31,13 @@
 			});
 		}
 
+		// /problem/{id}
+		retVal.getProblem =  function(probId){
+			return Restangular.one('problem', probId).getList().then(function(response){
+				return response;
+			});
+		}
+
 		// /acceptProblem
 		retVal.postAcceptOffer =  function(probId, sloId){
 			var data = {

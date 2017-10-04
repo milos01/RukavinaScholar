@@ -18,7 +18,7 @@ class Problem extends Model
 
     protected $table = 'problems';
     protected $fillable = [
-        
+        'problem_type'
     ];
 
     
@@ -30,7 +30,7 @@ class Problem extends Model
     	return $this->belongsTo('App\User','person_from');
     }
 
-    public function problem_type(){
+    public function task_type(){
         return $this->belongsTo('App\ProblemCategory','problem_type');
     }
 

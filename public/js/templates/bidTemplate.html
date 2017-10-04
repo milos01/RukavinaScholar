@@ -1,0 +1,24 @@
+<span ng-show="problem.showTimeExpired" class="badge">Time expired! Can't bid anymore</span>
+<span ng-show="problem.showBiddingForm">
+	<form name="offerForm" ng-submit="placeBid(id)" novalidate>
+		<div class="row">
+		  <div class="col-sm-2">
+		  	<div class="input-group">
+			  <span class="input-group-addon">$</span>
+			  <input type = "number" min="1" class ="form-control" ng-model="biddingOffer" name="biddingOffer" required>
+			</div>
+		  </div>
+		</div>
+		<div class="row">
+		  <div class="col-sm-6">
+		  	<textarea class="form-control" placeholder="e.g. Problem can be solved in 10 mins with 1 file attached..." style="resize:none; background: #f7f7f7" ng-model="biddingDescription" name="biddingDescription" required></textarea>
+		  </div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				<button class="btn btn-primary" type="submit" style="float:left;border-radius: 0px;margin-top:5px" ng-disabled="offerForm.$invalid">Bid for this task</button>
+			</div>
+		</div>
+	</form>
+</span>
+<span ng-show="problem.showMyBid" class="badge">Aleady bidded</span>

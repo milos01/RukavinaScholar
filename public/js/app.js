@@ -7,7 +7,7 @@ app = angular.module('kbkApp', ['restangular', 'ngSanitize', 'ui.footable'], fun
 });
 
 app.config(function(RestangularProvider) {
-  RestangularProvider.setBaseUrl('api/application');
+  RestangularProvider.setBaseUrl('/api/application');
   RestangularProvider.setErrorInterceptor(function(response) {
     if (response.status === 500) {
         $log.info("internal server error");
@@ -16,9 +16,6 @@ app.config(function(RestangularProvider) {
     return true;
   });
 });
-
-
-
 
 // DELETE?
 // |

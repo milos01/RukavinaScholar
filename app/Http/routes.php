@@ -46,13 +46,14 @@
 		Route::get('takeProblem/{id}', 'ProblemController@takeProblem');
 		Route::get('assigned', 'ProblemController@assigned');
 		Route::get('newproblem', 'ProblemController@newProblem');
+		Route::get('api/application/problem/{id}', 'ProblemController@getProblem');
 		Route::post('api/application/addModerator', 'ProblemController@addMate');
 		Route::post('api/application/deleteWorker', 'ProblemController@deleteWorker');
 		Route::get('api/application/getuserproblems', 'ProblemController@getAllProblems');
 		Route::post('api/application/newproblemsubmit', 'ProblemController@newproblemsubmit');
 		Route::post('api/application/getuserproblemoffer', 'ProblemController@getproblemoffers');
 		Route::get('api/application/getOneUserProblems', 'ProblemController@getOneUserProblems');
-		Route::post('api/application/getProblem', 'ProblemController@getProblem');
+		// Route::post('api/application/getProblem', 'ProblemController@getProblem');
     	Route::post('api/application/acceptProblem', 'ProblemController@acceptProblem');
 
 		//Uplaod routes

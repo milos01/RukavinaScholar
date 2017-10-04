@@ -18,19 +18,13 @@ class ProblemController extends Controller
 	public function __construct()
     {
         // $this->middleware('auth');
-				$this->now = Carbon::now();
+		$this->now = Carbon::now();
     }
 
     public function showProblem($id){
-    	$problem = Problem::findorFail($id);
-    	$myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-        $countn = 0;
-        foreach ($myMessagess as $key => $message) {
-            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $countn++;
-            }
-        }
-    	return view('problem')->with('problem', $problem)->with('myMessagesCount', $countn);
+    	$problem = Problem::with('task_type')->with('offers')->findorFail($id);
+
+    	return view('problem')->with('problem', $problem);
     }
 
     public function showMyProblem($id){
@@ -57,7 +51,7 @@ class ProblemController extends Controller
     }
 
     public function getAllProblems(){
-        $allProblems = Problem::with('offers')->with('user_from')->with('problem_type')->get();
+        $allProblems = Problem::with('offers')->with('user_from')->with('task_type')->get();
         return $allProblems;
     }
 
@@ -187,14 +181,15 @@ class ProblemController extends Controller
     }
 
     public function getOneUserProblems(){
-        $userProblems = Problem::with('offers')->with('problem_type')->where('person_from', Auth::user()->id)->get();
+        $userProblems = Problem::with('offers')->with('task_type')->where('person_from', Auth::user()->id)->get();
         return $userProblems;
     }
 
-    public function getProblem(Request $request){
-        $problem = Problem::with('offers')->with('user_from')->findorFail($request->probId);
-
-        return $problem->toArray();
+    public function getProblem($probId){
+        $list = [];
+        $problem = Problem::with('offers')->with('user_from')->with('task_type')->findorFail($probId);
+        array_push($list, $problem);
+        return $list;
     }
 
 		public function resetWaiting($id){

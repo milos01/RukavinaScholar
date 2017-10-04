@@ -11,8 +11,6 @@
 			});
 		}
 
-
-		
 		// /user/:id
 		retVal.getUser =  function(id){
 			return Restangular.one('user',id).get().then(function(response){

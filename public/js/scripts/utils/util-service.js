@@ -14,6 +14,16 @@ app.factory('UtilService', function($http){
 
             return minOffer;
         },
+        hasMyOffer: function(task, user){
+            var myOffer = false;
+            angular.forEach(task.offers, function(value, key) {
+                if (user.id === value.person_from) {
+                    myOffer = true;
+                }
+            });
+
+            return myOffer;
+        },
         STATUS: {
         	MIN_OFFER : {message: "Offer:"},
         	NO_OFFERS : {message: "No offers"},

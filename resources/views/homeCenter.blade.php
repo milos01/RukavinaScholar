@@ -70,10 +70,6 @@
        </p>
        <div class="row text-center">
          <div class="col-lg-6">
-           <canvas id="polarChart" width="80" height="80"></canvas>
-           <h5 >Kolter</h5>
-         </div>
-         <div class="col-lg-6">
            <canvas id="doughnutChart" width="78" height="78"></canvas>
            <h5 >Maxtor</h5>
          </div>
@@ -137,11 +133,11 @@
                   <!-- index -->
                   <td><% $index+1 %></td>
                   <!-- subject -->
-                  <td><a href="home/problem/<%problem.id%>"><% problem.subject | limitTo: 26 %></a></td>
+                  <td><a href="problem/<%problem.id%>"><% problem.subject | limitTo: 26 %></a></td>
                   <!-- description -->
                   <td><span ng-bind-html="problem.problem_description"></span></td>
                   <!-- task type -->
-                  <td><% problem.problem_type.name %></td>
+                  <td><% problem.task_type.name %></td>
                   <!-- created at -->
                   <td><% problem.created_at | dateFilter: 'MM/dd/yyyy' %></td>
                   <!-- info -->
@@ -155,7 +151,7 @@
                   </td>
                   @else
                   <td>
-                    <span timer-directive problem="problem">timer here</span>
+                    <span timer-directive problem="problem"></span>
                   </td>
                   @endif
                   <!-- <td>asdasdasdasdasdasas</td> -->
@@ -435,6 +431,4 @@
 
                    </div>
                    @stop
-                   @section('jsSocket')
-
-                   @stop
+                   
