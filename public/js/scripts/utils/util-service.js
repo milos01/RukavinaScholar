@@ -18,7 +18,7 @@ app.factory('UtilService', function($http){
             var myOffer = false;
             angular.forEach(task.offers, function(value, key) {
                 if (user.id === value.person_from) {
-                    myOffer = true;
+                    myOffer = value;
                 }
             });
 

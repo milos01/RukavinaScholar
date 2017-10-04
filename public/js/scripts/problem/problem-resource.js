@@ -38,6 +38,18 @@
 			});
 		}
 
+		// /placeOffer
+		retVal.postPlaceOffer =  function(id, offer, description){
+			var data = {
+				id: id,
+				offer: offer,
+				description: description
+			}
+			return Restangular.all('placeOffer').post(data).then(function(response){
+				return response;
+			});
+		}
+
 		// /acceptProblem
 		retVal.postAcceptOffer =  function(probId, sloId){
 			var data = {

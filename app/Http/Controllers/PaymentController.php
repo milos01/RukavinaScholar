@@ -26,24 +26,18 @@ class PaymentController extends Controller
     }
 
     public function placeOffer(Request $request){
-      $problemId = $request->probId;
     	$problemDesc = $request->description;
-    	$problem = Problem::findorFail($problemId);
-    	$price = $request->price;
+    	$problem = Problem::findorFail($request->id);
+    	$price = $request->offer;
 
     	$offer = new Offer();
     	$offer->problem()->associate($problem);
     	$offer->personFrom()->associate(Auth::user());
         $offer->price = $price;
     	$offer->description = $problemDesc;
+        $offer->save();
 
-
-    	if ($offer->save() and $problem->save()) {
-    		return response()->json("Ok");
-    	}
-
-    	return response()->json("Server error");
-
+        return $offer;
     }
 
 }

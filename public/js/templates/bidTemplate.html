@@ -1,6 +1,5 @@
-<span ng-show="problem.showTimeExpired" class="badge">Time expired! Can't bid anymore</span>
 <span ng-show="problem.showBiddingForm">
-	<form name="offerForm" ng-submit="placeBid(id)" novalidate>
+	<form name="offerForm" ng-submit="placeBid(problem)" novalidate>
 		<div class="row">
 		  <div class="col-sm-2">
 		  	<div class="input-group">
@@ -21,4 +20,4 @@
 		</div>
 	</form>
 </span>
-<span ng-show="problem.showMyBid" class="badge">Aleady bidded</span>
+<span ng-show="problem.showMyBid" class="badge">Aleady bidded ${{problem.myOffer}}</span>

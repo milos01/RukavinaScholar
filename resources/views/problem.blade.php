@@ -54,7 +54,7 @@ Problem preview
                     </div>
                     <div class="col-md-7"  ng-repeat="prob in problems">
                         <h2 class="font-bold m-b-xs">
-                            {{$problem->subject}}
+                            {{$problem->subject}} ({{$problem->task_type->name}})
                             <span timer-directive problem="prob"></span>
                         </h2>
                         <div class="pull-right">
@@ -63,19 +63,13 @@ Problem preview
                         <hr/>
                         <h4>Task description</h4>
                         <div>
-                            <% prob.problem_description %>
-                            <!-- {!! $problem->problem_description !!} -->
+                            {!! $problem->problem_description !!}
                             <br/>
                             <br/>
                         </div>
                         <div class="m-t-md">
                             <dt>Posted</dt>
                             <dd>{{$problem->created_at->format('m/d/Y')}}
-                            </dd>
-                        </div>
-                        <div class="m-t-md">
-                            <dt>Task type</dt>
-                            <dd>{{$problem->task_type->name}}
                             </dd>
                         </div>
                         <div class="m-t-md">

@@ -134,7 +134,6 @@ app.directive('timerDirective', function(ProblemResource, UtilService, $interval
             // Set waiting on false(0)
             ProblemResource.putResetTaskWaiting(scope.problem.id).then(function(updatedTask){
               scope.problem.showBiddingForm = false;
-              scope.problem.showTimeExpired = true;
               // socket.emit('updateProblemStatus', {emailTo: problem.user_from.email, problem_id: problem.id});
             });
           }
@@ -155,7 +154,7 @@ app.controller('ProblemController',  function(ProblemResource, $scope){
   };
 });
 
-app.directive('biddingDirective', function(UserResource, UtilService, alertSerice){
+app.directive('biddingDirective', function(ProblemResource, UserResource, UtilService, alertSerice){
   return {
     templateUrl: '/js/templates/bidTemplate.html',
     restrict: 'A',
@@ -164,47 +163,26 @@ app.directive('biddingDirective', function(UserResource, UtilService, alertSeric
       user: '='
     },
     link: function (scope) {
+      var hasMyOffer = UtilService.hasMyOffer(scope.problem, scope.user);
       //if user has not 'regular' role
       if (scope.user.role_id != 1) {
-        var timeVals = UtilService.timeDifference(scope.problem);
-        if (timeVals['difference'] < 0) {
-          scope.problem.showTimeExpired = true;
+        if (scope.problem.offers.length === 0) {
+          scope.problem.showBiddingForm = true;
         }else{
-          if (scope.problem.offers.length === 0) {
-            scope.problem.showBiddingForm = true;
+          if (hasMyOffer) {
+            scope.problem.myOffer = hasMyOffer.price;
+            scope.problem.showMyBid = true;
           }else{
-            var hasMyOffer = UtilService.hasMyOffer(scope.problem, scope.user);
-            if (hasMyOffer) {
-              scope.problem.showMyBid = true;
-            }else{
-              scope.problem.showBiddingForm = true;
-            }
+            scope.problem.showBiddingForm = true;
           }
         }
       }
-      scope.placeBid = function(problemId){    
-        var offer = $scope.biddingOffer;
-        var desc = $scope.biddingDescription;
-        return $http({
-            method: 'POST',
-            url: '/home/api/application/placeOffer',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {probId: id, price: offer, description: desc}
-        }).then(function(resp){
-
-          alertSerice.successSweet('Success', 'success', 'Successfully bidded $'+offer+' on this task');
-          $("#offerPlace").html('<span style="padding:13px 0px;position:absolute">Already bidded $'+offer+'</span>');
-          //emit event
-          var newOffer = {
-            price: offer,
-            description: desc,
-            problem_id: id,
-            user_from: d,
-            created_at: new Date()
-          }
-          socket.emit('updateTaskOffers', {emailTo: res.data.user_from.email, offer: newOffer});
+      scope.placeBid = function(problem){    
+        ProblemResource.postPlaceOffer(scope.problem.id, scope.biddingOffer, scope.biddingDescription).then(function(offer){
+          alertSerice.successSweet('Success', 'success', 'Successfully bidded $'+scope.biddingOffer+' on this task');
+          problem.myOffer = offer.price;
+          scope.problem.showBiddingForm = false;
+          scope.problem.showMyBid = true;
         });
       };
     }
