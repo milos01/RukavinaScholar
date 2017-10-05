@@ -1,7 +1,7 @@
 
 (function (angular) {
 // socket = io('http://localhost:3000');
-app = angular.module('kbkApp', ['restangular', 'ngSanitize', 'ui.footable'], function($interpolateProvider) {
+app = angular.module('kbkApp', ['restangular', 'ngSanitize', 'ui.footable', 'btford.socket-io'], function($interpolateProvider) {
   $interpolateProvider.startSymbol('<%');
   $interpolateProvider.endSymbol('%>');
 });

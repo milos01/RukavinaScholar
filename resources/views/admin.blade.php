@@ -289,7 +289,7 @@ body {
             <script src="../../../../js/plugins/sweetalert/sweetalert.min.js"></script>
             <script src="../../../../js/plugins/dropzone/dropzone.js"></script>
             <!-- Socket.IO -->
-            <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+            <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> -->
             <!-- Toastr script -->
             <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
            
@@ -306,6 +306,8 @@ body {
             <script type="text/javascript" src="{{asset('js/plugins/footable/footable.all.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/angular-footable/dist/angular-footable.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/angular-sanitize/angular-sanitize.min.js')}}"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+            <script type="text/javascript" src="{{asset('bower_components/angular-socket-io/socket.min.js')}}"></script>
             <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.js"></script>
             <script type="text/javascript" src="{{asset('bower_components/summernote/dist/summernote.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/lodash/dist/lodash.min.js')}}"></script>
@@ -317,6 +319,7 @@ body {
             <script src="{{asset('js/scripts/services/alert-service.js')}}"></script>
             <script src="{{asset('js/scripts/user/user-service.js')}}"></script>
             <script src="{{asset('js/scripts/utils/util-service.js')}}"></script>
+            <script src="{{asset('js/scripts/services/socket-service.js')}}"></script>
             <!-- App js filters -->
             <script src="{{asset('js/scripts/utils/filters/filters.js')}}"></script>
             <!-- App js resources -->

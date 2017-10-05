@@ -3,7 +3,7 @@
   // Home page frontend
   // |
   // V
-	app.controller('showProblemController', function(UserResource, UtilService, ProblemResource, $scope, $interval, $parse, $http){
+	app.controller('showProblemController', function(UserResource, UtilService, ProblemResource, Socket, $scope, $interval, $parse, $http){
     $scope.init = function(loggedUser){
       $scope.loading = true;
       $scope.taskTypeIncludes = [];
@@ -12,7 +12,7 @@
         UserResource.getLoggedUserTasks().then(function(loggedUserTasks){
           $scope.problems = loggedUserTasks;
           $scope.requestAgain = function(){
-            socket.emit('updateAdminTime', {emailTo: "milosa942@gmail.com"});
+            // socket.emit('updateAdminTime', {emailTo: "milosa942@gmail.com"});
           }
         }).finally(function() {
           $scope.loading = false;
@@ -36,7 +36,7 @@
     }
 });
 
-app.directive('problemShowDirective', function (UtilService, $timeout) {
+app.directive('problemShowDirective', function (UtilService, Socket, $timeout) {
   return {
     templateUrl: '/js/templates/taskInfoTemplate.html',
     restrict: 'A',
