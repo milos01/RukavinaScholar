@@ -38,6 +38,13 @@
 			});
 		}
 
+		// /problem/{id}/reset
+		retVal.getProblemReset =  function(id){
+			return Restangular.one('problem', id).one('reset').get().then(function(response){
+				return response;
+			});
+		}
+
 		// /placeOffer
 		retVal.postPlaceOffer =  function(id, offer, description){
 			var data = {

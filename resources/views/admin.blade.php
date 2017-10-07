@@ -28,8 +28,8 @@ rel="stylesheet">
 <link href="../../../../css/plugins/dropzone/dropzone.css" rel="stylesheet">
 <!-- FooTable -->
 <link href="{{asset('css/plugins/footable/footable.core.css')}}" rel="stylesheet">
-<!-- Toastr style -->
-<link href="../../../../css/plugins/toastr/toastr.min.css" rel="stylesheet">
+<link href="{{asset('/bower_components/angular-toastr/dist/angular-toastr.min.css')}}" rel="stylesheet">
+
 <!-- <link href="../../../../css/tooltip.css" rel="stylesheet"> -->
 
 <!-- Gritter -->
@@ -232,7 +232,7 @@ body {
             </div>
             <!-- Mainly scripts -->
 
-            <script src="../../../../js/jquery-2.1.1.js"></script>
+            <script type="text/javascript" src="{{asset('bower_components/jquery/dist/jquery.min.js')}}"></script>
 
             <script
             src="../../../../js/plugins/metisMenu/jquery.metisMenu.js"></script>
@@ -268,7 +268,7 @@ body {
 
             <!-- jQuery UI -->
             <script src="../../../../js/plugins/jquery-ui/jquery-ui.min.js"></script>
-            <script src="../../../../js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="{{asset('bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 
             <!-- EayPIE -->
             <script
@@ -290,8 +290,6 @@ body {
             <script src="../../../../js/plugins/dropzone/dropzone.js"></script>
             <!-- Socket.IO -->
             <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> -->
-            <!-- Toastr script -->
-            <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.js"></script>
            
             <script src="../../../../js/plugins/toastr/toastr.min.js"></script>
             <!-- ChartJS-->
@@ -305,6 +303,7 @@ body {
             <script src="../../../../js/plugins/sweetalert/sweetalert.min.js"></script>
             <script type="text/javascript" src="{{asset('js/plugins/footable/footable.all.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/angular-footable/dist/angular-footable.min.js')}}"></script>
+            <script type="text/javascript" src="{{asset('bower_components/angular-toastr/dist/angular-toastr.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/angular-sanitize/angular-sanitize.min.js')}}"></script>
             <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
             <script type="text/javascript" src="{{asset('bower_components/angular-socket-io/socket.min.js')}}"></script>

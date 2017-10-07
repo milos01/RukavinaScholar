@@ -161,7 +161,7 @@ class ProblemController extends Controller
 			$problem->time_ends_at = $this->now->addMinutes(env('PROBLEM_EXPIRE_MINUTES'));
 			$problem->waiting = 1;
 			$problem->save();
-			return back();
+			return $problem;
 
 		}
     public function problemDownload($id){

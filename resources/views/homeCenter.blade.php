@@ -148,10 +148,11 @@
                   @if(Auth::user()->is('regular'))
                   <td>
                     <span confirmation-directive problem="problem" problems="problems" index="<% $index %>"></span>
+                    <span timer-directive problem="problem" user="{{Auth::user()}}" ></span>
                   </td>
                   @else
                   <td>
-                    <span timer-directive problem="problem"></span>
+                    <span timer-directive problem="problem" user="{{Auth::user()}}"></span>
                   </td>
                   @endif
                   <!-- <td>asdasdasdasdasdasas</td> -->
@@ -431,4 +432,4 @@
 
                    </div>
                    @stop
-                   
+

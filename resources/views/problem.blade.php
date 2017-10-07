@@ -55,7 +55,7 @@ Problem preview
                     <div class="col-md-7"  ng-repeat="prob in problems">
                         <h2 class="font-bold m-b-xs">
                             {{$problem->subject}} ({{$problem->task_type->name}})
-                            <span timer-directive problem="prob"></span>
+                            <span timer-directive problem="prob" user="{{Auth::user()}}"></span>
                         </h2>
                         <div class="pull-right">
                             <a href="{{url('/home')}}"  style="color: white"><button class="btn btn-danger btn-sm" style="margin-top: -60px"><i class="fa fa-angle-left" aria-hidden="true"></i> Back to home </button></a>

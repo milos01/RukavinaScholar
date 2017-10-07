@@ -23,7 +23,7 @@ function emailExists(email){
 }
 
 io.on('connection', function (socket) {
-  socket.on('homeLoad', function(data){
+  socket.on('connect-user', function(data){
       socket.nick = data.email;
       users[socket.nick] = socket.id;
       console.log(users);
@@ -31,19 +31,20 @@ io.on('connection', function (socket) {
 
   socket.on('updateTaskOffers', function (data) {
     if(emailExists(data.emailTo)){
-      socket.broadcast.to(users[data.emailTo]).emit('updateTaskOffersEmit', {offer: data.offer});
+      socket.broadcast.to(users[data.emailTo]).emit('updateTaskOffersEmit');
+      socket.broadcast.to(users[data.emailTo]).emit('notifyUserEmit', {message: 'You recieved new offer!'});
+    }
+  }); 
+
+  socket.on('updateAdminTime', function (data) {
+    if(emailExists(data.emailTo)){
+      socket.broadcast.to(users[data.emailTo]).emit('updateAdminTimeEmit', {data: data.data});
     }
   });  
 
   socket.on('updateProblemStatus', function (data) {
     if(emailExists(data.emailTo)){
       socket.broadcast.to(users[data.emailTo]).emit('updateProblemStatusEmit', {problem_id: data.problem_id});
-    }
-  });
-
-  socket.on('updateAdminTime', function (data) {
-    if(emailExists(data.emailTo)){
-      socket.broadcast.to(users[data.emailTo]).emit('updateAdminTimeEmit');
     }
   });
 

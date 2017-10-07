@@ -39,7 +39,7 @@
 		//Problem routes
 		Route::get('problem/{id}', 'ProblemController@showProblem');
 		Route::get('problem/{id}/download', 'ProblemController@problemDownload');
-    	Route::get('problem/{id}/reset', 'ProblemController@updateProblemExpireTime');
+    	Route::get('api/application/problem/{id}/reset', 'ProblemController@updateProblemExpireTime');
     	Route::put('api/application/problem/{id}/resetWaiting', 'ProblemController@resetWaiting');
     	Route::put('api/application/problem/{id}/inactive', 'ProblemController@inactiveProblem');
 		Route::get('myproblem/{id}', 'ProblemController@showMyProblem');
