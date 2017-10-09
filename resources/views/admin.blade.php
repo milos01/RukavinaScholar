@@ -132,14 +132,14 @@ body {
             <span class="nav-label" id="mngu">Home</span></a></li>
             @if(Auth::user()->is('admin'))
 
-            <li style="margin-top:-4px"><a href="/home/manage"><i class="fa fa-users"></i>
+            <li style="margin-top:-4px"><a href="/manage"><i class="fa fa-users"></i>
                 <span class="nav-label" id="mngu">Manage users</span></a></li>
 
                 <!-- <li><a href="#"><i class="fa fa-area-chart"></i>
                     <span class="nav-label">Statistics
                         <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:white; margin-right: 1px"></i></span>
                     </span></a></li> -->
-                    <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
+                    <li><a href="/assigned"><i class="fa fa-book" aria-hidden="true"></i>
                         <span class="nav-label">Assigned to me
                             @if($assigns != 0)
                             <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white">{{$assigns}}</span>
@@ -151,7 +151,7 @@ body {
                     <span class="nav-label" id="mngu">Settings</span></a></li>
 
                     @elseif(Auth::user()->is('moderator'))
-                    <li><a href="/home/assigned"><i class="fa fa-book" aria-hidden="true"></i>
+                    <li><a href="/assigned"><i class="fa fa-book" aria-hidden="true"></i>
                         <span class="nav-label">Assigned to me
                             @if($assigns != 0)
                             <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white">{{$assigns}}</span>
@@ -159,15 +159,15 @@ body {
                         </span></a></li>
 
                         @elseif(Auth::user()->is('regular'))
-                        <li style="margin-top:-4px"><a href="/home/newproblem"><i class="fa fa-plus"></i>
+                        <li style="margin-top:-4px"><a href="/newproblem"><i class="fa fa-plus"></i>
                             <span class="nav-label" id="mngu">Submit task</span></a></li>
                             @endif
 
-                            <li style="margin-top:-4px"><a href="/home/edit"><i class="fa fa-user"></i>
+                            <li style="margin-top:-4px"><a href="/edit"><i class="fa fa-user"></i>
                                 <span class="nav-label">Edit profile</span></a></li>
 
                                 <li>
-                                    <a href="/home/inbox"><i class="fa fa-envelope"></i>
+                                    <a href="/inbox"><i class="fa fa-envelope"></i>
                                         <span id="mailBox"class="nav-label">Mailbox
 
                                             @if($myMessagesCount != 0)
@@ -305,9 +305,10 @@ body {
             <script type="text/javascript" src="{{asset('bower_components/angular-footable/dist/angular-footable.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/angular-toastr/dist/angular-toastr.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/angular-sanitize/angular-sanitize.min.js')}}"></script>
+            <script type="text/javascript" src="{{asset('bower_components/angular-animate/angular-animate.min.js')}}"></script>
+            <script type="text/javascript" src="{{asset('bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js')}}"></script>
             <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
             <script type="text/javascript" src="{{asset('bower_components/angular-socket-io/socket.min.js')}}"></script>
-            <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.js"></script>
             <script type="text/javascript" src="{{asset('bower_components/summernote/dist/summernote.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/lodash/dist/lodash.min.js')}}"></script>
             <script type="text/javascript" src="{{asset('bower_components/restangular/dist/restangular.min.js')}}"></script>
@@ -413,11 +414,6 @@ body {
             </script>
             @show  
           <script>
-
-            $(document).ready(function() {
-                $('[data-toggle="tooltip"]').tooltip();
-                $("[rel='tooltip']").tooltip();
-            });
         </script>
       
 

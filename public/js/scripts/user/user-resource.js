@@ -18,6 +18,13 @@
 			});
 		}
 
+		// /getAllModerators
+		retVal.getAllModerators =  function(){
+			return Restangular.one('getAllModerators').getList().then(function(response){
+				return response;
+			});
+		}
+
 		retVal.getLoggedUserTasks =  function(){
 			return Restangular.one('getOneUserProblems').get().then(function(response){
 				return response;

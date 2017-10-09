@@ -37,8 +37,16 @@ io.on('connection', function (socket) {
   }); 
 
   socket.on('updateAdminTime', function (data) {
+    for (var i = data.emailTo.length - 1; i >= 0; i--) {
+      if(emailExists(data.emailTo[i].email)){
+        socket.broadcast.to(users[data.emailTo[i].email]).emit('updateAdminTimeEmit', {data: data.data});
+      }
+    }
+  }); 
+
+  socket.on('addToAssigned', function (data) {
     if(emailExists(data.emailTo)){
-      socket.broadcast.to(users[data.emailTo]).emit('updateAdminTimeEmit', {data: data.data});
+      socket.broadcast.to(users[data.emailTo]).emit('addToAssignedEmit', {data: data.data});
     }
   });  
 

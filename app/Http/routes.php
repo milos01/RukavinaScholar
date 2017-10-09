@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -35,6 +34,7 @@
 		Route::get('api/application/user/{id}', 'UserController@findUserById'); // finduserbid
 		Route::post('api/application/getusers','UserController@getApiUsers');
 		Route::post('api/application/getusers2','UserController@getApiUsers2');
+		Route::get('api/application/getAllModerators','UserController@getAllModerators');
 
 		//Problem routes
 		Route::get('problem/{id}', 'ProblemController@showProblem');
@@ -53,8 +53,8 @@
 		Route::post('api/application/newproblemsubmit', 'ProblemController@newproblemsubmit');
 		Route::post('api/application/getuserproblemoffer', 'ProblemController@getproblemoffers');
 		Route::get('api/application/getOneUserProblems', 'ProblemController@getOneUserProblems');
-		// Route::post('api/application/getProblem', 'ProblemController@getProblem');
     	Route::post('api/application/acceptProblem', 'ProblemController@acceptProblem');
+    	Route::get('api/application/getAssignedToMe', 'ProblemController@getAssignedToMe');
 
 		//Uplaod routes
 		Route::post('api/application/saveImage', 'UploadController@saveImage');

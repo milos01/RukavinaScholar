@@ -44,7 +44,7 @@
     });
 });
 
-app.directive('problemShowDirective', function (ProblemResource, UtilService, Socket, $timeout) {
+app.directive('problemShowDirective', function (UserResource, ProblemResource, UtilService, Socket, $timeout) {
   return {
     templateUrl: '/js/templates/taskInfoTemplate.html',
     restrict: 'A',
@@ -96,7 +96,9 @@ app.directive('problemShowDirective', function (ProblemResource, UtilService, So
             id: updatedTask.id,
             time: updatedTask.time_ends_at.date
           }
-          Socket.emit('updateAdminTime', {emailTo: "milosa942@gmail.com", data: data});
+          UserResource.getAllModerators().then(function(allModerators){
+            Socket.emit('updateAdminTime', {emailTo: allModerators, data: data});
+          });
           if(scope.user.role_id === 1){
             scope.problem.showLink = false;
             scope.problem.status = UtilService.STATUS.WAITING_OFFERS;
@@ -107,7 +109,7 @@ app.directive('problemShowDirective', function (ProblemResource, UtilService, So
   }
 });
 
-app.directive('confirmationDirective', function (ProblemResource, UtilService) {
+app.directive('confirmationDirective', function (ProblemResource, Socket, UtilService) {
   return {
     templateUrl: '/js/templates/confirmationTemplate.html',
     restrict: 'A',
@@ -131,9 +133,10 @@ app.directive('confirmationDirective', function (ProblemResource, UtilService) {
       //Accept offer
       scope.acceptOffer = function(problem){
         var minOffer = UtilService.findMin(problem);
-        ProblemResource.postAcceptOffer(problem.id, minOffer.person_from).then(function(){
+        ProblemResource.postAcceptOffer(problem.id, minOffer.person_from).then(function(updatedTask){
           scope.problem.showConfirmation = false;
           scope.problem.showMakePayment = true;
+          Socket.emit('addToAssigned', {emailTo: updatedTask.main_solver.email, data: problem});
         });
       }
     }
@@ -157,7 +160,6 @@ app.directive('timerDirective', function(ProblemResource, UtilService, Socket, $
           scope.problem.timer = timeVals['minutes'] + "m " + timeVals['seconds'] + "s ";
           if(timeVals['difference'] < 0){
             scope.problem.timer = "Expired";
-            console.log(scope.problem.waiting);
             if(scope.problem.waiting != 0){
               // Set waiting on false(0)
               ProblemResource.putResetTaskWaiting(scope.problem.id).then(function(updatedTask){
@@ -165,7 +167,6 @@ app.directive('timerDirective', function(ProblemResource, UtilService, Socket, $
                   if(scope.problem.offers.length > 0 && scope.problem.took === 0){
                     scope.problem.showConfirmation = true;
                   }else if(scope.problem.offers.length == 0){
-                    console.log("usoo");
                     scope.problem.showLink = true;
                     scope.problem.status = UtilService.STATUS.NO_OFFERS;
                   }
@@ -234,6 +235,48 @@ app.directive('biddingDirective', function(ProblemResource, UserResource, UtilSe
           Socket.emit('updateTaskOffers', {emailTo: problem.user_from.email});
         });
       };
+    }
+  }
+});
+// Assigned page fronend
+// |
+// V
+app.controller('assignedController', function(ProblemResource, Socket, $scope){
+  Socket.connectUser();
+  Socket.on('notifyUserEmit', function(data){
+    toastr.success(data.message, 'Rukhell');
+  });
+  $scope.loading = true;
+  $scope.init = function(loggedUser){
+    ProblemResource.getAssignedToMe().then(function(assignedTasks){
+      $scope.problems = assignedTasks;
+    }).finally(function(){
+      $scope.loading = false;
+    });
+    Socket.forward('addToAssignedEmit', $scope);
+  }
+
+  $scope.$on('socket:addToAssignedEmit', function(ev, data){
+    $scope.$apply(function(){
+      $scope.problems.push(data.data);
+    })
+  })
+});
+
+app.directive('assignDirective', function(){
+  return {
+    templateUrl: '/js/templates/assignIconTemplate.html',
+    restrict: 'A',
+    scope: { 
+      problem: '=',
+      user: '='
+    },
+    link: function (scope) {
+      if (scope.problem.main_slovler === scope.user.id) {
+        scope.problem.showStar = true;
+      }else{
+        scope.problem.showPen = true;
+      }
     }
   }
 });
@@ -316,76 +359,3 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
 });
 
 })(angular);
-//SOCKETS
-//|
-//V
-// socket.on('updateTaskOffersEmit',function(data){
-//   angular.forEach(res.data, function(problem) {
-//     if(problem.id == data.offer.problem_id){
-//       var newOffer = {
-//         created_at: data.offer.created_at,
-//         description:data.offer.description,
-//         price:data.offer.price,
-//         persFrom:{
-//           name: data.offer.user_from.name,
-//           lastName: data.offer.user_from.lastName
-//         }
-//       }
-//       problem.offers.push(newOffer);
-
-//     }
-//   });
-//   $scope.$apply(function () {
-//     $scope.problems = res.data;
-//   });
-// });
-
-// socket.on('updateProblemStatusEmit', function(data){
-//   var retVal = {};
-//   var newProblems =  $http({
-//   method: 'GET',
-//   url: 'home/api/application/getOneUserProblems',
-//   headers: {
-//       "Content-Type": "application/json"
-//   },
-//   data: {}
-// }).then(function(ress){
-  
-  
-//     $scope.problems = ress.data;
-  
-// });
-// // $scope.$apply(function () {
-  
-// // }          
-//   // angular.forEach(res.data, function(problem) {
-//   //   if(problem.id == data.problem_id){
-
-//   //   }
-//   // });
-// });
-
-// socket.on('updateAdminTimeEmit', function(){
-//             $http({
-//               method: 'GET',
-//               url: 'home/api/application/getuserproblems',
-//               headers: {
-//                   "Content-Type": "application/json"
-//               },
-//               data: {}
-//             }).then(function(ress){
-//               $http({
-//               method: 'GET',
-//               url: 'home/problem/1/reset',
-//               headers: {
-//                   "Content-Type": "application/json"
-//               },
-//               data: {}
-//             }).then(function(resss){
-          
-//             });
-//               // console.log(ress.data);
-       
-      
-//             });
-//           });

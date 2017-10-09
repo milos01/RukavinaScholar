@@ -57,19 +57,14 @@ class ProblemController extends Controller
 
 
     public function assigned(){
-    	$authId = Auth::id();
-    	$myProblems = Auth::user()->problems;
-        $this->readAssigns($myProblems);
-        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-        $countn = 0;
-        foreach ($myMessagess as $key => $message) {
-            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $countn++;
-            }
-        }
+        // $myAssigns = Auth::user()->problems()->where('read', 0)->get();
+    	return view('myProblems');
+    }
 
-        $myAssigns = Auth::user()->problems()->where('read', 0)->get();
-    	return view('myProblems')->with('myProblems', $myProblems)->with('myMessagesCount', $countn)->with('myAssigns', count($myAssigns));
+    public function getAssignedToMe(){
+        $myProblems = Auth::user()->problems()->with('task_type')->get();
+        $this->readAssigns($myProblems);
+        return $myProblems;
     }
 
     private function readAssigns($problems){
@@ -192,26 +187,23 @@ class ProblemController extends Controller
         return $list;
     }
 
-		public function resetWaiting($id){
-			$problem = Problem::findOrFail($id);
-			$problem->waiting = 0;
-			$problem->save();
-			return $problem;
-		}
+	public function resetWaiting($id){
+		$problem = Problem::findOrFail($id);
+		$problem->waiting = 0;
+		$problem->save(); 
+		return $problem;
+	}
 
-		public function acceptProblem(Request $request){
-    	    $probId = $request->probId;
-    	    $problem = Problem::findorFail($probId);
-    	    $problem->took = 1;
-            $problem->main_slovler = $request->sloId;
+	public function acceptProblem(Request $request){
+	    $probId = $request->probId;
+	    $problem = Problem::findorFail($probId);
+	    $problem->took = 1;
+        $problem->main_slovler = $request->sloId;
 
-    	    $luser = User::findorFail($request->sloId);
-    	    $luser->problems()->attach($probId, ['read' => 0]);
-        	if ($problem->save()) {
-        		return response()->json('Ok');
-        	}else{
-        		return response()->json('Server error');
-        	}
+	    $luser = User::findorFail($request->sloId);
+	    $luser->problems()->attach($probId, ['read' => 0]);
+    	$problem->save();
 
+        return $problem->with('mainSolver')->first();
     }
 }

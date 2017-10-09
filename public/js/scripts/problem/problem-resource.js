@@ -45,6 +45,13 @@
 			});
 		}
 
+		// /getAssignedToMe
+		retVal.getAssignedToMe =  function(){
+			return Restangular.one('getAssignedToMe').getList().then(function(response){
+				return response;
+			});
+		}
+
 		// /placeOffer
 		retVal.postPlaceOffer =  function(id, offer, description){
 			var data = {

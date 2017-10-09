@@ -21,14 +21,7 @@ class UserController extends Controller
      */
     public function showUserProfile($id){
         $user = User::findOrFail($id);
-        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-        $count = 0;
-        foreach ($myMessagess as $key => $message) {
-            if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-               $count++;
-            }
-        }
-        return view('userProfile')->with('user',$user)->with('myMessagesCount', $count);
+        return view('userProfile')->with('user',$user);
      }
 
     public function addStaff(MakeUserRequest $request)
@@ -81,6 +74,17 @@ class UserController extends Controller
             }
         }
         return view('editUser')->with('myMessagesCount', $count);
+    }
+
+    public function getAllModerators(){
+        $moderators = [];
+        $allUsers = User::all();
+        foreach ($allUsers as $user) {
+            if ($user->is('moderator')) {
+                array_push($moderators, $user);
+            }
+        }
+        return $moderators;
     }
 
     public function updateUser(Request $request){
