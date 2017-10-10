@@ -283,17 +283,28 @@ app.directive('assignDirective', function(){
 //New problem page
 // |
 // V
-app.controller('newProblemController', function($scope, $http, alertSerice, selectedFilesService, removeFileS3Service){
-  $http({
-      method: 'GET',
-      url: '/home/api/application/categories',
-      headers: {
-          "Content-Type": "application/json"
-      },
-      data: {}
-  }).then(function(res){
-    $scope.categories = res.data;
-  });
+app.controller('newProblemController', function(ProblemResource, $scope, $http, alertSerice, selectedFilesService, removeFileS3Service){
+  $scope.init = function(){
+    ProblemResource.getTaskCategories().then(function(taskCategories){
+      $scope.categories = taskCategories;
+    });
+  };
+  //Handle callbacks for dropzone
+  $scope.dzCallbacks = {
+    'addedfile' : function(file){
+      
+    },
+    'success' : function(file, xhr){
+      console.log(file.status);
+      if (file.status === "error") {
+        alert('Error');
+      }
+    },
+    'error': function(file, errorMessage, xhr){
+      // console.log(errorMessage);
+    }
+  };
+
   $scope.summernoteOptions = {
     height:300,
     toolbar: [
@@ -301,61 +312,57 @@ app.controller('newProblemController', function($scope, $http, alertSerice, sele
           ['fontsize', ['fontsize']],
           ['color', ['color']],
           ['para', ['ul', 'ol', 'paragraph']],
-          // ['height', ['height']]
         ]
-  }
-  $scope.addProblemSubmit = function(){
-    return $http({
-        method: 'POST',
-        url: '/home/api/application/newproblemsubmit',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: {probName: $scope.probName, probDescription: $scope.probDescription, probType: $scope.answer, selectedFiles: selectedFilesService.selectedFiles}
-    }).then(function(res){
-      alertSerice.successSweet('Success', 'success', 'Successfully submitted new task');
-      $('#showNewProblemForm').hide();
-      $('#showProblemConfirm').show();
+  };
+  // $scope.addProblemSubmit = function(){
+  //   return $http({
+  //       method: 'POST',
+  //       url: '/home/api/application/newproblemsubmit',
+  //       headers: {
+  //           "Content-Type": "application/json"
+  //       },
+  //       data: {probName: $scope.probName, probDescription: $scope.probDescription, probType: $scope.answer, selectedFiles: selectedFilesService.selectedFiles}
+  //   }).then(function(res){
+  //     alertSerice.successSweet('Success', 'success', 'Successfully submitted new task');
+  //     $('#showNewProblemForm').hide();
+  //     $('#showProblemConfirm').show();
 
 
-    }).finally(function() {
-      // called no matter success or failure
-    });
+  //   }).finally(function() {
+  //     // called no matter success or failure
+  //   });
 
-  }
-  if($('#uploadHolderr').is(':visible')){
-                $("#showSubmitButton2").show();
-                Dropzone.options.dropzoneForm = {
-                    addRemoveLinks: true,
-                    maxFilesize: 15,
-                    acceptedFiles: ".png, .jpg, .jpeg, .zip, .rar, .pdf, .tex, .docx, .xlsx, .tar, .gz , .bz2, .7z, .s7z",
-                    removedfile: function(file){
-                      var _ref;
-                      var name = file.name;
-                      selectedFilesService.selectedFiles.splice(file.name, 1);
-                      removeFileS3Service.remove(name).then(function (){});
-                      return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+  // }
+  // if($('#uploadHolderr').is(':visible')){
+  //               $("#showSubmitButton2").show();
+  //               Dropzone.options.dropzoneForm = {
+                   
+  //                   removedfile: function(file){
+  //                     var _ref;
+  //                     var name = file.name;
+  //                     selectedFilesService.selectedFiles.splice(file.name, 1);
+  //                     removeFileS3Service.remove(name).then(function (){});
+  //                     return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
 
-                    },
-                    paramName: "file", // The name that will be used to transfer the file
-                    dictDefaultMessage: "<strong>Drop files or click here to upload. (max. 15MB)<br>Accepted files: .png, .jpg, .jpeg, .zip, .rar, .pdf, .tex, .docx, .xlsx, .tar, .gz , .bz2, .7z, .s7z</strong>",
-                    accept: function(file, done) {
-                        if(selectedFilesService.selectedFiles.length >= 0){
-                            $("#showSubmitButton2").hide();
-                        }
-                        selectedFilesService.selectedFiles.push(file.name);
+  //                   },
+                  
+  //                   accept: function(file, done) {
+  //                       if(selectedFilesService.selectedFiles.length >= 0){
+  //                           $("#showSubmitButton2").hide();
+  //                       }
+  //                       selectedFilesService.selectedFiles.push(file.name);
 
-                        if (file.name == "a.jpg") {
-                          done("Naha, you don't.");
-                        }
-                        else { done(); }
-                    },
-                    queuecomplete: function(file){
-                        $("#showSubmitButton").fadeIn(100);
+  //                       if (file.name == "a.jpg") {
+  //                         done("Naha, you don't.");
+  //                       }
+  //                       else { done(); }
+  //                   },
+  //                   queuecomplete: function(file){
+  //                       $("#showSubmitButton").fadeIn(100);
 
-                    },
-                };
-  }
+  //                   },
+  //               };
+  // }
 });
 
 })(angular);

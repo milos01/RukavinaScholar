@@ -1,12 +1,14 @@
 
 (function (angular) {
+Dropzone.autoDiscover = false;
 // socket = io('http://localhost:3000');
-app = angular.module('kbkApp', ['ui.bootstrap', 'restangular', 'ngSanitize', 'ui.footable', 'btford.socket-io', 'toastr'], function($interpolateProvider) {
+app = angular.module('kbkApp', ['ui.bootstrap', 'restangular', 'ngSanitize', 'ui.footable', 'btford.socket-io', 'toastr', 'summernote', 'thatisuday.dropzone'], function($interpolateProvider) {
   $interpolateProvider.startSymbol('<%');
   $interpolateProvider.endSymbol('%>');
 });
 
-app.config(function(RestangularProvider) {
+app.config(function(RestangularProvider, dropzoneOpsProvider) {
+  // Restangular config
   RestangularProvider.setBaseUrl('/api/application');
   RestangularProvider.setErrorInterceptor(function(response) {
     if (response.status === 500) {
@@ -15,22 +17,17 @@ app.config(function(RestangularProvider) {
     }
     return true;
   });
+  // Dropzone config
+  dropzoneOpsProvider.setOptions({
+    url: '/api/application/uploadProblem',
+    addRemoveLinks: true,
+    maxFilesize: 15,
+    acceptedFiles: ".png, .jpg, .jpeg, .zip, .rar, .pdf, .tex, .docx, .xlsx, .tar, .gz , .bz2, .7z, .s7z",
+    paramName: "file",
+    dictDefaultMessage: "<strong>Drop files or click here to upload. (max. 15MB)<br>Accepted files: .png, .jpg, .jpeg, .zip, .rar, .pdf, .tex, .docx, .xlsx, .tar, .gz , .bz2, .7z, .s7z</strong>",
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
 });
-
-// DELETE?
-// |
-// V
-// app.controller('braintreeController', function($scope, $http){
-//     // $http({
-//     //     method: 'GET',
-//     //     url: '/home/api/application/generateToken',
-//     //     data: {}
-//     // }).then(function successCallback(res) {
-//     //     braintree.setup(res.data.token, 'dropin', {
-//     //       container: 'dropin-container'
-//     //     });
-//     // });
-// });
-
-
 })(angular);

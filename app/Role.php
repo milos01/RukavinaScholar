@@ -7,14 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     protected $table = 'roles';
-    protected $fillable = [
-        
-    ];
 
-    
-    protected $hidden = [
-        
-    ];
+    protected $fillable = [];
+
+    protected $hidden = [];
 
     public function users()
 	{

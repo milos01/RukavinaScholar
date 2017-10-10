@@ -75,6 +75,13 @@
 			});
 		}
 
+		// /category
+		retVal.getTaskCategories =  function(){
+			return Restangular.all('category').getList().then(function(response){
+				return response;
+			});
+		}
+
 		return retVal;
 	})
 })(angular);
