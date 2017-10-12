@@ -56,6 +56,11 @@ class UploadController extends Controller
         return response($manipulatedFile, 200);
     }
 
+    public function deltefile(Request $request){
+        Storage::disk('new_task_upload')->delete($request->name);
+        return response('ok',200);
+    }
+
     public function uploadSolution(Request $request){
         if($request->hasFile('file')){
 

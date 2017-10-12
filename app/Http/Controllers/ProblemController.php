@@ -134,14 +134,14 @@ class ProblemController extends Controller
         }
     }
 
-		public function updateProblemExpireTime($id){
-			$problem = Problem::findOrFail($id);
-			$problem->time_ends_at = $this->now->addMinutes(env('PROBLEM_EXPIRE_MINUTES'));
-			$problem->waiting = 1;
-			$problem->save();
-			return $problem;
+	public function updateProblemExpireTime($id){
+		$problem = Problem::findOrFail($id);
+		$problem->time_ends_at = $this->now->addMinutes(env('PROBLEM_EXPIRE_MINUTES'));
+		$problem->waiting = 1;
+		$problem->save();
+		return $problem;
 
-		}
+	}
     public function problemDownload($id){
         $s3 = Storage::disk('s3');
         // dd($s3->url('test.txt'));

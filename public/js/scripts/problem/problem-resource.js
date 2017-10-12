@@ -89,6 +89,13 @@
 			});
 		}
 
+		// /deltefile
+		retVal.postDeleteFile =  function(data){
+			return Restangular.all('deltefile').post(data).then(function(response){
+				return response;
+			});
+		}
+
 		return retVal;
 	})
 })(angular);

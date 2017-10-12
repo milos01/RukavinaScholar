@@ -283,7 +283,8 @@ app.directive('assignDirective', function(){
 //New problem page
 // |
 // V
-app.controller('newProblemController', function(ProblemResource, DropzoneService, AlertSerice, $scope){
+app.controller('newProblemController', function(ProblemResource, DropzoneService, AlertSerice, $scope, $window, $interval){
+  // $scope.filesLoading = true;
   $scope.init = function(){
     var time = new Date();
     ProblemResource.getTaskCategories().then(function(taskCategories){
@@ -300,15 +301,28 @@ app.controller('newProblemController', function(ProblemResource, DropzoneService
         }
       }
     },
+    'removedfile': function(file){
+      for (var i = DropzoneService.addedFiles.length - 1; i >= 0; i--) {
+        var media = DropzoneService.addedFiles[i];
+        if (media.name.indexOf(file.name) !== -1) {
+          ProblemResource.postDeleteFile({'name': media.name});
+          DropzoneService.addedFiles.splice(DropzoneService.addedFiles.indexOf(media), 1);
+        }
+      }
+      
+    },
+    'processing': function(file){
+      $scope.filesLoading = true;
+    },
     'success' : function(file, response){
       var newFile = {
-        'name': response,
+        'name': response[0],
         'size': file.size
       }
       DropzoneService.addedFiles.push(newFile);
     },
-    'removedfile' : function(file){
-
+    queuecomplete: function(file){
+      $scope.filesLoading = false;
     }
   };
 
@@ -320,63 +334,22 @@ app.controller('newProblemController', function(ProblemResource, DropzoneService
       selectedFiles: DropzoneService.addedFiles,
     }
     ProblemResource.postNewTask(data).then(function(){
-
+      AlertSerice.sweet('Success', 'success', 'Successfully submitted new task');
+      $interval(function() {
+          $window.location.href = '/home';
+      }, 1800);
     });
-    // return $http({
-    //     method: 'POST',
-    //     url: '/home/api/application/newproblemsubmit',
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    //     data: {probName: $scope.probName, probDescription: $scope.probDescription, probType: $scope.answer, selectedFiles: selectedFilesService.selectedFiles}
-    // }).then(function(res){
-    //   alertSerice.successSweet('Success', 'success', 'Successfully submitted new task');
-    //   $('#showNewProblemForm').hide();
-    //   $('#showProblemConfirm').show();
-
-
-    // });
   }
   // Summernote options
   $scope.summernoteOptions = {
     height:300,
     toolbar: [
-          ['style', ['bold', 'italic', 'underline', 'clear']],
-          ['fontsize', ['fontsize']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-        ]
+      ['style', ['bold', 'italic', 'underline', 'clear']],
+      ['fontsize', ['fontsize']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+    ]
   };
-  // if($('#uploadHolderr').is(':visible')){
-  //               $("#showSubmitButton2").show();
-  //               Dropzone.options.dropzoneForm = {
-                   
-  //                   removedfile: function(file){
-  //                     var _ref;
-  //                     var name = file.name;
-  //                     selectedFilesService.selectedFiles.splice(file.name, 1);
-  //                     removeFileS3Service.remove(name).then(function (){});
-  //                     return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
-
-  //                   },
-                  
-  //                   accept: function(file, done) {
-  //                       if(selectedFilesService.selectedFiles.length >= 0){
-  //                           $("#showSubmitButton2").hide();
-  //                       }
-  //                       selectedFilesService.selectedFiles.push(file.name);
-
-  //                       if (file.name == "a.jpg") {
-  //                         done("Naha, you don't.");
-  //                       }
-  //                       else { done(); }
-  //                   },
-  //                   queuecomplete: function(file){
-  //                       $("#showSubmitButton").fadeIn(100);
-
-  //                   },
-  //               };
-  // }
 });
 
 })(angular);

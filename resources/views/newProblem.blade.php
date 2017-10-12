@@ -50,8 +50,8 @@
                 <div class="hr-line-dashed"></div>
                 <div class="form-group" style="margin-bottom: 53px">
                     <div class="col-sm-4 col-sm-offset-2">
-                        <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton"  ng-disabled="newProblemForm.$invalid" style="display: none;">Submit task</button>
-                        <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton2" ng-disabled="newProblemForm.$invalid" style="">Submit task</button>
+                        <!-- <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton"  ng-disabled="newProblemForm.$invalid" style="display: none;">Submit task</button> -->
+                        <button class="btn btn-primary pull-left" ng-click="addProblemSubmit()" id="showSubmitButton2" ng-disabled="newProblemForm.$invalid || filesLoading" style="">Submit task</button>
                     </div>
                 </div>
             </div>

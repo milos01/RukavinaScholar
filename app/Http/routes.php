@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('api/application/uploadProblem', 'UploadController@uploadProblem');
 	Route::post('api/application/uploadSolution', 'UploadController@uploadSolution');
 	Route::post('api/application/removeUploadedFile', 'UploadController@removeUploadedFile');
+	Route::post('api/application/deltefile', 'UploadController@deltefile');
 
 	//Payment routes
 	Route::get('problem/{id}/payment/{pyid}', 'PaymentController@problemPaymentShow')->name('problemPaymentShow');
