@@ -17,14 +17,19 @@ class Problem extends Model
     protected $dates = ['deleted_at'];
 
     protected $table = 'problems';
+
     protected $fillable = [
-        'problem_type'
+        'subject',
+        'person_from',
+        'main_slovler',
+        'problem_type',
+        'problem_description',
+        'took',
+        'waiting',
+        'time_ends_at'
     ];
 
-    
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $hidden = [];
 
     public function user_from(){
     	return $this->belongsTo('App\User','person_from');
@@ -45,7 +50,7 @@ class Problem extends Model
 
     public function files()
     {
-        return $this->hasMany('App\ProblemFiles');
+        return $this->belongsToMany('App\Problem', 'problem_files', 'problem_id', 'file_id')->withTimestamps();
     }
 
     public function solutions()

@@ -60,6 +60,12 @@ return [
             'visibility' => 'public',
         ],
 
+        'new_task_upload' => [
+            'driver' => 'local',
+            'root' => storage_path('uploads/new_tasks'),
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => 'AKIAIHHKKFUDDAUDVY5A',

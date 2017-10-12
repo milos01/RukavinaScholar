@@ -82,6 +82,13 @@
 			});
 		}
 
+		// /newproblemsubmit
+		retVal.postNewTask =  function(data){
+			return Restangular.all('newproblemsubmit').post(data).then(function(response){
+				return response;
+			});
+		}
+
 		return retVal;
 	})
 })(angular);

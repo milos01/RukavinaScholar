@@ -1,7 +1,7 @@
 (function(){
-	app.factory('alertSerice', function() {
+	app.factory('AlertSerice', function() {
 	    return {
-	        successSweet: function(title, type, text) {
+	        sweet: function(title, type, text) {
 	            swal({
 	              title: title,
 	              text: text,

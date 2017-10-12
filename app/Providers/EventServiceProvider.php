@@ -16,6 +16,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\makeProfilePictureEvent' => [
             'App\Listeners\makeProfilePictureHandler',
         ],
+
+        'App\Events\SaveFileEvent' => [
+            'App\Listeners\SaveFileHandler',
+        ],
     ];
 
     /**

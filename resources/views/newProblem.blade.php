@@ -45,15 +45,7 @@
                 <div class="hr-line-dashed"></div>
 
                 <div class="form-group" id="uploadHolderr">
-                    
-                        <div class="dropzone" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
-                        
-                    <!-- <form action="/home/api/application/uploadProblem" class="dropzone" id="dropzoneForm" style="border: 1px dashed gray;width:83%;margin:auto auto;border-radius: 3px;background: #ececec" enctype="multipart/form-data" >
-                        <div class="fallback">
-                            <input name="file" type="file" id="fileSelected" ng-mdoel="aa" multiple />
-                        </div>
-                        
-                    </form> -->
+                    <div class="dropzone" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
                 </div>
                 <div class="hr-line-dashed"></div>
                 <div class="form-group" style="margin-bottom: 53px">

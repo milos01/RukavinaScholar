@@ -2,12 +2,12 @@
 (function (angular) {
 Dropzone.autoDiscover = false;
 // socket = io('http://localhost:3000');
-app = angular.module('kbkApp', ['ui.bootstrap', 'restangular', 'ngSanitize', 'ui.footable', 'btford.socket-io', 'toastr', 'summernote', 'thatisuday.dropzone'], function($interpolateProvider) {
+app = angular.module('kbkApp', ['ui.bootstrap', 'restangular', 'ngSanitize', 'ui.footable', 'btford.socket-io', 'toastr', 'summernote', 'thatisuday.dropzone', 'ngIdle'], function($interpolateProvider) {
   $interpolateProvider.startSymbol('<%');
   $interpolateProvider.endSymbol('%>');
 });
 
-app.config(function(RestangularProvider, dropzoneOpsProvider) {
+app.config(function(RestangularProvider, dropzoneOpsProvider, IdleProvider, KeepaliveProvider) {
   // Restangular config
   RestangularProvider.setBaseUrl('/api/application');
   RestangularProvider.setErrorInterceptor(function(response) {
@@ -28,6 +28,14 @@ app.config(function(RestangularProvider, dropzoneOpsProvider) {
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
+  });
+  // Idle timer config
+  IdleProvider.idle(60);
+  IdleProvider.timeout(10);
+  KeepaliveProvider.interval(10);
+}).run(function($rootScope){
+  $rootScope.$on('IdleTimeout', function() {
+    console.log('logout user');
   });
 });
 })(angular);

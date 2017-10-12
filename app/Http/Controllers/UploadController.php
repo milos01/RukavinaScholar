@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Events\SaveFileEvent;
+use App\Http\Requests\SaveTaskFileRequest;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\UploadFilesToS3;
@@ -46,15 +48,12 @@ class UploadController extends Controller
 
     /**
     */
-    public function uploadProblem(Request $request){
+    public function uploadProblem(SaveTaskFileRequest $request){
+        $manipulatedFile = $this->fileManipulation('new_task_upload', $request);
 
-        if($request->hasFile('file')){
-            $manipulatedFile = $this->fileManipulation('/uploads', $request);
-
-            //Dispatch Upload file to Amazon S3 job
-            $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
-
-        }
+        //Dispatch Upload file to Amazon S3 job
+        // $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
+        return response($manipulatedFile, 200);
     }
 
     public function uploadSolution(Request $request){
@@ -62,7 +61,7 @@ class UploadController extends Controller
 
 
 
-            $manipulatedFile = $this->fileManipulation('/uploads/solutions', $request);
+            $manipulatedFile = $this->fileManipulation('new_task_upload', $request);
 
 							$file = new File();
 	            $file->fileName = $manipulatedFile[0];
@@ -87,34 +86,19 @@ class UploadController extends Controller
         }
     }
 
-    private function fileManipulation($path, $request){
-        $input = $request->all();
-
-        $rules = array(
-            'file' => 'max:15000|mimes:png,jpg,jpeg,zip,rar,pdf,tex,docx,xlsx,tar,bz2,7z',
-        );
-
-        $validation = Validator::make($input, $rules);
-
-        if ($validation->fails()) {
-					dd('sadas');
-            return "Unsuported format";
-        }
+    private function fileManipulation($pathName, $request){
         $file = $request->file('file');
         $path_parts = pathinfo($file->getClientOriginalName());
-        $fileName = $path_parts['filename'];
-        $fileExt = $path_parts['extension'];
-        $rightNow = Auth::id();
 
-        $hFileName = hash('md5', $fileName.'_'.$rightNow) . '.' . $fileExt;
-        $file->move(storage_path(). $path, $hFileName);
-        $file2 = storage_path(). $path.'/'. $hFileName;
+        $fileName = $file->getClientOriginalName();
+        $fileName = event(new SaveFileEvent($pathName, $fileName, $file));
+      
+        return $fileName;
 
-        return [
-					$hFileName,
-					$file2
-				];
+    }
 
+    private function makeFileName($extension){
+        return time().".".$extension;
     }
 
     public function removeUploadedFile(Request $request){

@@ -1,5 +1,5 @@
  @extends('admin')
- @section('navName')
+ @section('navMenu')
  <div class="row  border-bottom white-bg dashboard-header">
 
    <div class="col-sm-3">

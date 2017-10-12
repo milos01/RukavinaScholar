@@ -198,8 +198,7 @@
         </div>
         <div class="row wrapper border-bottom white-bg page-heading">
           <div class="col-lg-10">
-            @section('navName') @show
-            <ol class="breadcrumb">
+            <ol class="breadcrumb" style="padding-top: 15px">
               @section('navMenu') @show
             </ol>
           </div>
@@ -229,6 +228,7 @@
   <!-- <script type="text/javascript" src="{{asset('bower_components/angular-chart.js/dist/angular-chart.min.js')}}"></script> -->
   <script type="text/javascript" src="{{asset('js/plugins/footable/footable.all.min.js')}}"></script>
   <script type="text/javascript" src="{{asset('bower_components/angular-footable/dist/angular-footable.min.js')}}"></script>
+  <script type="text/javascript" src="{{asset('bower_components/ng-idle/angular-idle.min.js')}}"></script>
   <script type="text/javascript" src="{{asset('bower_components/dropzone/dist/dropzone.js')}}"></script>
   <script type="text/javascript" src="{{asset('bower_components/ng-dropzone/dist/ng-dropzone.js')}}"></script>
   <script type="text/javascript" src="{{asset('bower_components/angular-toastr/dist/angular-toastr.min.js')}}"></script>
@@ -248,6 +248,7 @@
   <script src="{{asset('js/scripts/user/user-service.js')}}"></script>
   <script src="{{asset('js/scripts/utils/util-service.js')}}"></script>
   <script src="{{asset('js/scripts/services/socket-service.js')}}"></script>
+  <script src="{{asset('js/scripts/problem/dropzone/dropzone-service.js')}}"></script>
   <!-- App js filters -->
   <script src="{{asset('js/scripts/utils/filters/filters.js')}}"></script>
   <!-- App js resources -->

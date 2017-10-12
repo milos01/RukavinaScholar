@@ -201,7 +201,7 @@ app.controller('ProblemController',  function(ProblemResource, Socket, $scope){
   };
 });
 
-app.directive('biddingDirective', function(ProblemResource, UserResource, UtilService, Socket, alertSerice){
+app.directive('biddingDirective', function(ProblemResource, UserResource, UtilService, AlertSerice, Socket){
   return {
     templateUrl: '/js/templates/bidTemplate.html',
     restrict: 'A',
@@ -227,7 +227,7 @@ app.directive('biddingDirective', function(ProblemResource, UserResource, UtilSe
       }
       scope.placeBid = function(problem){    
         ProblemResource.postPlaceOffer(scope.problem.id, scope.biddingOffer, scope.biddingDescription).then(function(offer){
-          alertSerice.successSweet('Success', 'success', 'Successfully bidded $'+scope.biddingOffer+' on this task');
+          AlertSerice.sweet('Success', 'success', 'Successfully bidded $'+scope.biddingOffer+' on this task');
           problem.myOffer = offer.price;
           scope.problem.showBiddingForm = false;
           scope.problem.showMyBid = true;
@@ -283,8 +283,9 @@ app.directive('assignDirective', function(){
 //New problem page
 // |
 // V
-app.controller('newProblemController', function(ProblemResource, $scope, $http, alertSerice, selectedFilesService, removeFileS3Service){
+app.controller('newProblemController', function(ProblemResource, DropzoneService, AlertSerice, $scope){
   $scope.init = function(){
+    var time = new Date();
     ProblemResource.getTaskCategories().then(function(taskCategories){
       $scope.categories = taskCategories;
     });
@@ -292,19 +293,51 @@ app.controller('newProblemController', function(ProblemResource, $scope, $http, 
   //Handle callbacks for dropzone
   $scope.dzCallbacks = {
     'addedfile' : function(file){
-      
-    },
-    'success' : function(file, xhr){
-      console.log(file.status);
-      if (file.status === "error") {
-        alert('Error');
+      for (var i = DropzoneService.addedFiles.length - 1; i >= 0; i--) {
+        if (DropzoneService.addedFiles[i].name === file.name && DropzoneService.addedFiles[i].size === file.size ) {
+          AlertSerice.sweet('Error', 'error', "Can't upload same picture!");
+          $scope.dzMethods.removeFile(file);
+        }
       }
     },
-    'error': function(file, errorMessage, xhr){
-      // console.log(errorMessage);
+    'success' : function(file, response){
+      var newFile = {
+        'name': response,
+        'size': file.size
+      }
+      DropzoneService.addedFiles.push(newFile);
+    },
+    'removedfile' : function(file){
+
     }
   };
 
+  $scope.addProblemSubmit = function(){
+    var data = {
+      probName: $scope.probName,
+      probDescription: $scope.probDescription,
+      probType: $scope.answer,
+      selectedFiles: DropzoneService.addedFiles,
+    }
+    ProblemResource.postNewTask(data).then(function(){
+
+    });
+    // return $http({
+    //     method: 'POST',
+    //     url: '/home/api/application/newproblemsubmit',
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     },
+    //     data: {probName: $scope.probName, probDescription: $scope.probDescription, probType: $scope.answer, selectedFiles: selectedFilesService.selectedFiles}
+    // }).then(function(res){
+    //   alertSerice.successSweet('Success', 'success', 'Successfully submitted new task');
+    //   $('#showNewProblemForm').hide();
+    //   $('#showProblemConfirm').show();
+
+
+    // });
+  }
+  // Summernote options
   $scope.summernoteOptions = {
     height:300,
     toolbar: [
@@ -314,25 +347,6 @@ app.controller('newProblemController', function(ProblemResource, $scope, $http, 
           ['para', ['ul', 'ol', 'paragraph']],
         ]
   };
-  // $scope.addProblemSubmit = function(){
-  //   return $http({
-  //       method: 'POST',
-  //       url: '/home/api/application/newproblemsubmit',
-  //       headers: {
-  //           "Content-Type": "application/json"
-  //       },
-  //       data: {probName: $scope.probName, probDescription: $scope.probDescription, probType: $scope.answer, selectedFiles: selectedFilesService.selectedFiles}
-  //   }).then(function(res){
-  //     alertSerice.successSweet('Success', 'success', 'Successfully submitted new task');
-  //     $('#showNewProblemForm').hide();
-  //     $('#showProblemConfirm').show();
-
-
-  //   }).finally(function() {
-  //     // called no matter success or failure
-  //   });
-
-  // }
   // if($('#uploadHolderr').is(':visible')){
   //               $("#showSubmitButton2").show();
   //               Dropzone.options.dropzoneForm = {

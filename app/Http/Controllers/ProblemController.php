@@ -113,42 +113,25 @@ class ProblemController extends Controller
     }
 
     public function newproblemsubmit(Request $request){
-        $user = Auth::user()->id;
-        $problem = new Problem();
-        $problem->subject = $request->probName;
-        $problem->person_from = $user;
-        $problem->main_slovler = $user;
-        $problem->problem_type = $request->probType;
-        $problem->problem_description = $request->probDescription;
-        $problem->took = 0;
-        $problem->waiting = 1;
-        $problem->time_ends_at = $this->now->addMinutes(env('PROBLEM_EXPIRE_MINUTES'));
-        $problem->save();
-
-
-        foreach ($request->selectedFiles as $value) {
-
-            $findExtension = strpos($value, ".");
-            $fp =  $findExtension;
-            $fileExt = substr($value, ++$fp, strlen($value));
-            $fileName = substr($value, 0, $findExtension);
-            $rightNow = Auth::id();
-
-
-            $file = new File();
-            $file->fileName = hash('md5', $fileName.'_'.$rightNow) . '.' . $fileExt;
-            $file->save();
-
-            $probFile = new ProblemFiles();
-            $probFile->file()->associate($file);
-            $probFile->problem()->associate($problem);
-            $probFile->save();
+        $user = Auth::id();
+        $problem = Problem::create([
+            'subject' => $request->probName,
+            'person_from' => $user,
+            'main_slovler' => $user,
+            'problem_type' => $request->probType,
+            'problem_description' => $request->probDescription,
+            'took' => 0,
+            'waiting' => 1,
+            'time_ends_at' => $this->now->addMinutes(env('PROBLEM_EXPIRE_MINUTES')),
+        ]);
+        
+        foreach ($request->selectedFiles as $media) {
+            $file = File::create([
+                'fileName' => $media['name'][0],
+            ]);
+            
+            $problem->files()->attach($file->id);
         }
-
-
-        // $file->files()->associate($user);
-
-        // dd($problem->files);
     }
 
 		public function updateProblemExpireTime($id){
