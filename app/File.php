@@ -13,8 +13,8 @@ class File extends Model
 
     protected $hidden = [];
 
-    public function users()
+    public function problems()
     {
-        return $this->belongsToMany('App\User', 'problem_files', 'problem_id', 'file_id')->withTimestamps();
+        return $this->belongsToMany('App\Problem', 'problem_files', 'problem_id', 'file_id')->withTimestamps();
     }
 }

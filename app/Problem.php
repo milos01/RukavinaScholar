@@ -50,7 +50,7 @@ class Problem extends Model
 
     public function files()
     {
-        return $this->belongsToMany('App\Problem', 'problem_files', 'problem_id', 'file_id')->withTimestamps();
+        return $this->belongsToMany('App\File', 'problem_files', 'problem_id', 'file_id')->withTimestamps();
     }
 
     public function solutions()

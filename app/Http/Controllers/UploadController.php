@@ -94,8 +94,7 @@ class UploadController extends Controller
     private function fileManipulation($pathName, $request){
         $file = $request->file('file');
         $path_parts = pathinfo($file->getClientOriginalName());
-
-        $fileName = $file->getClientOriginalName();
+        $fileName = $path_parts['basename'];
         $fileName = event(new SaveFileEvent($pathName, $fileName, $file));
       
         return $fileName;

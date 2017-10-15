@@ -127,7 +127,7 @@ class ProblemController extends Controller
         
         foreach ($request->selectedFiles as $media) {
             $file = File::create([
-                'fileName' => $media['name'][0],
+                'fileName' => $media['name'],
             ]);
             
             $problem->files()->attach($file->id);

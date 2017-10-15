@@ -319,7 +319,7 @@ app.controller('newProblemController', function(ProblemResource, DropzoneService
         'name': response[0],
         'size': file.size
       }
-      DropzoneService.addedFiles.push(newFile);
+      DropzoneService.addedFiles.push(newFile);     
     },
     queuecomplete: function(file){
       $scope.filesLoading = false;

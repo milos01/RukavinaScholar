@@ -26,28 +26,31 @@ Problem preview
                                         <!-- [media type(video, text doc, string)] -->
                                         <i class="fa fa-cloud-download fa-5x" aria-hidden="true" style="position: relative;color:#686b6d"></i>
                                         @if(count($problem->files) != 0 || count($problem->solutions) != 0)
-                                        @if(Auth::user()->is('regular'))
-                                        @if($problem->took == 2 && $problem->waiting == 0)
-                                        <p>Your files are ready...</p>
-                                        @foreach($problem->solutions as $key=>$file)
-                                        <br/><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">Solution File {{$key+1}} </a>
-                                        @endforeach
+                                            @if(Auth::user()->is('regular'))
+                                                @if($problem->took == 2 && $problem->waiting == 0)
+                                                    <p>Your files are ready...</p>
+                                                    @foreach($problem->solutions as $key=>$file)
+                                                        <br/><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">Solution File {{$key+1}} </a>
+                                                    @endforeach
+                                                @else
+                                                    <p>You uploaded {{count($problem->files)}}
+                                                    @if(count($problem->files) == 1)
+                                                        file.</p>
+                                                    @else
+                                                        files.</p>
+                                                    @endif
+                                                @endif
+                                            @else
+                                                @foreach($problem->files as $file)
+                                                    <br/>
+                                                    <a href="{{asset('new_tasks/'.$file->fileName)}}" download="{{$file->fileName}}">
+                                                        {{$file->fileName}}
+                                                    </a>
+                                                @endforeach
+                                            @endif
                                         @else
-                                        <p>You uploaded {{count($problem->files)}}
-                                            @if(count($problem->files) == 1)
-                                        file.</p>
-                                        @else
-                                    files.</p>
-                                    @endif
-                                    @endif
-                                    @else
-                                    @foreach($problem->files as $file)
-                                    <br/><a href="https://s3.amazonaws.com/kbk300test/{{$file->file->fileName}}" download="{{$file->file->fileName}}">{{$file->file->fileName}}</a>
-                                    @endforeach
-                                    @endif
-                                    @else
-                                    <p>No files uploaded.</p>
-                                    @endif
+                                        <p>No files uploaded.</p>
+                                        @endif
                                 </div>
                             </div>
                         </div>

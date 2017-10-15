@@ -191,90 +191,10 @@
                                  </tbody>
 
                                </table>
-                               <div style="text-align: center;margin-top:30px;position: relative;" ng-show="loading">
+                               <div style="text-align: center;margin-top:30px;position: relative;" ng-show="loading" ng-cloak>
                                 <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="color:#1ab394"></i>
                               </div>
-                                  <!-- <table class="table">
-                                      <thead>
-                                      <tr >
-                                          <th>#</th>
-                                          <th>Subject</th>
-                                          <th>Description</th>
-                                          <th>Task Type</th>
-                                          <th>Created at</th>
-                                          <th>Additional</th>
-                                      </tr>
-                                      </thead>
-                                      <tbody>
-                                      <tr ng-repeat="problem in problems | filter:tookFilter | filter: search | filter:colourFilter" problem-show-directive problem="problem" user="{{Auth::id()}}" ng-cloak>
-                                          <td ng-bind="$index + 1"></td>
-                                          <td><a href="home/problem/<%problem.id%>" ng-bind="problem.subject | limitTo: 6"></a></td>
-                                          <td ng-bind="problem.problem_description | limitTo:5"></td>
-                                          <td ng-bind="problem.problem_type"></td>
-                                          <td ng-bind="problem.created_at | dateFilter: 'MM/dd/yyyy'"></td>
-                                          <td>
-                                            <span id="statusHolder"></span>
-                                          </td>
-                                          <td>
-                                            <span ng-bind="problem.timer"></span>
-                                            <div id="paymentHolder" style="" ng-cloak>
-                                            <a ng-show="showMakePayment<%problem.id%>" href="home/problem/'+scope.problem.id+'/payment/'+minOffer.id+'" class="btn btn-info btn-xs" ng-cloak>Make paymendt</a>
-                                            <span ng-show="showAcceptDecline<%problem.id%>" style="" ng-cloak>
-                                              <a ng-click="acceptOffer(problem)">Accept </a>
-                                              /
-                                              <a ng-click="declineOffer(problem.id)">Decline</a>
-                                            </span>
-                                          </div>
-                                          </td>
-                                          <td>
-                                            <div class="ibox-tools">
-
-                                                <a class="collapse-link" ng-click="collapseMotion(problem)">
-                                                    <span ng-show="problem.showUp" ng-cloak>
-                                                        <i class="fa fa-chevron-up"></i>
-                                                    </span>
-
-                                                    <span ng-show="problem.showDown" ng-cloak>
-                                                        <i class="fa fa-chevron-down"></i>
-                                                    </span>
-                                                </a>
-
-                                            </div>
-                                          </td>
-                                          <td >
-                                          <div class="collapse container" uib-collapse="problem.isCollapsed" style="background: antiquewhite;width: 100%" ng-show="showOffersManu" ng-cloak>
-                                              <a href="home/problem/<%offer.id%>">
-                                              <div class="row" ng-repeat="offer in problem.offers" style="padding: 10px 5px">
-
-                                                  <div class="col-md-1" my-offer offer="offer">
-                                                   <p ng-bind="offer.isMine">
-
-                                                   </p>
-                                               </div>
-
-                                              <div class="col-md-5" style="background: #fdf0e0;">
-
-                                                  Offer description: <%offer.description | limitTo:50%>
-
-                                              </div>
-
-                                            <div class="col-md-1 pull-right" style="">
-                                               $<%offer.price%>
-                                             </div>
-                                             <div class="col-md-2 pull-right" style="">
-                                                 <div style="" ng-bind="offer.created_at | dateFilter: 'MM/dd/yyyy @ h:mma'"></div>
-                                             </div>
-                                            </div>
-                                          </a>
-                                        </div>
-                                        </td>
-                                      </tr>
-
-                                      </tbody>
-
-                                    </table> -->
-
-                                    <!-- <p ng-show="(problems | filter: tookFilter | filter: search | filter:colourFilter.length == 0" style="text-align:center;margin-top:40px;position: relative;" ng-cloak>No tasks found!</p> -->
+                              <p ng-show="(problems | filter: search | taskTypeFilter:taskTypeIncludes).length === 0" style="text-align:center;margin-top:40px;position: relative;" ng-cloak>No tasks found!</p>
                                   </div>
 
                                 </div>
