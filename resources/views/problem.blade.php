@@ -37,7 +37,7 @@ Problem preview
                                                     @if(count($problem->files) == 1)
                                                         file.</p>
                                                     @else
-                                                        files.</p>
+                                                        files.
                                                     @endif
                                                 @endif
                                             @else
@@ -55,10 +55,11 @@ Problem preview
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7"  ng-repeat="prob in problems">
+
+                    <div class="col-md-7">
                         <h2 class="font-bold m-b-xs">
                             {{$problem->subject}} ({{$problem->task_type->name}})
-                            <span timer-directive problem="prob" user="{{Auth::user()}}"></span>
+                            <span timer-directive problem="prob" user="{{Auth::user()}}" ng-if="dataHasLoaded"></span>
                         </h2>
                         <div class="pull-right">
                             <a href="{{url('/home')}}"  style="color: white"><button class="btn btn-danger btn-sm" style="margin-top: -60px"><i class="fa fa-angle-left" aria-hidden="true"></i> Back to home </button></a>
@@ -103,7 +104,8 @@ Problem preview
                             <div class="m-t-md">
                                 <dt>Status</dt>
                                 <dd>
-                                    <span problem-show-directive problem="prob" user="{{Auth::user()}}"></span> 
+
+                                    <span problem-show-directive problem="prob" user="{{Auth::user()}}" ng-if="dataHasLoaded"></span> 
                                 </dd>
                             </div>
                             <div class="m-t-md">
@@ -114,7 +116,7 @@ Problem preview
                              </div>
                              @endif
                          </div>
-                         <div  class="m-t-md" style="border-top: 1px solid #fff; border-bottom: 1px solid #fff; height: 46px" bidding-directive problem="prob" user="{{Auth::user()}}">
+                         <div  class="m-t-md" style="border-top: 1px solid #fff; border-bottom: 1px solid #fff; height: 46px" bidding-directive problem="prob" user="{{Auth::user()}}" ng-if="dataHasLoaded">
                          </div>
                      </div>
                  </div>
@@ -125,6 +127,12 @@ Problem preview
 
      </div>
  </div>
+ <div class="row" ng-if="dataHasLoaded" ng-cloak>
+    <div class="col-lg-12">
+        <div show-solution-directive problem="prob" user="{{Auth::user()}}"></div>
+    </div>
+</div>
+
 </div>
 </div>
 @stop

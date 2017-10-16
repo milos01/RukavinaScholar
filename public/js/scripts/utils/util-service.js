@@ -1,5 +1,5 @@
 (function(angular){
-app.factory('UtilService', function($http){
+app.factory('UtilService', function(){
     return {
         findMin: function(task){
         	var min = Number.MAX_SAFE_INTEGER;
@@ -23,6 +23,12 @@ app.factory('UtilService', function($http){
             });
 
             return myOffer;
+        },
+        mainSolver: function(task, user){
+            if (task.took === 1 && task.main_slovler === user.id) {
+                return true;
+            }
+            return false;
         },
         STATUS: {
         	MIN_OFFER : {message: "Offer:"},

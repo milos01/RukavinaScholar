@@ -196,7 +196,8 @@ app.controller('ProblemController',  function(ProblemResource, Socket, $scope){
   });
   $scope.init = function(problemId){
     ProblemResource.getProblem(problemId).then(function(problem){
-      $scope.problems = problem;
+      $scope.prob = problem[0];
+      $scope.dataHasLoaded = true;
     });
   };
 });
@@ -238,6 +239,25 @@ app.directive('biddingDirective', function(ProblemResource, UserResource, UtilSe
     }
   }
 });
+
+app.directive('showSolutionDirective', function(UtilService){
+  return {
+    template: '<sapn  ng-show=\"showSolutionDropzone\"><div><h3>Upload solution files for task below</h3></div><div class="dropzone" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div></sapn>',
+    restrict: 'A',
+    scope: { 
+      problem: '=',
+      user: '='
+    },
+    link: function (scope) {
+      var isMainSolver = UtilService.mainSolver(scope.problem, scope.user);
+      if (!isMainSolver) {
+        scope.showSolutionDropzone = false;
+      }else{
+        scope.showSolutionDropzone = true;
+      }
+    }
+  }
+})
 // Assigned page fronend
 // |
 // V
