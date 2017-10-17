@@ -126,12 +126,25 @@ class ProblemController extends Controller
         ]);
         
         foreach ($request->selectedFiles as $media) {
-            $file = File::create([
-                'fileName' => $media['name'],
-            ]);
-            
+            $file = $this->saveFile($problem, $media);
             $problem->files()->attach($file->id);
         }
+    }
+
+    public function newsolutionsubmit(Request $request){
+        $problem = Problem::findOrFail($request->task_id);
+        foreach ($request->selectedFiles as $media) {
+            $file = $this->saveFile($problem, $media);
+            $problem->solutions()->attach($file->id);
+        }
+        $problem->solution_description = $request->probDescription;
+        $problem->save();
+    }
+
+    private function saveFile($problem, $media){
+        return File::create([
+            'fileName' => $media['name'],
+        ]);
     }
 
 	public function updateProblemExpireTime($id){
@@ -164,10 +177,8 @@ class ProblemController extends Controller
     }
 
     public function getProblem($probId){
-        $list = [];
-        $problem = Problem::with('offers')->with('user_from')->with('task_type')->findorFail($probId);
-        array_push($list, $problem);
-        return $list;
+        $problem = Problem::with('offers')->with('user_from')->with('task_type')->with('solutions')->with('mainSolver')->findorFail($probId);
+        return $problem;
     }
 
 	public function resetWaiting($id){

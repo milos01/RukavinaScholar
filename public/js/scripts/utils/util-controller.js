@@ -20,6 +20,16 @@ app.factory('selectedFilesService', function() {
     };
 });
 
+app.controller('navigationController', function($scope){
+  $scope.isSelected = function(menuItem){
+    return $scope.selected === menuItem;
+  }
+
+  $scope.setActive = function(item){
+    $scope.selected = item;
+  }
+})
+
 app.directive('capitalizeFirst', function($parse) {
    	return {
     	require: 'ngModel',

@@ -33,7 +33,7 @@
 
 		// /problem/{id}
 		retVal.getProblem =  function(probId){
-			return Restangular.one('problem', probId).getList().then(function(response){
+			return Restangular.one('problem', probId).get().then(function(response){
 				return response;
 			});
 		}
@@ -85,6 +85,13 @@
 		// /newproblemsubmit
 		retVal.postNewTask =  function(data){
 			return Restangular.all('newproblemsubmit').post(data).then(function(response){
+				return response;
+			});
+		}
+
+		// /newsolutionsubmit
+		retVal.postTaskSolution =  function(data){
+			return Restangular.all('newsolutionsubmit').post(data).then(function(response){
 				return response;
 			});
 		}

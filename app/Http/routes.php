@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('api/application/addModerator', 'ProblemController@addMate');
 	Route::post('api/application/deleteWorker', 'ProblemController@deleteWorker');
 	Route::post('api/application/newproblemsubmit', 'ProblemController@newproblemsubmit');
+	Route::post('api/application/newsolutionsubmit', 'ProblemController@newsolutionsubmit');
 	Route::post('api/application/getuserproblemoffer', 'ProblemController@getproblemoffers');
 	Route::post('api/application/acceptProblem', 'ProblemController@acceptProblem');
 	Route::put('api/application/problem/{id}/resetWaiting', 'ProblemController@resetWaiting');

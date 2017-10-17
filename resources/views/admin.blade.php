@@ -97,10 +97,10 @@
     </div>
     @endif
     <div id="wrapper">
-      <nav class="navbar-default navbar-static-side" role="navigation">
+      <nav class="navbar-default navbar-static-side" role="navigation" ng-controller="navigationController">
         <div class="sidebar-collapse">
           <ul class="nav metismenu" id="side-menu">
-            <li class="nav-header">
+            <li class="nav-header" style="background-color: #243645;">
               <div class="dropdown profile-element">
                 <span>
                   <img alt="image" class="img-circle" src="{{asset('avatars/'.Auth::user()->picture)}}" width="53px" height="53px" />
@@ -119,15 +119,15 @@
               <div class="logo-element">Rukhell</div>
             </li>
             <!-- App side menu -->
-            <li style="margin-top:-4px" >
+            <li class="{{ (Request::path() == 'home' || Request::path() == '/') ? 'active' : '' }}">
               <a href="{{ route('home') }}">
-                <i class="fa fa-home"></i> <span class="nav-label" id="mngu">Home</span>
+                <i class="fa fa-home"></i> <span class="nav-label" id="mngu" ng-click="setActive('home')">Home</span>
               </a>
             </li>
             @if(Auth::user()->is('admin') || Auth::user()->is('moderator'))
-              <li style="margin-top:-4px"><a href="{{route('showManage')}}"><i class="fa fa-users"></i>
-                <span class="nav-label" id="mngu">Manage users</span></a></li>
-                <li><a href="{{ route('assigned') }}"><i class="fa fa-book" aria-hidden="true"></i>
+              <li class="{{ Request::path() == 'assigned' ? 'active' : '' }}">
+                <a href="{{ route('assigned') }}">
+                  <i class="fa fa-book" aria-hidden="true"></i>
                   <span class="nav-label">Assigned to me
                     @if($assigns != 0)
                     <span class="badge" style="background-color:#ed5565; margin-top:-2px; margin-left:2px; color:white">{{$assigns}}</span>
@@ -137,25 +137,30 @@
               </li>
             @endif
             @if(Auth::user()->is('admin'))
-            <li style="margin-top:-4px">
+            <li class="{{ Request::path() == 'manage' ? 'active' : '' }}">
+              <a href="{{route('showManage')}}">
+                <i class="fa fa-users"></i> <span class="nav-label" id="mngu">Manage users</span>
+              </a>
+            </li>
+            <li class="{{ Request::path() == 'settings' ? 'active' : '' }}">
               <a href="{{ route('showSettingsPage') }}">
                 <i class="fa fa-cog"></i> <span class="nav-label" id="mngu">Settings</span>
               </a>
             </li>
             @endif
             @if(Auth::user()->is('regular'))
-              <li style="margin-top:-4px">
+              <li class="{{ Request::path() == 'newproblem' ? 'active' : '' }}">
                 <a href="{{ route('newProblem') }}">
                   <i class="fa fa-plus"></i> <span class="nav-label" id="mngu">Submit task</span>
                 </a>
               </li>
             @endif
-            <li style="margin-top:-4px">
+            <li class="{{ Request::path() == 'edit' ? 'active' : '' }}">
               <a href="{{ route('editUser') }}">
                 <i class="fa fa-user"></i> <span class="nav-label">Edit profile</span>
               </a>
             </li>
-            <li>
+            <li class="{{ Request::path() == 'inbox' ? 'active' : '' }}">
               <a href="{{ route('showInbox') }}">
                 <i class="fa fa-envelope"></i>
                 <span id="mailBox"class="nav-label">Mailbox

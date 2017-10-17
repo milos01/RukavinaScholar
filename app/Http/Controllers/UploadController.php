@@ -49,47 +49,51 @@ class UploadController extends Controller
     /**
     */
     public function uploadProblem(SaveTaskFileRequest $request){
-        $manipulatedFile = $this->fileManipulation('new_task_upload', $request);
-
+        $pathName = $this->getPathName($request);
+        $manipulatedFile = $this->fileManipulation($pathName, $request);
         //Dispatch Upload file to Amazon S3 job
         // $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
         return response($manipulatedFile, 200);
     }
 
     public function deltefile(Request $request){
-        Storage::disk('new_task_upload')->delete($request->name);
+        $pathName = $this->getPathName($request);
+        Storage::disk($pathName)->delete($request->name);
         return response('ok',200);
     }
 
-    public function uploadSolution(Request $request){
-        if($request->hasFile('file')){
-
-
-
-            $manipulatedFile = $this->fileManipulation('new_task_upload', $request);
-
-							$file = new File();
-	            $file->fileName = $manipulatedFile[0];
-	            $file->save();
-
-	            $problem = Problem::findorFail($request->prob_id);
-							if ($request->solutionDesc) {
-								$problem->solution_description = $request->solutionDesc;
-							}
-	            $problem->took = 2;
-	            $problem->save();
-
-	            $probSol = new ProblemSolutions();
-	            $probSol->file()->associate($file);
-	            $probSol->problem()->associate($problem);
-	            $probSol->save();
-
-            // $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
-
-
-
-        }
+    private function getPathName($request){
+        $taskType = $request->type;
+        return ($taskType == "solution") ? 'task_solution_upload' : 'new_task_upload';
     }
+
+    // public function uploadSolution(Request $request){
+    //     if($request->hasFile('file')){
+
+    //         $manipulatedFile = $this->fileManipulation('new_task_upload', $request);
+
+				// 			$file = new File();
+	   //          $file->fileName = $manipulatedFile[0];
+	   //          $file->save();
+
+	   //          $problem = Problem::findorFail($request->prob_id);
+				// 			if ($request->solutionDesc) {
+				// 				$problem->solution_description = $request->solutionDesc;
+				// 			}
+	   //          $problem->took = 2;
+	   //          $problem->save();
+
+	   //          $probSol = new ProblemSolutions();
+	   //          $probSol->file()->associate($file);
+	   //          $probSol->problem()->associate($problem);
+	   //          $probSol->save();
+
+    //         // $this->dispatch(new UploadFilesToS3($manipulatedFile[0], $manipulatedFile[1]));
+
+
+
+    //     }
+    // }
 
     private function fileManipulation($pathName, $request){
         $file = $request->file('file');

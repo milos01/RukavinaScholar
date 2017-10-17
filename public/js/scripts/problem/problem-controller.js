@@ -121,7 +121,7 @@ app.directive('confirmationDirective', function (ProblemResource, Socket, UtilSe
     link: function (scope) {
       if(scope.problem.offers.length > 0 && scope.problem.waiting === 0 && scope.problem.took === 0){
         scope.problem.showConfirmation = true;
-      }else if(scope.problem.offers.length > 0 && scope.problem.waiting === 0 && scope.problem.took === 1){
+      }else if(scope.problem.offers.length > 0 && scope.problem.waiting === 0 && (scope.problem.took === 1 || scope.problem.took === 2) && scope.problem.paid === 0){
         scope.problem.showMakePayment = true;
       }
       //Decline offer
@@ -196,7 +196,7 @@ app.controller('ProblemController',  function(ProblemResource, Socket, $scope){
   });
   $scope.init = function(problemId){
     ProblemResource.getProblem(problemId).then(function(problem){
-      $scope.prob = problem[0];
+      $scope.prob = problem;
       $scope.dataHasLoaded = true;
     });
   };
@@ -239,25 +239,6 @@ app.directive('biddingDirective', function(ProblemResource, UserResource, UtilSe
     }
   }
 });
-
-app.directive('showSolutionDirective', function(UtilService){
-  return {
-    template: '<sapn  ng-show=\"showSolutionDropzone\"><div><h3>Upload solution files for task below</h3></div><div class="dropzone" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div></sapn>',
-    restrict: 'A',
-    scope: { 
-      problem: '=',
-      user: '='
-    },
-    link: function (scope) {
-      var isMainSolver = UtilService.mainSolver(scope.problem, scope.user);
-      if (!isMainSolver) {
-        scope.showSolutionDropzone = false;
-      }else{
-        scope.showSolutionDropzone = true;
-      }
-    }
-  }
-})
 // Assigned page fronend
 // |
 // V
@@ -303,33 +284,42 @@ app.directive('assignDirective', function(){
 //New problem page
 // |
 // V
-app.controller('newProblemController', function(ProblemResource, DropzoneService, AlertSerice, $scope, $window, $interval){
-  // $scope.filesLoading = true;
-  $scope.init = function(){
-    var time = new Date();
-    ProblemResource.getTaskCategories().then(function(taskCategories){
-      $scope.categories = taskCategories;
-    });
+app.controller('newProblemController', function(ProblemResource, DropzoneService, UtilService, AlertSerice, Socket, $scope, $window, $interval){
+  
+  $scope.init = function(problem, user){
+    if(problem === undefined && user === undefined){
+      Socket.connectUser();
+      var time = new Date();
+      ProblemResource.getTaskCategories().then(function(taskCategories){
+        $scope.categories = taskCategories;
+      });
+    }else{
+      var isMainSolver = UtilService.mainSolver(problem, user);
+      if (!isMainSolver || problem.took === 2) {
+        $scope.showSolutionDropzone = false;
+      }else{
+        $scope.showSolutionDropzone = true;
+      }
+    }
   };
   //Handle callbacks for dropzone
   $scope.dzCallbacks = {
+    'sending': function(file, xhr, formData){
+      formData.append('type', $('#taskType').val());
+    },
     'addedfile' : function(file){
-      for (var i = DropzoneService.addedFiles.length - 1; i >= 0; i--) {
-        if (DropzoneService.addedFiles[i].name === file.name && DropzoneService.addedFiles[i].size === file.size ) {
-          AlertSerice.sweet('Error', 'error', "Can't upload same picture!");
-          $scope.dzMethods.removeFile(file);
+      console.log(DropzoneService.currentFiles);
+      for (var i = DropzoneService.currentFiles.length - 1; i >= 0; i--) {
+        if (DropzoneService.currentFiles[i].name === file.name && DropzoneService.currentFiles[i].size === file.size ) {
+            AlertSerice.sweet('Error', 'error', "Can't upload same picture!");
+            removeDuplicate(DropzoneService.addedFiles, DropzoneService.currentFiles, file);
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0; 
         }
       }
     },
     'removedfile': function(file){
-      for (var i = DropzoneService.addedFiles.length - 1; i >= 0; i--) {
-        var media = DropzoneService.addedFiles[i];
-        if (media.name.indexOf(file.name) !== -1) {
-          ProblemResource.postDeleteFile({'name': media.name});
-          DropzoneService.addedFiles.splice(DropzoneService.addedFiles.indexOf(media), 1);
-        }
-      }
-      
+      removeDuplicate(DropzoneService.addedFiles, DropzoneService.currentFiles, file);
     },
     'processing': function(file){
       $scope.filesLoading = true;
@@ -339,12 +329,35 @@ app.controller('newProblemController', function(ProblemResource, DropzoneService
         'name': response[0],
         'size': file.size
       }
-      DropzoneService.addedFiles.push(newFile);     
+      DropzoneService.addedFiles.push(newFile);
+      DropzoneService.currentFiles.push({
+        'name': file.name,
+        'size': file.size
+      });
+
+      $scope.fileList = DropzoneService.addedFiles;
     },
     queuecomplete: function(file){
       $scope.filesLoading = false;
     }
   };
+
+  function removeDuplicate(addedFiles, currentFiles, file){
+    for (var i = addedFiles.length - 1; i >= 0; i--) {
+      var media = addedFiles[i];
+      if (media.name.indexOf(file.name) !== -1) {
+        ProblemResource.postDeleteFile({'name': media.name, 'type': $('#taskType').val()});
+        addedFiles.splice(addedFiles.indexOf(media), 1);
+
+      }
+    }
+    for (var i = currentFiles.length - 1; i >= 0; i--) {
+      var media = currentFiles[i];
+      if (media.name.indexOf(file.name) !== -1) {
+        currentFiles.splice(currentFiles.indexOf(media), 1);
+      }
+    }
+  }
 
   $scope.addProblemSubmit = function(){
     var data = {
@@ -357,6 +370,20 @@ app.controller('newProblemController', function(ProblemResource, DropzoneService
       AlertSerice.sweet('Success', 'success', 'Successfully submitted new task');
       $interval(function() {
           $window.location.href = '/home';
+      }, 1800);
+    });
+  }
+
+  $scope.addSolutionSubmit = function(task){
+    var data = {
+      probDescription: $scope.probDescription,
+      selectedFiles: DropzoneService.addedFiles,
+      task_id: task.id
+    }
+    ProblemResource.postTaskSolution(data).then(function(){
+      AlertSerice.sweet('Success', 'success', 'Successfully submitted solution for this task');
+      $interval(function() {
+          $window.location.reload();
       }, 1800);
     });
   }

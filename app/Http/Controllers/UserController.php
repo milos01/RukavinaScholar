@@ -80,7 +80,7 @@ class UserController extends Controller
         $moderators = [];
         $allUsers = User::all();
         foreach ($allUsers as $user) {
-            if ($user->is('moderator')) {
+            if ($user->is('moderator') || $user->is('admin')) {
                 array_push($moderators, $user);
             }
         }

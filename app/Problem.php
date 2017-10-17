@@ -24,6 +24,7 @@ class Problem extends Model
         'main_slovler',
         'problem_type',
         'problem_description',
+        'solution_description',
         'took',
         'waiting',
         'time_ends_at'
@@ -50,12 +51,12 @@ class Problem extends Model
 
     public function files()
     {
-        return $this->belongsToMany('App\File', 'problem_files', 'problem_id', 'file_id')->withTimestamps();
+        return $this->belongsToMany('App\File', 'problem_files', 'problem_id', 'file_id');
     }
 
     public function solutions()
     {
-        return $this->hasMany('App\ProblemSolutions');
+        return $this->belongsToMany('App\File', 'problem_solution_files', 'problem_id', 'solution_file_id');
     }
 
     public function offers()

@@ -66,6 +66,12 @@ return [
             'visibility' => 'public',
         ],
 
+        'task_solution_upload' => [
+            'driver' => 'local',
+            'root' => storage_path('uploads/solved_tasks'),
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => 'AKIAIHHKKFUDDAUDVY5A',
