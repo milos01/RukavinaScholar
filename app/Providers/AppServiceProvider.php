@@ -5,7 +5,8 @@ namespace App\Providers;
 use App\User;
 use App\Problem;
 use Auth, DB, Event;
-
+use Validator;
+use Hash;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,7 +18,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-          
+        Validator::extend('old_password', function ($attribute, $value, $parameters, $validator) {
+
+            return Hash::check($value, current($parameters));
+
+        });
+
         User::deleting(function ($user) {
             $problems = Problem::all();
             foreach ($problems as $problem) {

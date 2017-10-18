@@ -144,6 +144,7 @@ app.controller('editUserInfoController', function($scope){
   $scope.init = function(user){
     $scope.firstName = user.name;
     $scope.lastName = user.lastName;
+    $scope.username = user.username;
   };
 });
 

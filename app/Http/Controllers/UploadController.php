@@ -18,32 +18,31 @@ class UploadController extends Controller
 {
 
     public function saveImage(Request $request){
-        if($request->hasFile('file')){
-            $input = $request->all();
+        $input = $request->all();
 
-            $rules = array(
-                'file' => 'image|max:3000|mimes:jpeg,jpg,png',
-            );
+        $rules = array(
+            'file' => 'required|image|max:3000|mimes:jpeg,jpg,png',
+        );
 
-            $validation = Validator::make($input, $rules);
+        $validation = Validator::make($input, $rules);
 
-            if ($validation->fails()) {
-                return back();
-            }
-
-            $destinationPath = 'uploads'; // upload path
-            $extension = $request->file('file')->getClientOriginalExtension(); // getting file extension
-            $fileName = time() . '.' . $extension;
-
-            // $upload_success = $request->file('file')->move(public_path('img'), $fileName); // uploading file to given path
-            Image::make($request->file('file'))->fit(200)->save(public_path('img/'.$fileName));
-
-            $user = Auth::user();
-            $user->picture = $fileName;
-            $user->save();
+        if ($validation->fails()) {
             return back();
         }
-        return back();
+        $user = Auth::user();
+        Storage::disk('avatar_uploads')->delete($user->picture);
+
+        $destinationPath = 'uploads'; // upload path
+        $extension = $request->file('file')->getClientOriginalExtension(); // getting file extension
+        $fileName = $this->makeFileName($extension);
+
+        // $upload_success = $request->file('file')->move(public_path('img'), $fileName); // uploading file to given path
+        $img = Image::make($request->file('file'))->fit(200);
+        Storage::disk('avatar_uploads')->put($fileName, $img->encode());
+
+        $user->picture = $fileName;
+        $user->save();
+        return back();   
     }
 
     /**

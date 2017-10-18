@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('edit', 'UserController@editUser')->name('editUser');
 	Route::get('user/{id}', 'UserController@showUserProfile')->name('showUserProfile');
 	Route::post('updateUser', 'UserController@updateUser')->name('updateUser');
+	Route::post('updateUsername', 'UserController@updateUsername')->name('updateUsername');
 	Route::post('updatePassword', 'UserController@updatePassword')->name('updatePassword');
 	//User api routes
 	Route::get('api/application/user', 'UserController@getLoggedUser');
@@ -65,7 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
 	
 
 	//Uplaod routes
-	Route::post('api/application/saveImage', 'UploadController@saveImage');
+	Route::post('api/application/saveImage', 'UploadController@saveImage')->name('saveImage');
 	Route::post('api/application/uploadProblem', 'UploadController@uploadProblem');
 	Route::post('api/application/uploadSolution', 'UploadController@uploadSolution');
 	Route::post('api/application/removeUploadedFile', 'UploadController@removeUploadedFile');

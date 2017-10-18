@@ -92,10 +92,17 @@ class UserController extends Controller
         $user->name = $request->firstName;
         $user->lastName = $request->lastName;
         if($user->save()){
-            return redirect('/home/edit');
+            return back();
         }
     }
 
+    public function updateUsername(UpdateUserRequest $request){
+        $user = Auth::user();
+        $user->username = $request->username;
+        if($user->save()){
+            return back();
+        }
+    }
 
     public function showManage(){
         $users = User::all();

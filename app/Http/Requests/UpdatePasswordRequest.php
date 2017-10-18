@@ -24,8 +24,13 @@ class UpdatePasswordRequest extends Request
     public function rules()
     {
         return [
-            'oldPassword' => 'required|max:45',
-            'newPassword' => 'required|max:45',
+            'oldPassword' => 'required|max:45| old_password' . Auth::user()->password,
+            'newPassword' => [
+                'required',
+                'min:6',
+                'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z]).+$/',
+                'confirmed'
+            ],
             'repPassword' => 'required|max:45|same:newPassword',
         ];
     }

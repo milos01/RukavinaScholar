@@ -24,7 +24,7 @@ class Problem extends Model
         'main_slovler',
         'problem_type',
         'problem_description',
-        'solution_description',
+        'sol_description',
         'took',
         'waiting',
         'time_ends_at'

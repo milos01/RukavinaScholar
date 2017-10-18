@@ -24,8 +24,7 @@ class UpdateUserRequest extends Request
     public function rules()
     {
         return [
-            'fname' => 'required|max:255',
-            'lname' => 'required|max:255',
+            'username' => 'required|unique:users|max:255',
         ];
     }
 }

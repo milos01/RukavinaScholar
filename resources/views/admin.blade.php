@@ -87,15 +87,6 @@
     </style>
   </head>
   <body id="app-layout" ng-app="kbkApp">
-    @if (count($errors) > 0)
-    <div id="alarm"class="alert alert-danger" style="position: absolute;top:0px;z-index: 10000;width:100%;">
-      <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-      </ul>
-    </div>
-    @endif
     <div id="wrapper">
       <nav class="navbar-default navbar-static-side" role="navigation" ng-controller="navigationController">
         <div class="sidebar-collapse">
