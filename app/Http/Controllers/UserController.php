@@ -122,11 +122,11 @@ class UserController extends Controller
         $hashedPassword = Hash::make($request->newPassword);
         if (!Hash::check($request->oldPassword, $user->password))
         {
-            return redirect('/home/edit#tab-2')->with('error', 'Current password isn\'t valid!');
+            return back();
         }
         $user->password = $hashedPassword;
         if ($user->save()) {
-            return redirect('/home/edit');
+            return back();
         }
     }
 

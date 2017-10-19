@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use Auth;
 
 class UpdatePasswordRequest extends Request
 {
@@ -24,14 +25,21 @@ class UpdatePasswordRequest extends Request
     public function rules()
     {
         return [
-            'oldPassword' => 'required|max:45| old_password' . Auth::user()->password,
+            'oldPassword' => 'required|max:45| old_password:' . Auth::user()->password,
             'newPassword' => [
                 'required',
                 'min:6',
                 'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z]).+$/',
                 'confirmed'
             ],
-            'repPassword' => 'required|max:45|same:newPassword',
+            'newPassword_confirmation' => 'required|max:45|same:newPassword',
         ];
+    }
+
+    public function messages()
+    {
+         return [
+              'oldPassword.old_password' => 'Not your current password.',
+         ];
     }
 }

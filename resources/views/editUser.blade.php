@@ -15,20 +15,21 @@
             <div class="tabs-container">
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#tab-1"> Basic info</a></li>
-                        <li class=""><a data-toggle="tab" href="#tab-2"> Security</a></li>
-                        
                     </ul>
                     <div class="tab-content" ng-controller="editUserInfoController" ng-init="init({{Auth::user()}})">
                         <div id="tab-1" class="tab-pane active">
                             <div class="panel-body">
-                                <div class="contianer pull-left" style="">
-                                    <img src="{{asset('avatars/'.Auth::user()->picture)}}">
-                                    <form action="{{route('saveImage')}}" method="POST" enctype="multipart/form-data"/>
-                                        <input name="file" type="file" style="max-width: 200px;margin-top: 3px" value="Choose image" data-input="false" multiple /> 
-                                        <input type="submit" class="btn btn-primary btn-xs" style="width: 200px; margin-top: 5px" value="Upload picture">   
-                                        <input type="hidden" name="_token" value="{{csrf_token()}}"/> 
-                                    </form>
+                                <div class="col-lg-2">
+                                    <div class="col-lg-12">
+                                        <img class="col-lg-12" src="{{asset('avatars/'.Auth::user()->picture)}}" style="margin-bottom: 10px">
+                                        <form action="{{route('saveImage')}}" method="POST" enctype="multipart/form-data"/>
+                                            <input name="file" type="file" style="margin-top: 3px" value="Choose image" data-input="false" multiple /> 
+                                            <input type="submit" class="btn btn-primary btn-xs" style="width: 100%; margin-top: 5px" value="Upload picture">   
+                                            <input type="hidden" name="_token" value="{{csrf_token()}}"/> 
+                                        </form>
+                                    </div>
                                 </div>
+                                <div class="col-lg-10">
                             	<form action="{{route('updateUser')}}" method="POST" name="editBasicInfoForm" novalidate>
                                     <fieldset class="form-horizontal">
                                         <div class="form-group" ng-class="{ 'has-error' : editBasicInfoForm.firstName.$invalid && !editBasicInfoForm.firstName.$pristine }"><label class="col-sm-2 control-label">First name</label>
@@ -69,46 +70,51 @@
                                         <input type="hidden" name="_token" value="{{csrf_token()}}"/>
                                     </fieldset>
                                 </form>
+                                </div>
+                                <hr>
+                                <div class="col-lg-2"></div>
+                                <div class="col-lg-10">
+                                <form action="{{route('updatePassword')}}" method="POST" name="editPasswordForm" style="margin-top: 20px" novalidate>
+                                    <fieldset class="form-horizontal">
+                                        <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.oldPassword.$invalid && !editPasswordForm.oldPassword.$pristine }" ng-class="{ 'has-error' : editPasswordForm.oldPassword.$invalid && !editPasswordForm.oldPassword.$pristine }"><label class="col-sm-2 control-label">Current password</label>
+                                            <div class="col-sm-8"><input type="password" class="form-control" name="oldPassword" ng-model="user.oldPassword" autocomplete="off" required>
+                                            <p ng-show="editPasswordForm.oldPassword.$error.required && !editPasswordForm.oldPassword.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your current password is required</p>
+                                            @if ($errors->has('oldPassword'))
+                                                    <p class="help-block" style="color: red">
+                                                        <strong>{{ $errors->first('oldPassword') }}</strong>
+                                                    </p>
+                                            @endif
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.newPassword.$invalid && !editPasswordForm.newPassword.$pristine }"><label class="col-sm-2 control-label">New password</label>
+                                            <div class="col-sm-8"><input type="password" class="form-control" name="newPassword" ng-model="user.newPassword" required>
+                                                <p ng-show="editPasswordForm.newPassword.$error.required && !editPasswordForm.newPassword.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your new password is required</p>
+                                                @if ($errors->has('newPassword'))
+                                                    <p class="help-block" style="color: red">
+                                                        <strong>{{ $errors->first('newPassword') }}</strong>
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.newPassword_confirmation.$invalid && !editPasswordForm.newPassword_confirmation.$pristine }"><label class="col-sm-2 control-label">Repeat password</label>
+                                            <div class="col-sm-8"><input type="password" class="form-control" name="newPassword_confirmation" ng-model="user.newPassword_confirmation" required>
+                                                <p ng-show="editPasswordForm.newPassword_confirmation.$error.required && !editPasswordForm.newPassword_confirmation.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Repeat password is required</p>
+                                                @if ($errors->has('newPassword_confirmation'))
+                                                    <p class="help-block" style="color: red">
+                                                        <strong>{{ $errors->first('newPassword_confirmation') }}</strong>
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-10" style="margin-left:10px;">
+                                            <button type="submit" class="btn btn-primary pull-right" ng-disabled="editPasswordForm.$invalid">Change password</button>
+                                        </div>
+                                    </fieldset>
+                                    <input type="hidden" value="{{csrf_token()}}" name="_token"/>
+                                </form>
+                                </div>
                             </div>
                         </div>
-                        <div id="tab-2" class="tab-pane">
-                            <div class="panel-body">
-                            <form action="{{route('updatePassword')}}" method="POST" name="editPasswordForm" novalidate>
-                                <fieldset class="form-horizontal">
-                                    <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.oldPassword.$invalid && !editPasswordForm.oldPassword.$pristine }"><label class="col-sm-2 control-label">Old password</label>
-                                        <div class="col-sm-8"><input type="password" class="form-control" name="oldPassword" ng-model="user.oldPassword" autocomplete="off" required>
-                                        <p ng-show="editPasswordForm.oldPassword.$error.required && !editPasswordForm.oldPassword.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your current password is required</p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.newPassword.$invalid && !editPasswordForm.newPassword.$pristine }"><label class="col-sm-2 control-label">New password</label>
-                                        <div class="col-sm-8"><input type="password" class="form-control" name="newPassword" ng-model="user.newPassword" required>
-                                            <p ng-show="editPasswordForm.newPassword.$error.required && !editPasswordForm.newPassword.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Your new password is required</p>
-                                            @if ($errors->has('newPassword'))
-                                                <p class="help-block" style="color: red">
-                                                    <strong>{{ $errors->first('newPassword') }}</strong>
-                                                </p>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="form-group" ng-class="{ 'has-error' : editPasswordForm.repPassword.$invalid && !editPasswordForm.repPassword.$pristine }"><label class="col-sm-2 control-label">Repeat password</label>
-                                        <div class="col-sm-8"><input type="password" class="form-control" name="repPassword" ng-model="user.repPassword" required>
-                                            <p ng-show="editPasswordForm.repPassword.$error.required && !editPasswordForm.repPassword.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Repeat password is required</p>
-                                            @if ($errors->has('repPassword'))
-                                                <p class="help-block" style="color: red">
-                                                    <strong>{{ $errors->first('repPassword') }}</strong>
-                                                </p>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-10" style="margin-left:10px;">
-                                    	<button type="submit" class="btn btn-primary pull-right" ng-disabled="editPasswordForm.$invalid">Change password</button>
-                                    </div>
-                                </fieldset>
-                                <input type="hidden" value="{{csrf_token()}}" name="_token"/>
-                            </form>
-                            </div>
-                        </div>
-                        
                     </div>
             </div>
         </div> 
