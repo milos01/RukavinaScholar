@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Http\Requests\NewCategoryRequest;
 use App\Http\Requests;
 use App\ProblemCategory;
 
@@ -14,16 +14,15 @@ class SettingsController extends Controller
       $deleteCategories = ProblemCategory::onlyTrashed()->get();
       return view('settings')->with('categories', $categories)->with('deleteCategories', $deleteCategories);
     }
-    public function addNewCategory(Request $request){
+    public function addNewCategory(NewCategoryRequest $request){
       $category = ProblemCategory::create([
           'name' => $request->name,
-        ]);
+      ]);
       return back();
     }
 
     public function deleteCategory(Request $request){
       $category = ProblemCategory::findorFail($request->categoryId);
-
       $category->delete();
       return back();
     }

@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\User;
+use App\ProblemCategory;
 use App\Problem;
 use Auth, DB, Event;
 use Validator;
 use Hash;
 use Illuminate\Support\ServiceProvider;
+use Hashids\Hashids;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,6 +46,21 @@ class AppServiceProvider extends ServiceProvider
             return $problems;
         });
 
+        ProblemCategory::deleting(function ($category) {
+            foreach ($category->problems as $problem) {
+                $problem->delete();
+            }
+        });
+
+        ProblemCategory::updating(function ($category) {
+            $problems = Problem::onlyTrashed()->get();
+            foreach ($problems as $problem) {
+                if($problem->problem_type == $category->id){
+                    $problem->restore();
+                }   
+            }
+        });
+
         if (env('APP_ENV') === 'local') {
             DB::connection()->enableQueryLog();
         }
@@ -63,6 +80,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(Hashids::class, function () {
+            return new Hashids(env('HASHIDS_SALT'), 10);
+        });
     }
 }

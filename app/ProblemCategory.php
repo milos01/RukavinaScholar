@@ -19,4 +19,10 @@ class ProblemCategory extends Model
   protected $fillable = [
     'name'
   ];
+
+  public function problems()
+    {
+        return $this->hasMany('App\Problem', 'problem_type');
+    }
+
 }

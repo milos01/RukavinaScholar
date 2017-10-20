@@ -35,10 +35,10 @@ class User extends Authenticatable
 
     public function is($role)
     {
-            if (  $this->role->name == $role)
-            {
-                return true;
-            }
+        if ($this->role->name == $role)
+        {
+            return true;
+        }
         return false;
     }
 

@@ -20,16 +20,6 @@ app.factory('selectedFilesService', function() {
     };
 });
 
-app.controller('navigationController', function($scope){
-  $scope.isSelected = function(menuItem){
-    return $scope.selected === menuItem;
-  }
-
-  $scope.setActive = function(item){
-    $scope.selected = item;
-  }
-})
-
 app.directive('capitalizeFirst', function($parse) {
    	return {
     	require: 'ngModel',
@@ -88,12 +78,14 @@ app.directive('myOffer', function(UserResource) {
 });
 
 app.directive('fooRepeatDone', function() {
-    return function($scope, element) {
-        if ($scope.$last) { // all are rendered
+    return function(scope, element) {
+        if (scope.$last) { // all are rendered
             $('.table').trigger('footable_redraw');
+           
         }
     }
 });
+
 app.directive("passwordVerify", function() {
     return {
         require: "ngModel",

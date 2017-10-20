@@ -88,7 +88,7 @@
   </head>
   <body id="app-layout" ng-app="kbkApp">
     <div id="wrapper">
-      <nav class="navbar-default navbar-static-side" role="navigation" ng-controller="navigationController">
+      <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
           <ul class="nav metismenu" id="side-menu">
             <li class="nav-header" style="background-color: #243645;">

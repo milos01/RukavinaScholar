@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Hasher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,6 +19,13 @@ class Problem extends Model
 
     protected $table = 'problems';
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['hash_id'];
+
     protected $fillable = [
         'subject',
         'person_from',
@@ -31,6 +39,11 @@ class Problem extends Model
     ];
 
     protected $hidden = [];
+
+    public function getHashIdAttribute()
+    {
+        return Hasher::encode($this->attributes['id']);
+    }
 
     public function user_from(){
     	return $this->belongsTo('App\User','person_from');

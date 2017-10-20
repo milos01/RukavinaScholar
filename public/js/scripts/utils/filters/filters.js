@@ -24,7 +24,7 @@ app.filter('taskTypeFilter', function(){
 		var filtered = [];
 		angular.forEach(tasks, function(task) {
 	    	if (taskTypeIncludes.length > 0) {
-	            if ($.inArray(task.problem_type.name, taskTypeIncludes) >= 0)
+	            if ($.inArray(task.task_type.name, taskTypeIncludes) >= 0)
 	                filtered.push(task);
 	        }else{
 	        	filtered.push(task);

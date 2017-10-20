@@ -14,7 +14,9 @@
         "netshell/paypal": "dev-master",
         "braintree/braintree_php": "^3.18",
         "laravel/socialite": "~2.0",
-        "a6digital/laravel-default-profile-image": "^1.0"
+        "a6digital/laravel-default-profile-image": "^1.0",
+        "hashids/hashids": "^2.0",
+        "league/fractal": "^0.17.0"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",

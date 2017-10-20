@@ -12,17 +12,25 @@ use App\Problem;
 use Auth,Zipper;
 use Crypt;
 use Carbon\Carbon;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Manager;
+use League\Fractal\Serializer\DataArraySerializer;
+use App\Http\Transformers\ProblemTransformer;
+
 class ProblemController extends Controller
 {
 	protected $now;
+    protected $manager;
+
 	public function __construct()
     {
-        // $this->middleware('auth');
+        $this->manager = new Manager();
+        $this->manager->setSerializer(new DataArraySerializer());
 		$this->now = Carbon::now();
     }
 
-    public function showProblem($id){
-    	$problem = Problem::with('task_type')->with('offers')->findorFail($id);
+    public function showProblem($problem_id){
+    	$problem = Problem::with('task_type')->with('offers')->findorFail($problem_id);
 
     	return view('problem')->with('problem', $problem);
     }
@@ -52,7 +60,9 @@ class ProblemController extends Controller
 
     public function getAllProblems(){
         $allProblems = Problem::with('offers')->with('user_from')->with('task_type')->get();
-        return $allProblems;
+
+        $resource = new Collection($allProblems, new ProblemTransformer());
+        return $this->manager->createData($resource)->toArray();
     }
 
 

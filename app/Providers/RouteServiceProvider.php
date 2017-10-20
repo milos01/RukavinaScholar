@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use Route;
+use App\User;
 use Illuminate\Routing\Router;
+use App\Helpers\Hasher;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -27,6 +30,14 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot($router);
+
+        Route::bind('problem_id', function ($id) {
+            return Hasher::decode($id);
+        });
+
+        Route::bind('username', function ($username) {
+            return User::where('username', $username)->firstOrFail();
+        });
     }
 
     /**

@@ -30,20 +30,20 @@ Route::group(['middleware' => 'auth'], function () {
 
 	//User routes
 	Route::get('edit', 'UserController@editUser')->name('editUser');
-	Route::get('user/{id}', 'UserController@showUserProfile')->name('showUserProfile');
+	Route::get('user/{username}', 'UserController@showUserProfile')->name('showUserProfile');
 	Route::post('updateUser', 'UserController@updateUser')->name('updateUser');
 	Route::post('updateUsername', 'UserController@updateUsername')->name('updateUsername');
 	Route::post('updatePassword', 'UserController@updatePassword')->name('updatePassword');
 	//User api routes
 	Route::get('api/application/user', 'UserController@getLoggedUser');
-	Route::get('api/application/user/{id}', 'UserController@findUserById');
+	Route::get('api/application/user/{uid}', 'UserController@findUserById');
 	Route::get('api/application/getAllModerators','UserController@getAllModerators');
 	Route::post('api/application/getusers','UserController@getApiUsers');
 	Route::post('api/application/getusers2','UserController@getApiUsers2');
 	
 
 	//Problem routes
-	Route::get('problem/{id}', 'ProblemController@showProblem');
+	Route::get('problem/{problem_id}', 'ProblemController@showProblem');
 	Route::get('problem/{id}/download', 'ProblemController@problemDownload');
 	Route::get('myproblem/{id}', 'ProblemController@showMyProblem');
 	Route::get('takeProblem/{id}', 'ProblemController@takeProblem');
@@ -77,14 +77,6 @@ Route::group(['middleware' => 'auth'], function () {
 	// Paymnent api routes
 	Route::post('api/application/placeOffer', 'PaymentController@placeOffer');
 
-	//Settings routes
-    Route::get('settings', 'SettingsController@showSettingsPage')->name('showSettingsPage');
-    Route::post('settings/category', 'SettingsController@addNewCategory')->name('addNewCategory');
-    Route::put('settings/category', 'SettingsController@activateCategory')->name('activateCategory');
-    Route::delete('settings/category', 'SettingsController@deleteCategory')->name('deleteCategory');
-    // Settings api routes
-    Route::get('/api/application/category', 'SettingsController@getAllCategories');
-
 	//Inbox/Messages routes
 	Route::get('inbox', 'InboxController@showInbox')->name('showInbox');
 	Route::get('inbox/{id}', 'InboxController@showUsersMessages')->name('showUsersMessages');
@@ -99,6 +91,14 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('manage/deleteUser/{id}', 'UserController@deleteUser')->name('deleteUser');
 		Route::get('manage/activateUser/{id}', 'UserController@activateUser')->name('activateUser');
 		Route::post('manage/addStaff', 'UserController@addStaff')->name('addStaff');
+		
+		//Settings routes
+	    Route::get('settings', 'SettingsController@showSettingsPage')->name('showSettingsPage');
+	    Route::post('settings/category', 'SettingsController@addNewCategory')->name('addNewCategory');
+	    Route::put('settings/category', 'SettingsController@activateCategory')->name('activateCategory');
+	    Route::delete('settings/category', 'SettingsController@deleteCategory')->name('deleteCategory');
+	    // Settings api routes
+	    Route::get('/api/application/category', 'SettingsController@getAllCategories');
 	});
 
 	//Paypal routes

@@ -10,6 +10,7 @@
     });
     $scope.init = function(loggedUser){
       $scope.loading = true;
+      $scope.showNoFound = false;
       $scope.taskTypeIncludes = [];
       //if user has 'regular' role
       if (loggedUser.role_id == 1) {

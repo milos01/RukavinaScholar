@@ -6,8 +6,8 @@
 
 		// /getuserproblems
 		retVal.getAllTasks =  function(){
-			return Restangular.all('getuserproblems').getList().then(function(response){
-				return response;
+			return Restangular.one('getuserproblems').get().then(function(response){
+				return response.data;
 			});
 		}
 

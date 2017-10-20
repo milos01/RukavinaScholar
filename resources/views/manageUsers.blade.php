@@ -17,7 +17,7 @@
 	  <div class="modal-dialog" style="width:400px">
 
 	    <!-- Modal content-->
-	     <form method="POST" action="{{ url('/home/manage/addStaff') }}" name="addStaffForm" novalidate>
+	     <form method="POST" action="{{ route('addStaff') }}" name="addStaffForm" novalidate>
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -35,6 +35,12 @@
 	        		<input type="text" class="form-control" placeholder="Last name" name = "lname" ng-model="staff.lname" required>
 	        		<p ng-show="addStaffForm.lname.$error.required && !addStaffForm.lname.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Last name required</p>
                 </div>
+             </div>
+             <div class="form-group" ng-class="{ 'has-error' : addStaffForm.username.$invalid && !addStaffForm.username.$pristine }">
+             	<div class="col-sm-12">
+	        		<input type="text" class="form-control" placeholder="Username" name = "username" ng-model="staff.username" required>
+	        		<p ng-show="addStaffForm.username.$error.required && !addStaffForm.username.$pristine" style="font-size:14px;position:absolute;right:0px;margin-right:28px;color:#ed5565;margin-top:-28px">Username required</p>
+             </div>
              </div>
              <div class="form-group" ng-class="{ 'has-error' : addStaffForm.email.$invalid && !addStaffForm.email.$pristine }">
              	<div class="col-sm-12">
@@ -58,8 +64,20 @@
 	<!-- End modal -->
 	 <div class="row">
             <div class="col-lg-12">
+            	@if ($errors->any())
+            	<div class="wrapper wrapper-content">
+            		<div class="ibox">
+					    <div class="col-md-12 alert alert-danger">
+					        <ul>
+					            @foreach ($errors->all() as $error)
+					                <li>{{ $error }}</li>
+					            @endforeach
+					        </ul>
+					    </div>
+				    </div>
+				</div>
+				@endif
                 <div class="wrapper wrapper-content animated fadeInUp">
-
                     <div class="ibox">
                         <div class="ibox-title">
                             <h5>Staff list</h5>
@@ -73,77 +91,53 @@
                                     <tbody>
 									@foreach($users as $user)
 										@if($user->email != Auth::user()->email)
-	                                    <tr>
-	                                        <td class="project-status">
-	                                        @if($user->is('moderator'))
-	                                            <a href="{{url('/home/manage/upgrade', [$user->id])}}" class="btn btn-primary btn-s">Make admin</a>
-	                                        @elseif($user->is('admin'))
-	                                        	<a href="{{url('/home/manage/downgrade', [$user->id])}}" class="btn btn-default btn-s">Downgrade</a>
-	                                        @endif
+	                                    <tr style="{{$user->deleted_at ? 'background:rgba(237, 86, 102, .1)': ''}}">
+	                                    	<td class="project-people">
+	                                            <a href=""><img alt="image" class="img-circle" src="{{asset('avatars/'.$user->picture)}}"></a>
+	                                            
 	                                        </td>
 	                                        <td class="project-title">
-	                                            <a href="{{url('/home', $user->id)}}">{{ $user->name }} {{$user->lastName}}
+	                                            {{ $user->name }} {{$user->lastName}}
 	                                            	@if($user->is('moderator'))
 	                                            		(Moderator)
 	                                        		@elseif($user->is('admin'))
 	                                        			(Admin)
 	                                        		@endif
-	                                            </a>
-	                                            <br/>
-	                                            <small>Signed up: {{$user->created_at->format('m/d/Y')}}</small>
-	                                        </td>
-	                                        <td class="project-completion">
-	                                                <small>Activity: {{$user->effect}}%</small>
-	                                                <div class="progress progress-mini">
-	                                                    <div style="width: {{$user->effect}}%;" class="progress-bar"></div>
-	                                                </div>
-	                                        </td>
-	                                        <td class="project-people">
-	                                            <a href=""><img alt="image" class="img-circle" src="../../img/{{$user->picture}}"></a>
 	                                            
-	                                        </td>
-	                                        <td class="project-actions">
-	                                            <a href="{{url('/home/user', [$user->id])}}" class="btn btn-white btn-sm"><i class="fa fa-eye"></i> View </a>
-	                                            <a href="{{url('/home/manage/deleteUser',[$user->id])}}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete </a>
-	                                        </td>
-	                                    </tr>
-	                                    @endif
-                                    @endforeach  
-                                    @foreach($deletedUsers as $user)
-										@if($user->email != Auth::user()->email)
-	                                    <tr  style="background: rgba(237, 86, 102, .1)">
-	                                    	<td></td>
-	                                        <td class="project-title">
-	                                            <a href="{{url('/home', $user->id)}}">{{ $user->name }} {{$user->lastName}}
-	                                            	@if($user->is('moderator'))
-	                                            		(Was moderator)
-	                                        		@elseif($user->is('admin'))
-	                                        			(Was admin)
-	                                        		@elseif($user->is('regular'))
-	                                        			(Was regular user)
-	                                        		@endif
-	                                            </a>
 	                                            <br/>
 	                                            <small>Signed up: {{$user->created_at->format('m/d/Y')}}</small><br/>
-	                                            <small>Deleted at: {{$user->deleted_at->format('m/d/Y')}}</small>
+	                                            @if($user->deleted_at)
+	                                        		<small>Deleted at: {{$user->deleted_at->format('m/d/Y')}}</small>
+	                                        	@endif
+	                                        </td>
+	                                        <td class="project-status">
+	                                        @if(!$user->deleted_at)
+		                                        @if($user->is('moderator'))
+		                                            <a href="{{route('upgradeAdmin', $user->id)}}" class="btn btn-primary btn-s">Make admin</a>
+		                                        @elseif($user->is('admin'))
+		                                        	<a href="{{route('donwgradeAdmin', $user->id)}}" class="btn btn-default btn-s">Downgrade</a>
+		                                        @endif
+	                                        @endif
 	                                        </td>
 	                                        <td class="project-completion">
-	                                                <small>Activity: {{$user->effect}}%</small>
-	                                                <div class="progress progress-mini">
-	                                                    <div style="width: {{$user->effect}}%;" class="progress-bar"></div>
-	                                                </div>
+	                                                <p>Email: {{$user->email}}</p>
 	                                        </td>
-	                                        <td class="project-people">
-	                                            <a href=""><img alt="image" class="img-circle" src="../../img/{{$user->picture}}"></a>
+	                                       
+	                                        <td class="project-people" style="text-align:left">
+	                                            <p>Username: {{$user->username}}</p>
 	                                            
 	                                        </td>
 	                                        <td class="project-actions">
-	                                            <!-- <a href="#" class="btn btn-white btn-sm"><i class="fa fa-eye"></i> View </a> -->
-	                                            <a href="{{url('/home/manage/activateUser',[$user->id])}}" class="btn btn-info btn-sm"><i class="fa fa-check"></i> Activate </a>
+	                                        	@if($user->deleted_at)
+	                                        		<a href="{{route('activateUser', $user->id)}}" class="btn btn-info btn-sm"><i class="fa fa-check"></i> Activate </a>
+	                                        	@else
+	                                        		<a href="{{route('showUserProfile', $user->username)}}" class="btn btn-white btn-sm"><i class="fa fa-eye"></i> View </a>
+	                                            	<a href="{{route('deleteUser', $user->id)}}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete </a>
+	                                        	@endif
 	                                        </td>
 	                                    </tr>
 	                                    @endif
-                                    @endforeach 
+                                    @endforeach  		
                                     </tbody>
                                 </table>
                             </div>
@@ -153,6 +147,7 @@
             </div>
         </div>
 @stop
-
+@section('chartTableJs')
+@stop
 
 

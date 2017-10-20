@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\NewImageRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\User;
+use App\Events\makeProfilePictureEvent;
 use Hash, Auth,DB, Input, Validator, Response, Image;
 
 
@@ -19,34 +20,30 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showUserProfile($id){
-        $user = User::findOrFail($id);
+    public function showUserProfile(User $user){
         return view('userProfile')->with('user',$user);
      }
 
     public function addStaff(MakeUserRequest $request)
     {
-        $user = new User;
+        $user = User::create([
+            'name' => $request->fname,
+            'email' =>  $request->email,
+            'password' => Hash::make('defPass'),
+            'lastName' => $request->lname,
+            'username' => $request->username,
+            'role_id' => 2,
+        ]);
 
-        $user->name = $request->fname;
-        $user->email = $request->email;
-        $user->password = Hash::make('defPass');
-        $user->lastName = $request->lname;
-        $user->picture = "defPic.png";
-        $user->role_id = 2;
-
-        if ($user->save()) {
-            return redirect('/home/manage');
-        }else{
-            return redirect('/home/manage')->with('alert', 'Something went wrong :(');
-        }
+        event(new makeProfilePictureEvent($request->email, $request->fname, $request->lname));
+        return back();
     }
 
     public function upgradeAdmin($id){
         $user = User::find($id);
         $user->role_id = 3;
         if($user->save()){
-            return redirect('/home/manage');
+            return back();
         }
 
     }
@@ -55,7 +52,7 @@ class UserController extends Controller
         $user = User::find($id);
         $user->role_id = 2;
         if($user->save()){
-            return redirect('/home/manage');
+            return back();
         }
     }
     /**
@@ -105,16 +102,10 @@ class UserController extends Controller
     }
 
     public function showManage(){
-        $users = User::all();
+        $users = User::withTrashed()->get();
         $deletedUsers = User::onlyTrashed()->get();
-        $myMessagess = Auth::user()->fromMessages()->where('last', 1)->orWhere('user_to', Auth::user()->id)->where('last', 1)->groupBy('group_start','group_end')->orderBy('id', 'DESC')->get();
-            $count = 0;
-            foreach ($myMessagess as $key => $message) {
-                if ($message->pivot->read == 0 and $message->pivot->user_to == Auth::id()) {
-                    $count++;
-                }
-            }
-            return view('/manageUsers')->with('users', $users)->with('myMessagesCount', $count)->with('deletedUsers', $deletedUsers);
+        
+        return view('/manageUsers')->with('users', $users)->with('deletedUsers', $deletedUsers);
     }
 
     public function updatePassword(UpdatePasswordRequest $request){
@@ -154,7 +145,7 @@ class UserController extends Controller
     }
 
     public function findUserById(Request $request){
-        $user = User::with('role')->findorFail($request->id);
+        $user = User::with('role')->findorFail($request->uid);
         
         return $user->toArray();
     }
