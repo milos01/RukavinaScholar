@@ -25,6 +25,7 @@
         }).finally(function() {
           $scope.loading = false;
         });
+        Socket.forward('addNewTaskEmit', $scope);
       }
       Socket.forward('updateTaskOffersEmit', $scope);
     }
@@ -37,6 +38,14 @@
         $scope.taskTypeIncludes.push(taskType);
       }
     }
+    $scope.$on('socket:addNewTaskEmit', function(ev, data){
+      console.log(data.data);
+      if (data.data.time_ends_at.date) {
+        data.data.time_ends_at.date = data.data.time_ends_at;
+      }
+      console.log(data.data);
+      $scope.problems.push(data.data);
+    })
     //upadate 'regular' user bast offer offer
     $scope.$on('socket:updateTaskOffersEmit', function(ev, data){
       ProblemResource.getAllTasks().then(function(allTasks){
@@ -146,7 +155,7 @@ app.directive('confirmationDirective', function (ProblemResource, Socket, UtilSe
 
 app.directive('timerDirective', function(ProblemResource, UtilService, Socket, $interval){
   return {
-    template: '<sapn class="badge"><i ng-show=\"problem.showLoading\" class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>{{problem.timer}}</span>',
+    template: '<sapnconfirmation-directive><i ng-show=\"problem.showLoading\" class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>{{problem.timer}}</span>',
     restrict: 'A',
     scope: { 
       problem: '=',
@@ -178,11 +187,12 @@ app.directive('timerDirective', function(ProblemResource, UtilService, Socket, $
             $interval.cancel(x);
           }
         }, 1000);
-      }, true);
+      }, true); 
       Socket.on('updateAdminTimeEmit', function(data){
         if (data.data.id === scope.problem.id) {
           scope.problem.time_ends_at = data.data.time;
         }
+        scope.problem.showBiddingForm = true;
       });
     }
   }
@@ -285,7 +295,7 @@ app.directive('assignDirective', function(){
 //New problem page
 // |
 // V
-app.controller('newProblemController', function(ProblemResource, DropzoneService, UtilService, AlertSerice, Socket, $scope, $window, $interval){
+app.controller('newProblemController', function(ProblemResource, UserResource, DropzoneService, UtilService, AlertSerice, Socket, $scope, $window, $interval){
   
   $scope.init = function(problem, user){
     if(problem === undefined && user === undefined){
@@ -367,7 +377,11 @@ app.controller('newProblemController', function(ProblemResource, DropzoneService
       probType: $scope.answer,
       selectedFiles: DropzoneService.addedFiles,
     }
-    ProblemResource.postNewTask(data).then(function(){
+    ProblemResource.postNewTask(data).then(function(response){
+      UserResource.getAllModerators().then(function(allModerators){
+        Socket.emit('addNewTask', {emailTo: allModerators, data: response});
+      });
+      
       AlertSerice.sweet('Success', 'success', 'Successfully submitted new task');
       $interval(function() {
           $window.location.href = '/home';

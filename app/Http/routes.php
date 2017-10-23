@@ -91,16 +91,16 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('manage/deleteUser/{id}', 'UserController@deleteUser')->name('deleteUser');
 		Route::get('manage/activateUser/{id}', 'UserController@activateUser')->name('activateUser');
 		Route::post('manage/addStaff', 'UserController@addStaff')->name('addStaff');
-		
+
 		//Settings routes
 	    Route::get('settings', 'SettingsController@showSettingsPage')->name('showSettingsPage');
 	    Route::post('settings/category', 'SettingsController@addNewCategory')->name('addNewCategory');
 	    Route::put('settings/category', 'SettingsController@activateCategory')->name('activateCategory');
 	    Route::delete('settings/category', 'SettingsController@deleteCategory')->name('deleteCategory');
-	    // Settings api routes
-	    Route::get('/api/application/category', 'SettingsController@getAllCategories');
+	    
 	});
-
+	// Settings api routes
+	Route::get('/api/application/category', 'SettingsController@getAllCategories');
 	//Paypal routes
 	// Route::get('checkout', 'PaypalController@checkout');
 	// Route::get('getDone', 'PaypalController@getDone');

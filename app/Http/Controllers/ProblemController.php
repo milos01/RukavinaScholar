@@ -13,6 +13,7 @@ use Auth,Zipper;
 use Crypt;
 use Carbon\Carbon;
 use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
 use League\Fractal\Manager;
 use League\Fractal\Serializer\DataArraySerializer;
 use App\Http\Transformers\ProblemTransformer;
@@ -59,7 +60,7 @@ class ProblemController extends Controller
     }
 
     public function getAllProblems(){
-        $allProblems = Problem::with('offers')->with('user_from')->with('task_type')->get();
+        $allProblems = Problem::all();
 
         $resource = new Collection($allProblems, new ProblemTransformer());
         return $this->manager->createData($resource)->toArray();
@@ -139,6 +140,9 @@ class ProblemController extends Controller
             $file = $this->saveFile($problem, $media);
             $problem->files()->attach($file->id);
         }
+
+        $resource = new Item($problem, new ProblemTransformer());
+        return $this->manager->createData($resource)->toArray();
     }
 
     public function newsolutionsubmit(Request $request){
@@ -182,8 +186,10 @@ class ProblemController extends Controller
     }
 
     public function getOneUserProblems(){
-        $userProblems = Problem::with('offers')->with('task_type')->where('person_from', Auth::user()->id)->get();
-        return $userProblems;
+        $userProblems = Auth::user()->myProblems;
+
+        $resource = new Collection($userProblems, new ProblemTransformer());
+        return $this->manager->createData($resource)->toArray();
     }
 
     public function getProblem($probId){

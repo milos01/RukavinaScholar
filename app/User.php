@@ -50,6 +50,10 @@ class User extends Authenticatable
         return $this->belongsTo('App\Role');
     }
 
+    public function myProblems(){
+        return $this->hasMany('App\Problem', 'person_from');
+    }
+
 
     public function fromMessages()
     {

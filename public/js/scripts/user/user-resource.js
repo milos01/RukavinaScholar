@@ -27,7 +27,7 @@
 
 		retVal.getLoggedUserTasks =  function(){
 			return Restangular.one('getOneUserProblems').get().then(function(response){
-				return response;
+				return response.data;
 			});
 		}
 

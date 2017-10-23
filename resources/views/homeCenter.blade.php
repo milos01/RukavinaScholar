@@ -133,7 +133,7 @@
                   <!-- index -->
                   <td></td>
                   <!-- subject -->
-                  <td><a href="problem/<%problem.id%>"><% problem.subject | limitTo: 26 %></a></td>
+                  <td><a href="problem/<%problem.hashid%>"><% problem.subject | limitTo: 26 %></a></td>
                   <!-- description -->
                   <td><span ng-bind-html="problem.problem_description"></span></td>
                   <!-- task type -->
@@ -142,17 +142,17 @@
                   <td><% problem.created_at.date | dateFilter: 'MM/dd/yyyy' %></td>
                   <!-- info -->
                   <td>
-                    <span problem-show-directive problem="problem" user="{{Auth::user()}}"></span>
+                    <span class="badge" problem-show-directive problem="problem" user="{{Auth::user()}}"></span>
                     <!-- <div ng-click="requestAgain()"><a>click to reset</a></div> -->
                   </td>
                   @if(Auth::user()->is('regular'))
                   <td>
-                    <span confirmation-directive problem="problem" problems="problems" index="<% $index %>"></span>
-                    <span timer-directive problem="problem" user="{{Auth::user()}}" ></span>
+                    <span ng-class="{'badge': problem.showConfirmation && problem.showMakePayment}" confirmation-directive problem="problem" problems="problems" index="<% $index %>"></span>
+                    <span class="badge" timer-directive problem="problem" user="{{Auth::user()}}" ></span>
                   </td>
                   @else
                   <td>
-                    <span timer-directive problem="problem" user="{{Auth::user()}}"></span>
+                    <span class="badge" timer-directive problem="problem" user="{{Auth::user()}}"></span>
                   </td>
                   @endif
                   <!-- <td>asdasdasdasdasdasas</td> -->

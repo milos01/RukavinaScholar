@@ -56,6 +56,14 @@ io.on('connection', function (socket) {
     }
   });
 
+  socket.on('addNewTask', function (data) {
+    for (var i = data.emailTo.length - 1; i >= 0; i--) {
+      if(emailExists(data.emailTo[i].email)){
+        socket.broadcast.to(users[data.emailTo[i].email]).emit('addNewTaskEmit', {data: data.data.data});
+      }
+    }
+  });
+
   socket.on('disconnect', function(){
     if(!socket.nick){
       return;

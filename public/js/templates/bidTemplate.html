@@ -1,16 +1,16 @@
 <span ng-show="problem.showBiddingForm">
 	<form name="offerForm" ng-submit="placeBid(problem)" novalidate>
 		<div class="row">
-		  <div class="col-sm-2">
+		  <div class="col-sm-10">
 		  	<div class="input-group">
-			  <span class="input-group-addon">$</span>
-			  <input type = "number" min="1" class ="form-control" ng-model="biddingOffer" name="biddingOffer" required>
+			  <span class="input-group-addon" style="color:#686b6d; background: #f3f3f4">$</span>
+			  <input type = "number" min="1" class ="form-control" ng-model="biddingOffer" name="biddingOffer" style="color: #686b6d" required>
 			</div>
 		  </div>
 		</div>
 		<div class="row">
-		  <div class="col-sm-6">
-		  	<textarea class="form-control" placeholder="e.g. Problem can be solved in 10 mins with 1 file attached..." style="resize:none; background: #f7f7f7" ng-model="biddingDescription" name="biddingDescription" required></textarea>
+		  <div class="col-sm-10">
+		  	<textarea class="form-control" placeholder="e.g. Problem can be solved in 10 mins with 1 file attached..." style="resize:none; background: #f3f3f4; margin-top:10px; color: #686b6d" ng-model="biddingDescription" name="biddingDescription" required></textarea>
 		  </div>
 		</div>
 		<div class="row">
@@ -20,4 +20,4 @@
 		</div>
 	</form>
 </span>
-<span ng-show="problem.showMyBid" class="badge">Aleady bidded ${{problem.myOffer}}</span>
+<span ng-show="problem.showMyBid">*Aleady bidded ${{problem.myOffer}}</span>

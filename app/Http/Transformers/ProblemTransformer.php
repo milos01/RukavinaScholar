@@ -11,7 +11,8 @@ class ProblemTransformer extends TransformerAbstract
 	public function transform(Problem $problem)
 	{
 	    return [
-	        'id' => Hasher::encode($problem->id),
+	    	'id' => $problem->id,
+	        'hashid' => Hasher::encode($problem->id),
 	        'subject' => $problem->subject,
 	        'person_from' => $problem->person_from,
 	        'main_slovler' => $problem->main_slovler,

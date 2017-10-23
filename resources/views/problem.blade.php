@@ -102,9 +102,10 @@ Problem preview
                                         <i class="fa fa-question fa-5x"></i>
                                     </div>
                                     <div class="col-xs-8 text-right">
-                                        <span><u>Task name</u></span>
+                                        (<span timer-directive problem="prob" user="{{Auth::user()}}" ng-if="dataHasLoaded"></span>) <span><u>Task name</u></span>
+
                                         <h2 class="font-bold">
-                                           <span timer-directive problem="prob" user="{{Auth::user()}}" ng-if="dataHasLoaded"></span> {{$problem->subject}}
+                                            {{$problem->subject}}
                                         </h2>
                                     </div>
                                 </div>
@@ -137,17 +138,22 @@ Problem preview
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <div class="widget lazur-bg p-xl">
-                                <p>
-                                    <u>Task type:</u> {{$problem->task_type->name}}
-                                </p>
-                                <p>
-                                    Status <span problem-show-directive problem="prob" user="{{Auth::user()}}" ng-if="dataHasLoaded"></span>
-                                </p>
-                                <ul class="m-t-md" bidding-directive problem="prob" user="{{Auth::user()}}" ng-if="dataHasLoaded">
-                                </ul>
+                            <div class="widget lazur-bg p-xs">
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <h3>
+                                            <u>Task type:</u> {{$problem->task_type->name}}
+                                        </h3>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <h4>
+                                            <span bidding-directive problem="prob" user="{{Auth::user()}}" ng-if="dataHasLoaded"></span>
+                                        </h4>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        
                         <div class="col-lg-4">
                             @if(Auth::user()->is('regular'))
                                 @if($problem->took >= 1 && $problem->waiting == 0)
