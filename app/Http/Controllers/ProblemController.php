@@ -55,14 +55,18 @@ class ProblemController extends Controller
         $problem->main_slovler = $luser->id;
     	$problem->save();
 
-
     	return redirect('/home');
     }
 
     public function getAllProblems(){
-        $allProblems = Problem::all();
+        $allProblems = Problem::paginate(env('PAGINATE_NUM'));
 
         $resource = new Collection($allProblems, new ProblemTransformer());
+        $resource->setMeta([
+            'current_page' => $allProblems->currentPage(),
+            'next_page_url' => $allProblems->nextPageUrl(),
+            'total_pages' => $allProblems->lastPage(),
+        ]);
         return $this->manager->createData($resource)->toArray();
     }
 

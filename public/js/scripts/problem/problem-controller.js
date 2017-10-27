@@ -21,7 +21,8 @@
         });
       }else{
         ProblemResource.getAllTasks().then(function(allTasks){
-          $scope.problems = allTasks;
+          $scope.problemsData = allTasks.data;
+          $scope.problemsMeta = allTasks.meta;
         }).finally(function() {
           $scope.loading = false;
         });
@@ -196,6 +197,23 @@ app.directive('timerDirective', function(ProblemResource, UtilService, Socket, $
       });
     }
   }
+});
+
+app.directive('pageLinksDirective', function () {
+    return {
+        template: '<span ng-repeat="page in pages"><button class="btn btn-default btn-xs">{{page}}</button></span>',
+        restrict: 'A',
+        scope: {
+            problems: '='
+        },
+        link: function (scope) {
+            var pages = [];
+            for(var i = 1; i <= scope.problems.total_pages; i++){
+                pages.push(i);
+            }
+            scope.pages = pages;
+        }
+    }
 });
 //Problem page frontend
 // |
