@@ -129,7 +129,7 @@
 				</tr>
 			  </thead>
 			  <tbody>
-				<tr ng-repeat="problem in problemsData | filter: search | taskTypeFilter:taskTypeIncludes" ng-cloak foo-repeat-done>
+				<tr ng-repeat="problem in taskObj.problemsData | filter: search | taskTypeFilter:taskTypeIncludes" ng-cloak foo-repeat-done>
 				  <!-- index -->
 				  <td></td>
 				  <!-- subject -->
@@ -147,7 +147,7 @@
 				  </td>
 				  @if(Auth::user()->is('regular'))
 				  <td>
-					<span ng-class="{'badge': problem.showConfirmation && problem.showMakePayment}" confirmation-directive problem="problem" problems="problemsData" index="<% $index %>"></span>
+					  <span ng-class="{'badge': problem.showConfirmation && problem.showMakePayment}" confirmation-directive problem="problem" problems="problemsData" index="<% $index %>"></span>
 					<span class="badge" timer-directive problem="problem" user="{{Auth::user()}}" ></span>
 				  </td>
 				  @else
@@ -184,15 +184,16 @@
                         </td>
                     @endif
                     <hr/>
-                    <% problem %>
 				</tr>
               </tbody>
             </table>
               <div style="text-align: center;margin-top:30px;position: relative;" ng-show="loading" ng-cloak>
                   <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="color:#1ab394"></i>
               </div>
-              <p ng-show="(problemsData | filter: search | taskTypeFilter:taskTypeIncludes).length === 0" style="text-align:center;margin-top:40px;position: relative" ng-cloak>No tasks found!</p>
-              <div class="coll-lg-12 text-center" page-links-directive problems="problemsMeta" ng-if="problemsMeta"></div>
+              <p ng-show="(taskObj.problemsData | filter: search | taskTypeFilter:taskTypeIncludes).length === 0" style="text-align:center;margin-top:40px;position: relative" ng-cloak>No tasks found!</p>
+			  <div ng-controller="paginationController" ng-if="taskObj.problemsMeta && taskObj.problemsData">
+				  <div class="coll-lg-12 text-center"  page-links-directive problemsd="taskObj.problemsData" problemsm="taskObj.problemsMeta" user="{{Auth::user()}}"></div>
+			  </div>
 		  </div>
         </div>
       </div>

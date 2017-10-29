@@ -5,8 +5,8 @@
 		var retVal = {};
 
 		// /getuserproblems
-		retVal.getAllTasks =  function(){
-			return Restangular.one('getuserproblems').get().then(function(response){
+		retVal.getAllTasks =  function(pageNum){
+			return Restangular.one('getuserproblems').get({page: pageNum}).then(function(response){
 				return response;
 			});
 		}

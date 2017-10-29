@@ -20,9 +20,10 @@
           $scope.loading = false;
         });
       }else{
-        ProblemResource.getAllTasks().then(function(allTasks){
-          $scope.problemsData = allTasks.data;
-          $scope.problemsMeta = allTasks.meta;
+        ProblemResource.getAllTasks(1).then(function(allTasks){
+            $scope.taskObj = {}
+            $scope.taskObj.problemsData = allTasks.data;
+            $scope.taskObj.problemsMeta = allTasks.meta;
         }).finally(function() {
           $scope.loading = false;
         });
@@ -199,22 +200,36 @@ app.directive('timerDirective', function(ProblemResource, UtilService, Socket, $
   }
 });
 
-app.directive('pageLinksDirective', function () {
+app.controller('paginationController', function ($scope) {
+
+});
+
+app.directive('pageLinksDirective', function (ProblemResource, UtilService) {
     return {
-        template: '<span ng-repeat="page in pages"><button class="btn btn-default btn-xs">{{page}}</button></span>',
+        templateUrl: '/js/templates/pageLinksTemplate.html',
         restrict: 'A',
         scope: {
-            problems: '='
+            problemsd: '=',
+            problemsm: '=',
+            user: '='
         },
         link: function (scope) {
-            var pages = [];
-            for(var i = 1; i <= scope.problems.total_pages; i++){
-                pages.push(i);
+            UtilService.makePages(scope.problemsm);
+            scope.changePage = function (pageNum) {
+
+                if (scope.user.role_id == 1) {
+
+                }else{
+                     ProblemResource.getAllTasks(pageNum).then(function (allTasks) {
+                         scope.problemsd = allTasks.data;
+                         scope.problemsm = UtilService.makePages(allTasks.meta);
+                     });
+                }
             }
-            scope.pages = pages;
         }
     }
 });
+
 //Problem page frontend
 // |
 // V
