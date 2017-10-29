@@ -58,6 +58,15 @@ app.factory('UtilService', function(){
         		seconds: seconds
         	}
 
+        },
+
+        makePages: function (meta) {
+            var pages = [];
+            for(var i = 1; i <= meta.total_pages; i++){
+                pages.push(i);
+            }
+            meta.paging = pages;
+            return meta;
         }
     }
 });
