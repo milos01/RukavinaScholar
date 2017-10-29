@@ -12,16 +12,19 @@
       $scope.loading = true;
       $scope.showNoFound = false;
       $scope.taskTypeIncludes = [];
+      $scope.taskObj = {};
       //if user has 'regular' role
       if (loggedUser.role_id == 1) {
-        UserResource.getLoggedUserTasks().then(function(loggedUserTasks){
-          $scope.problems = loggedUserTasks;
+        UserResource.getLoggedUserTasks(1).then(function(loggedUserTasks){
+            $scope.taskObj.problemsData = allTasks.data;
+            $scope.taskObj.problemsMeta = allTasks.meta;
         }).finally(function() {
           $scope.loading = false;
         });
       }else{
-        ProblemResource.getAllTasks().then(function(allTasks){
-          $scope.problems = allTasks;
+        ProblemResource.getAllTasks(1).then(function(allTasks){
+            $scope.taskObj.problemsData = allTasks.data;
+            $scope.taskObj.problemsMeta = allTasks.meta;
         }).finally(function() {
           $scope.loading = false;
         });
@@ -37,6 +40,13 @@
       } else {
         $scope.taskTypeIncludes.push(taskType);
       }
+    }
+    //filter and search for paginated tasks
+    $scope.taskSearchFilter = function () {
+        ProblemResource.getAllTasks(1,$scope.product_name, $scope.programming, $scope.math, $scope.physics).then(function (allTasks) {
+            $scope.taskObj.problemsData = allTasks.data;
+            $scope.taskObj.problemsMeta = UtilService.makePages(allTasks.meta);
+        });
     }
     $scope.$on('socket:addNewTaskEmit', function(ev, data){
       console.log(data.data);
@@ -197,6 +207,39 @@ app.directive('timerDirective', function(ProblemResource, UtilService, Socket, $
     }
   }
 });
+
+app.controller('paginationController', function ($scope) {
+
+});
+
+app.directive('pageLinksDirective', function (ProblemResource, UtilService) {
+    return {
+        templateUrl: '/js/templates/pageLinksTemplate.html',
+        restrict: 'A',
+        scope: {
+            problemsd: '=',
+            problemsm: '=',
+            user: '='
+        },
+        link: function (scope) {
+            UtilService.makePages(scope.problemsm);
+            scope.changePage = function (pageNum) {
+                if (scope.user.role_id == 1) {
+                    UserResource.getLoggedUserTasks(pageNum).then(function(loggedUserTasks){
+                        $scope.problemsd = allTasks.data;
+                        $scope.problemsm = UtilService.makePages(allTasks.meta);
+                    });
+                }else{
+                     ProblemResource.getAllTasks(pageNum).then(function (allTasks) {
+                         scope.problemsd = allTasks.data;
+                         scope.problemsm = UtilService.makePages(allTasks.meta);
+                     });
+                }
+            }
+        }
+    }
+});
+
 //Problem page frontend
 // |
 // V

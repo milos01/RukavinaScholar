@@ -5,9 +5,16 @@
 		var retVal = {};
 
 		// /getuserproblems
-		retVal.getAllTasks =  function(){
-			return Restangular.one('getuserproblems').get().then(function(response){
-				return response.data;
+		retVal.getAllTasks =  function(pageNum, searchText, programming10, math10, physics10){
+			var searchData = {
+				page: pageNum,
+				search: searchText,
+				Programming: programming10,
+				Math: math10,
+                Physics: physics10
+			}
+			return Restangular.one('getuserproblems').get(searchData).then(function(response){
+				return response;
 			});
 		}
 
