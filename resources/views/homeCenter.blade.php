@@ -99,12 +99,15 @@
 				  <label class="control-label" for="product_name">Tasks for bidding</label>
 				  @endif
 				  <div class="container" style="width:100">
-					<input  type="text" id="product_name" name="product_name" placeholder="Task Name" class="form-control" ng-model="search.subject" style="float:left;width: 300px;margin-left: -15px">
-					<div class="container" style="width: 300px;float: left;padding: 6px;margin-left: 30px">
-					  <label class="checkbox-inline"><input type="checkbox" ng-click="includeTaskType('Programming')"/> Programming</label>
-					  <label class="checkbox-inline"><input type="checkbox" ng-click="includeTaskType('Math')" /> Math</label>
-					  <label class="checkbox-inline"><input type="checkbox" ng-click="includeTaskType('Physics')"/> Physics</label>
-					</div>
+					  <form ng-submit="taskSearchFilter()">
+						  <input  type="text" id="product_name" name="product_name" placeholder="Task Name" class="form-control" ng-model="product_name" style="float:left;width: 300px;margin-left: -15px">
+						  	<div class="container" style="width: 300px;float: left;padding: 6px;margin-left: 30px">
+						    	<label class="checkbox-inline"><input type="checkbox" name="Programming" ng-model="programming"/> Programming</label>
+						    	<label class="checkbox-inline"><input type="checkbox" name="Math" ng-model="math" /> Math</label>
+						    	<label class="checkbox-inline"><input type="checkbox" name="Physics" ng-model="physics"/> Physics</label>
+							</div>
+						  <button class="btn btn-default btn-xs" type="submit">Search</button>
+					  </form>
 				  </div>
 				</div>
 			  </div>
@@ -129,7 +132,7 @@
 				</tr>
 			  </thead>
 			  <tbody>
-				<tr ng-repeat="problem in taskObj.problemsData | filter: search | taskTypeFilter:taskTypeIncludes" ng-cloak foo-repeat-done>
+				<tr ng-repeat="problem in taskObj.problemsData" ng-cloak foo-repeat-done>
 				  <!-- index -->
 				  <td></td>
 				  <!-- subject -->

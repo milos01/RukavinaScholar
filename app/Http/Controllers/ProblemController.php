@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\ProblemCategory;
+use function foo\func;
 use Illuminate\Http\Request;
 use App\User;
 use App\Offer;
@@ -58,8 +60,16 @@ class ProblemController extends Controller
     	return redirect('/home');
     }
 
-    public function getAllProblems(){
-        $allProblems = Problem::paginate(env('PAGINATE_NUM'));
+    public function getAllProblems(Request $request){
+        $taskTypes = $this->getTaskTypes($request);
+
+        $allProblems = Problem::where('subject', 'like', $request->search.'%')
+            ->whereHas('task_type', function ($q) use ($taskTypes){
+                if (count($taskTypes) != 0){
+                    $q->whereIn('name', $taskTypes);
+                }
+            })
+            ->paginate(env('PAGINATE_NUM'));
 
         $resource = new Collection($allProblems, new ProblemTransformer());
         $resource->setMeta([
@@ -68,6 +78,17 @@ class ProblemController extends Controller
             'total_pages' => $allProblems->lastPage(),
         ]);
         return $this->manager->createData($resource)->toArray();
+    }
+
+    private function getTaskTypes($request){
+        $typeList = [];
+        $types = ProblemCategory::all();
+        foreach($types as $type){
+            if ($request->has($type->name) && $request->input($type->name) == 'true'){
+                array_push($typeList, $type->name);
+            }
+        }
+        return $typeList;
     }
 
 
