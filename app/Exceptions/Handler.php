@@ -3,9 +3,11 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Psy\Exception\ErrorException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -45,6 +47,26 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        switch ($e){
+            case ($e instanceof ModelNotFoundException):
+                return view('errors.404', [], 404);
+                break;
+            case ($e instanceof QueryException):
+                return view('errors.500', [], 500);
+                break;
+            case ($e instanceof ErrorException):
+                return view('errors.500', [], 500);
+                break;
+        }
+        if($e instanceof ModelNotFoundException){
+            dd($e);
+        }
+
+        if($e instanceof QueryException){
+//            return parent::render($request, $e);
+        }
         return parent::render($request, $e);
     }
+
+
 }

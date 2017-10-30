@@ -35,11 +35,20 @@ class makeProfilePictureHandler
 
         $this->updateUser($event->email);
     }
-
+    /**
+     * Generate file name.
+     *
+     * @return string
+     */
     private function getFileName(){
         return $this->now.".png";
     }
-
+    /**
+     * Upate user profile picture.
+     *
+     * @param  string  $email
+     * @return void
+     */
     private function updateUser($email){
         $user = User::where('email', $email)->first();
         $user->picture = $this->getFileName();
