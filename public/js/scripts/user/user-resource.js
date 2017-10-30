@@ -25,9 +25,9 @@
 			});
 		}
 
-		retVal.getLoggedUserTasks =  function(){
-			return Restangular.one('getOneUserProblems').get().then(function(response){
-				return response.data;
+		retVal.getLoggedUserTasks =  function(pageNum){
+			return Restangular.one('getOneUserProblems').get({page: pageNum}).then(function(response){
+				return response;
 			});
 		}
 

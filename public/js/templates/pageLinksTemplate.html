@@ -1,0 +1,4 @@
+{{paginatem}}
+<span ng-repeat="page in problemsm.paging">
+    <button ng-class="{'btn':ture, 'btn-default':true, 'active':page === problemsm.current_page}" ng-click="changePage(page)" style="padding: 0px 5px">{{page}}</button>
+</span>

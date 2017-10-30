@@ -20,7 +20,7 @@ class CreateProblemsTable extends Migration
       });
       Schema::create('problems', function(Blueprint $table){
             $table->increments('id');
-            $table->string('subject');
+            $table->string('subject')->unique();
             $table->integer('person_from')->unsigned();
             $table->foreign('person_from')->references('id')->on('users');
             $table->integer('main_slovler')->unsigned();
