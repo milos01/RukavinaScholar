@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -35,6 +36,7 @@ class User extends Authenticatable
 
     public function is($role)
     {
+
         if ($this->role->name == $role)
         {
             return true;

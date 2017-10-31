@@ -149,6 +149,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         F2m2\Apidocs\ApidocsServiceProvider::class,
+        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -211,6 +212,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Paypal' => Netshell\Paypal\Facades\Paypal::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
 
     ],
 

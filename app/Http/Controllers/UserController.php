@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Braintree\Exception\NotFound;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Requests\MakeUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -9,6 +12,7 @@ use App\Http\Requests\UpdatePasswordRequest;
 use App\User;
 use App\Events\makeProfilePictureEvent;
 use Hash, Auth,DB, Input, Validator, Response, Image;
+use League\Flysystem\FileNotFoundException;
 
 class UserController extends Controller
 {
@@ -63,7 +67,7 @@ class UserController extends Controller
      */
     public function upgradeAdmin($id){
         $user = User::findOrFail($id);
-        $user->role_id = 3;
+        $user->role_id = 311;
         if($user->save()){
             return back();
         }
@@ -75,7 +79,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function donwgradeAdmin($id){
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->role_id = 2;
         if($user->save()){
             return back();

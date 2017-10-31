@@ -2,31 +2,30 @@
 
 namespace App\Exceptions;
 
+use App\Traits\RestExceptionHandlerTrait;
+use App\Traits\RestTrait;
 use Exception;
-use Illuminate\Database\QueryException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Psy\Exception\ErrorException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
+    use RestExceptionHandlerTrait;
+    use RestTrait;
     /**
      * A list of the exception types that should not be reported.
      *
      * @var array
      */
     protected $dontReport = [
-        AuthorizationException::class,
-        HttpException::class,
-        ModelNotFoundException::class,
-        ValidationException::class,
+         AuthorizationException::class,
+//        HttpException::class,
+//        ModelNotFoundException::class,
+//        ValidationException::class,
     ];
 
     /**
-     * Report or log an exception.
+     * Report or log an exception. If app environment is in production than app will sent logs to Sentry.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
@@ -35,6 +34,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+        if (app()->bound('sentry') && $this->shouldReport($e) && app()->environment('production')) {
+            app('sentry')->captureException($e);
+        }
+
         parent::report($e);
     }
 
@@ -47,25 +50,16 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        switch ($e){
-            case ($e instanceof ModelNotFoundException):
-                return view('errors.404', [], 404);
-                break;
-            case ($e instanceof QueryException):
-                return view('errors.500', [], 500);
-                break;
-            case ($e instanceof ErrorException):
-                return view('errors.500', [], 500);
-                break;
+        if($this->isApiCall($request)){
+            $retval = $this->getJsonResponseForException($e);
+        }else{
+            if (app()->environment('production')){
+                $retval = $this->getResponseForException($e);
+            }else{
+                $retval = parent::render($request, $e);
+            }
         }
-        if($e instanceof ModelNotFoundException){
-            dd($e);
-        }
-
-        if($e instanceof QueryException){
-//            return parent::render($request, $e);
-        }
-        return parent::render($request, $e);
+        return $retval;
     }
 
 
