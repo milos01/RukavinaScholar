@@ -53,8 +53,15 @@
 		}
 
 		// /getAssignedToMe
-		retVal.getAssignedToMe =  function(){
-			return Restangular.one('getAssignedToMe').getList().then(function(response){
+		retVal.getAssignedToMe =  function(pageNum, searchText, programming10, math10, physics10){
+            var searchData = {
+                page: pageNum,
+                search: searchText,
+                Programming: programming10,
+                Math: math10,
+                Physics: physics10
+            }
+			return Restangular.one('getAssignedToMe').get(searchData).then(function(response){
 				return response;
 			});
 		}

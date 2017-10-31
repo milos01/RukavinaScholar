@@ -97,10 +97,25 @@ class ProblemController extends Controller
     	return view('myProblems');
     }
 
-    public function getAssignedToMe(){
-        $myProblems = Auth::user()->problems()->with('task_type')->get();
-        $this->readAssigns($myProblems);
-        return $myProblems;
+    public function getAssignedToMe(Request $request){
+        $taskTypes = $this->getTaskTypes($request);
+
+        $assignedTasks = Auth::user()->problems()->where('subject', 'like', $request->search.'%')
+            ->whereHas('task_type', function ($q) use ($taskTypes){
+                if (count($taskTypes) != 0){
+                    $q->whereIn('name', $taskTypes);
+                }
+            })
+            ->paginate(env('PAGINATE_NUM'));
+        $this->readAssigns($assignedTasks);
+
+        $resource = new Collection($assignedTasks, new ProblemTransformer());
+        $resource->setMeta([
+            'current_page' => $assignedTasks->currentPage(),
+            'next_page_url' => $assignedTasks->nextPageUrl(),
+            'total_pages' => $assignedTasks->lastPage(),
+        ]);
+        return $this->manager->createData($resource)->toArray();
     }
 
     private function readAssigns($problems){

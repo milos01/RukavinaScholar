@@ -296,21 +296,29 @@ app.directive('biddingDirective', function(ProblemResource, UserResource, UtilSe
 // Assigned page fronend
 // |
 // V
-app.controller('assignedController', function(ProblemResource, Socket, $scope){
+app.controller('assignedController', function(ProblemResource, UtilService, Socket, $scope){
   Socket.connectUser();
   Socket.on('notifyUserEmit', function(data){
     toastr.success(data.message, 'Rukhell');
   });
   $scope.loading = true;
   $scope.init = function(loggedUser){
-    ProblemResource.getAssignedToMe().then(function(assignedTasks){
-      $scope.problems = assignedTasks;
+    $scope.assignedObj = {};
+    ProblemResource.getAssignedToMe(1).then(function(assignedTasks){
+        $scope.assignedObj.problemsData = assignedTasks.data;
+        $scope.assignedObj.problemsMeta = assignedTasks.meta;
     }).finally(function(){
       $scope.loading = false;
     });
     Socket.forward('addToAssignedEmit', $scope);
   }
-
+  //filter and search for paginated tasks
+  $scope.taskSearchFilter = function () {
+      ProblemResource.getAssignedToMe(1,$scope.product_name, $scope.programming, $scope.math, $scope.physics).then(function (assignedTasks) {
+          $scope.assignedObj.problemsData = assignedTasks.data;
+          $scope.assignedObj.problemsMeta = UtilService.makePages(assignedTasks.meta);
+      });
+  }
   $scope.$on('socket:addToAssignedEmit', function(ev, data){
     $scope.$apply(function(){
       $scope.problems.push(data.data);

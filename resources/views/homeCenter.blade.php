@@ -100,13 +100,19 @@
 				  @endif
 				  <div class="container" style="width:100">
 					  <form ng-submit="taskSearchFilter()">
-						  <input  type="text" id="product_name" name="product_name" placeholder="Task Name" class="form-control" ng-model="product_name" style="float:left;width: 300px;margin-left: -15px">
-						  	<div class="container" style="width: 300px;float: left;padding: 6px;margin-left: 30px">
-						    	<label class="checkbox-inline"><input type="checkbox" name="Programming" ng-model="programming"/> Programming</label>
-						    	<label class="checkbox-inline"><input type="checkbox" name="Math" ng-model="math" /> Math</label>
-						    	<label class="checkbox-inline"><input type="checkbox" name="Physics" ng-model="physics"/> Physics</label>
-							</div>
-						  <button class="btn btn-default btn-xs" type="submit">Search</button>
+						  <div class="col-md-12">
+							  <div class="col-md-4">
+								  <input  type="text" id="product_name" name="product_name" placeholder="Task Name" class="form-control" ng-model="product_name" style="float:left;width: 100%;margin-left: -15px">
+							  </div>
+							  <div class="col-md-3">
+								  <label class="checkbox-inline"><input type="checkbox" name="Programming" ng-model="programming"/> Programming</label>
+								  <label class="checkbox-inline"><input type="checkbox" name="Math" ng-model="math" /> Math</label>
+								  <label class="checkbox-inline"><input type="checkbox" name="Physics" ng-model="physics"/> Physics</label>
+							  </div>
+							  <div class="col-md-2">
+								  <button class="btn btn-primary btn-xs form-control" type="submit" style="width: 100%;">Search!</button>
+							  </div>
+						  </div>
 					  </form>
 				  </div>
 				</div>
@@ -159,19 +165,6 @@
 				  </td>
 
 				  @endif
-
-				  <!-- <td>asdasdasdasdasdasas</td> -->
-									<!-- <td>
-									  <span ng-bind="problem.timer"></span>
-									  <div id="paymentHolder" style="" ng-cloak>
-									  <a ng-show="showMakePayment<%problem.id%>" href="home/problem/'+scope.problem.id+'/payment/'+minOffer.id+'" class="btn btn-info btn-xs" ng-cloak>Make paymendt</a>
-									  <span ng-show="showAcceptDecline<%problem.id%>" style="" ng-cloak>
-										<a ng-click="acceptOffer(problem)">Accept </a>
-										/
-										<a ng-click="declineOffer(problem.id)">Decline</a>
-									  </span>
-									</div>
-								  </td> -->
                     @if(!Auth::user()->is('regular'))
                         <td>
                             <div ng-repeat="offer in problem.offers">
@@ -193,7 +186,7 @@
               <div style="text-align: center;margin-top:30px;position: relative;" ng-show="loading" ng-cloak>
                   <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="color:#1ab394"></i>
               </div>
-              <p ng-show="(taskObj.problemsData | filter: search | taskTypeFilter:taskTypeIncludes).length === 0" style="text-align:center;margin-top:40px;position: relative" ng-cloak>No tasks found!</p>
+              <p ng-show="taskObj.problemsData.length === 0" style="text-align:center;margin-top:40px;position: relative" ng-cloak>No tasks found!</p>
 			  <div ng-controller="paginationController" ng-if="taskObj.problemsMeta && taskObj.problemsData">
 				  <div class="coll-lg-12 text-center"  page-links-directive problemsd="taskObj.problemsData" problemsm="taskObj.problemsMeta" user="{{Auth::user()}}"></div>
 			  </div>
