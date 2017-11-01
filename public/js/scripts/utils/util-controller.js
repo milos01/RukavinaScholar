@@ -1,18 +1,18 @@
 (function(){
 
-$(document).mouseup(function (e)
-{
-    var container = $("#responseDiv");
-    var container2 = $("#responseDiv2");
-
-    if (!container.is(e.target) // if the target of the click isn't the container...
-        && container.has(e.target).length === 0 || !container2.is(e.target) // if the target of the click isn't the container...
-        && container2.has(e.target).length === 0) // ... nor a descendant of the container
-    {
-        $("#responseDiv").hide();
-        $("#responseDiv2").hide();
-    }
-});
+// $(document).mouseup(function (e)
+// {
+//     var container = $("#responseDiv");
+//     var container2 = $("#responseDiv2");
+//
+//     if (!container.is(e.target) // if the target of the click isn't the container...
+//         && container.has(e.target).length === 0 || !container2.is(e.target) // if the target of the click isn't the container...
+//         && container2.has(e.target).length === 0) // ... nor a descendant of the container
+//     {
+//         $("#responseDiv").hide();
+//         $("#responseDiv2").hide();
+//     }
+// });
 
 app.factory('selectedFilesService', function() {
     return {

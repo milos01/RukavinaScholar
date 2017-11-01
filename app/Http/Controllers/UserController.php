@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Braintree\Exception\NotFound;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
+use App\Http\Transformers\UserTransformer;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
 use Illuminate\Http\Request;
 use App\Http\Requests\MakeUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -12,10 +12,17 @@ use App\Http\Requests\UpdatePasswordRequest;
 use App\User;
 use App\Events\makeProfilePictureEvent;
 use Hash, Auth,DB, Input, Validator, Response, Image;
-use League\Flysystem\FileNotFoundException;
+use League\Fractal\Serializer\DataArraySerializer;
 
 class UserController extends Controller
 {
+    protected $manager;
+
+    public function __construct()
+    {
+        $this->manager = new Manager();
+        $this->manager->setSerializer(new DataArraySerializer());
+    }
 //    Page showing methods
 //      |
 //      V
@@ -37,6 +44,14 @@ class UserController extends Controller
         $deletedUsers = User::onlyTrashed()->get();
 
         return view('/manageUsers')->with('users', $users)->with('deletedUsers', $deletedUsers);
+    }
+    /**
+     * Show edit user page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function editUser(){
+        return view('editUser');
     }
 //    User's business logic
 //      |
@@ -192,5 +207,15 @@ class UserController extends Controller
         $email = $request->input('email');
         $user = User::with('role')->where('email', $email)->get();
         return $user;
+    }
+    /**
+     * Search user by name or last name.
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getSearchStaff(Request $request){
+        $users = User::where('name', 'like', $request->keywords.'%')->orWhere('lastName', 'like', $request->keywords.'%')->get();
+        $resource = new Collection($users, new UserTransformer());
+        return $this->manager->createData($resource)->toArray();
     }
 }

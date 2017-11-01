@@ -4,6 +4,15 @@
 
 		var retVal = {};
 
+		retVal.getStaff = function (keywords) {
+		    var searchData = {
+		        'keywords': keywords
+            }
+
+            return Restangular.one('getSearchStaff').get(searchData).then(function(response){
+                return response;
+            });
+        }
 		// /user
 		retVal.getLoggedUser =  function(){
 			return Restangular.one('user').get().then(function(response){
@@ -25,8 +34,15 @@
 			});
 		}
 
-		retVal.getLoggedUserTasks =  function(pageNum){
-			return Restangular.one('getOneUserProblems').get({page: pageNum}).then(function(response){
+		retVal.getLoggedUserTasks =  function(pageNum, searchText, programming10, math10, physics10){
+            var searchData = {
+                page: pageNum,
+                search: searchText,
+                Programming: programming10,
+                Math: math10,
+                Physics: physics10
+            }
+			return Restangular.one('getOneUserProblems').get(searchData).then(function(response){
 				return response;
 			});
 		}

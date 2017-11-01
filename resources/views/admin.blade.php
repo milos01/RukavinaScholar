@@ -84,6 +84,9 @@
         margin-left: 6px;
         border-bottom: 9px solid white;
       }
+        .searchUserItems:hover{
+            background: #f9f9f9;
+        }
     </style>
   </head>
   <body id="app-layout" ng-app="kbkApp">
@@ -94,18 +97,22 @@
             <li class="nav-header" style="background-color: #243645;">
               <div class="dropdown profile-element">
                 <span>
-                  <img alt="image" class="img-circle" src="{{asset('avatars/'.Auth::user()->picture)}}" width="53px" height="53px" />
+                    <a href="{{route('editUser')}}">
+                        <img alt="image" class="img-circle" src="{{asset('avatars/'.Auth::user()->picture)}}" width="53px" height="53px" />
+                    </a>
                 </span> 
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span class="clear">
-                  <span class="block m-t-xs">
-                    <strong class="font-bold">
-                      {{Auth::user()->name}} {{Auth::user()->lastName}}
-                    </strong>
+                {{--<a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span class="clear">--}}
+                  <span     class="block m-t-xs">
+                      <a href="{{route('editUser')}}">
+                        <strong class="font-bold">
+                          {{Auth::user()->name}} {{Auth::user()->lastName}}
+                        </strong>
+                      </a>
                   </span> 
                   <span class="text-muted text-xs block">
                     {{Auth::user()->role->display_name}}
                   </span>
-                </a>
+                {{--</a>--}}
               </div>
               <div class="logo-element">Rukhell</div>
             </li>
@@ -165,14 +172,14 @@
         </div>
       </nav>
 
-      <div id="page-wrapper" class="gray-bg" style="min-height: 100vh">
+      <div id="page-wrapper" class="gray-bg" ng-controller="userSearchController" style="min-height: 100vh">
         <div class="row border-bottom">
           <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header" ng-controller="userSearchController">
+            <div class="navbar-header">
               <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#"><i class="fa fa-bars"></i> </a>
               <form role="search" class="navbar-form-custom" action="search_results.html">
                 <div class="form-group">
-                  <input type="text" placeholder="Search for people..." class="form-control" name="top-search" id="top-search" ng-model="keywords" ng-change="search2()">
+                  <input type="text" placeholder="Search for people..." class="form-control" name="top-search" id="top-search" ng-model="keywords" ng-change="searchStaff(getSearchableUsers, 800)">
                 </div>
               </form>
             </div>
@@ -185,10 +192,15 @@
             </ul>
           </nav>
           <div>
-            <div class="" id="responseDiv2" style="width:250px;max-height:200px;border:1px solid gray;position: absolute;margin-top:-5px;display:none;margin-left:70px;z-index: 999;background-color: white;z-index:9999;border-radius:2px;box-shadow: 0px 1px 3px #888888;">
+            <div ng-hide="!foundUsers.data || keywords.length === 0" id="responseDiv2" style="min-width: 200px;border:1px solid gray;position: absolute;margin-top:-5px;margin-left:70px;z-index: 999;background-color: white;z-index:9999;border-radius:2px;box-shadow: 0px 1px 3px #888888;" ng-cloak>
               <div class='arrow-up'></div>
               <div class='arrow-up2'></div>
-              <div id="responseDiv22"></div>
+                <div class="col-md-12" style="padding-left: 0px; padding-right: 0px" ng-repeat="user in foundUsers.data">
+                  <a href="/user/<%user.username%>">
+                    <div class="searchUserItems" style="padding: 15px 25px;"><% user.name %> <% user.lastName %></div>
+                  </a>
+                </div>
+                <div class="searchUserItems text-center" style="padding: 15px 0px" ng-show="foundUsers.data.length === 0">No users found!</div>
             </div>
           </div>
         </div>

@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('api/application/user', 'UserController@getLoggedUser');
 	Route::get('api/application/user/{uid}', 'UserController@findUserById');
 	Route::get('api/application/getAllModerators','UserController@getAllModerators');
+    Route::get('api/application/getSearchStaff','UserController@getSearchStaff');
 	Route::post('api/application/getusers','UserController@getApiUsers');
 	Route::post('api/application/getusers2','UserController@getApiUsers2');
 	

@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\ProblemCategory;
-use function foo\func;
 use Illuminate\Http\Request;
 use App\User;
 use App\Offer;
@@ -225,10 +223,24 @@ class ProblemController extends Controller
         return $offers;
     }
 
-    public function getOneUserProblems(){
-        $userProblems = Auth::user()->myProblems;
+    public function getOneUserProblems(Request $request){
+        $taskTypes = $this->getTaskTypes($request);
+
+        $userProblems = Auth::user()->myProblems()->where('subject', 'like', $request->search.'%')
+            ->whereHas('task_type', function ($q) use ($taskTypes){
+                if (count($taskTypes) != 0){
+                    $q->whereIn('name', $taskTypes);
+                }
+            })
+            ->paginate(env('PAGINATE_NUM'));;
 
         $resource = new Collection($userProblems, new ProblemTransformer());
+        $resource->setMeta([
+            'current_page' => $userProblems->currentPage(),
+            'next_page_url' => $userProblems->nextPageUrl(),
+            'total_pages' => $userProblems->lastPage(),
+        ]);
+
         return $this->manager->createData($resource)->toArray();
     }
 

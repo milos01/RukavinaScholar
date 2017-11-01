@@ -16,8 +16,8 @@
       //if user has 'regular' role
       if (loggedUser.role_id == 1) {
         UserResource.getLoggedUserTasks(1).then(function(loggedUserTasks){
-            $scope.taskObj.problemsData = allTasks.data;
-            $scope.taskObj.problemsMeta = allTasks.meta;
+            $scope.taskObj.problemsData = loggedUserTasks.data;
+            $scope.taskObj.problemsMeta = loggedUserTasks.meta;
         }).finally(function() {
           $scope.loading = false;
         });
@@ -212,7 +212,7 @@ app.controller('paginationController', function ($scope) {
 
 });
 
-app.directive('pageLinksDirective', function (ProblemResource, UtilService) {
+app.directive('pageLinksDirective', function (ProblemResource, UserResource, UtilService) {
     return {
         templateUrl: '/js/templates/pageLinksTemplate.html',
         restrict: 'A',
@@ -226,8 +226,8 @@ app.directive('pageLinksDirective', function (ProblemResource, UtilService) {
             scope.changePage = function (pageNum) {
                 if (scope.user.role_id == 1) {
                     UserResource.getLoggedUserTasks(pageNum).then(function(loggedUserTasks){
-                        $scope.problemsd = allTasks.data;
-                        $scope.problemsm = UtilService.makePages(allTasks.meta);
+                        scope.problemsd = loggedUserTasks.data;
+                        scope.problemsm = UtilService.makePages(loggedUserTasks.meta);
                     });
                 }else{
                      ProblemResource.getAllTasks(pageNum).then(function (allTasks) {
@@ -347,7 +347,6 @@ app.directive('assignDirective', function(){
 // |
 // V
 app.controller('newProblemController', function(ProblemResource, UserResource, DropzoneService, UtilService, AlertSerice, Socket, $scope, $window, $interval){
-  
   $scope.init = function(problem, user){
     if(problem === undefined && user === undefined){
       Socket.connectUser();
@@ -356,6 +355,7 @@ app.controller('newProblemController', function(ProblemResource, UserResource, D
         $scope.categories = taskCategories;
       });
     }else{
+      $scope.probDescription = problem.solution_description;
       var isMainSolver = UtilService.mainSolver(problem, user);
       if (!isMainSolver || problem.took === 2) {
         $scope.showSolutionDropzone = false;

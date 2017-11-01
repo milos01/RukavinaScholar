@@ -52,6 +52,7 @@ class Handler extends ExceptionHandler
     {
         if($this->isApiCall($request)){
             $retval = $this->getJsonResponseForException($e);
+            $retval = parent::render($request, $e);
         }else{
             if (app()->environment('production')){
                 $retval = $this->getResponseForException($e);

@@ -206,41 +206,39 @@ Problem preview
          </div>
 
      </div>
- </div>
- @if(!Auth::user()->is('regular'))
- <div class="row" ng-if="dataHasLoaded" ng-cloak>
-    <div class="col-lg-12" ng-controller="newProblemController" ng-init="init(prob, {{Auth::user()}})">
-        <div class="ibox float-e-margins" ng-show="showSolutionDropzone">
-            <div class="ibox-content">
-                <form class="form-horizontal" ng-submit="addSolutionSubmit(prob)" name="newProblemForm" novalidate>
-                    <div>
-                        <span>
-                            <div class="col-lg-12 text-center" style="padding: 20px 0px"><h3>Upload solution files for task below</h3></div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Description</label>
-                                <div class="col-sm-10">
-                                    <div style="width:80%">
-                                        <summernote config="summernoteOptions" ng-model="probDescription" required></summernote>
+     @if(!Auth::user()->is('regular'))
+     <div class="row" ng-if="dataHasLoaded" ng-cloak>
+        <div class="col-lg-12" ng-controller="newProblemController" ng-init="init(prob, {{Auth::user()}})">
+            <div class="ibox float-e-margins" ng-show="showSolutionDropzone">
+                <div class="ibox-content">
+                    <form class="form-horizontal" ng-submit="addSolutionSubmit(prob)" name="newProblemForm" novalidate>
+                        <div>
+                            <span>
+                                <div class="col-lg-12 text-center" style="padding: 20px 0px"><h3>Upload solution files for task below</h3></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Description</label>
+                                    <div class="col-sm-10">
+                                        <div style="width:80%">
+                                            <summernote config="summernoteOptions" ng-model="probDescription" required></summernote>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="solution_dropzone" class="dropzone" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
-                            <input type="hidden" id="taskType" value="solution">
-                        </span>
-                    </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group" style="margin-bottom: 53px">
-                        <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-primary pull-left" type="submit" id="showSubmitButton2" ng-disabled="newProblemForm.$invalid || filesLoading" style="">Submit task</button>
+                                <div id="solution_dropzone" class="dropzone" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
+                                <input type="hidden" id="taskType" value="solution">
+                            </span>
                         </div>
-                    </div>
-                </form>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group" style="margin-bottom: 53px">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary pull-left" type="submit" id="showSubmitButton2" ng-disabled="newProblemForm.$invalid || filesLoading" style="">Submit task</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
- @endif
-</div>
+    @endif
 </div>
 @stop
 @section('chartTableJs')

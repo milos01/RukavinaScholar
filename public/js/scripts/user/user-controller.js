@@ -1,5 +1,5 @@
 (function(angular){
-app.controller('userSearchController',function(searchService, searchService2, $scope, $compile, $http){
+app.controller('userSearchController',function(UserResource,searchService, searchService2, $scope, $compile, $timeout){
     var problemId = $("#problemId").val();
 
     $scope.search = function(){
@@ -68,44 +68,20 @@ app.controller('userSearchController',function(searchService, searchService2, $s
         });
     };
 
-    $scope.search2 = function(){
+    $scope.searchStaff = (function() {
+        var promise = null;
+        return function (callback, ms) {
+            $timeout.cancel(promise); //clearTimeout(timer);
+            promise = $timeout(callback, ms); //timer = setTimeout(callback, ms);
+        };
+    })();
 
-        searchService2.search($scope.keywords).then(function(response){
-            if( !$("#top-search").val() ){
-              $("#responseDiv2").fadeOut(50);
-            }else{
-
-            $("#responseDiv22").text("");
-
-            $("#responseDiv2").fadeIn(150);
-            if(response.data.length === 0){
-                $("#responseDiv22").html("<div style='padding-top:6px;padding-bottom:6px;text-align:center'>No result found</div>");
-            }else{
-              for (var i = response.data.length - 1; i >= 0; i--) {
-
-                  var divDiv = "<a href='/home/user/"+response.data[i].id+"'><div style='padding:10px;color:black' class='searchResults'><img src='../../img/"+response.data[i].picture+"' width='30px' style='border-radius: 3px; margin-right:10px'>"+response.data[i].name+" "+response.data[i].lastName+"</div></a>";
-
-                  angular.element(document.getElementById('responseDiv22')).append($compile(divDiv)($scope));
-                  $scope.addMateFunction = function(userId, problemId){
-                      $http({
-                          method: 'POST',
-                          url: '/home/api/application/addModerator',
-                          data: {userId: userId, problemId: problemId}
-                      }).then(function successCallback(response) {
-                          console.log(response.data);
-                          // var item = $("#menuSearchItem").text("aa");
-                          $("#itemsHolder").append("<div class='' id='menuSearchItem' style='border-bottom:2px solid red;max-width: 100px;height: 33px;background-color: #F3F3F4;border-radius: 3px; text-align: center;padding-top: 7px;float: left;margin-left: 10px;padding-left: 5px;padding-right:5px'>"+response.data.name +" "+response.data.lastName+"<i class='fa fa-times' aria-hidden='true' style='cursor:pointer;float:right' ng-click='deleteWorker("+problemId+","+userId+")'></i></div>");
-                      }, function errorCallback(response) {
-
-                      });
-                  };
-
-              }
-            };
-          }
+    $scope.getSearchableUsers = function () {
+        console.log('a');
+        UserResource.getStaff($scope.keywords).then(function(users) {
+            $scope.foundUsers = users;
         });
-
-    };
+    }
 
     $scope.deleteWorker = function(problemId, userId){
         $http({
